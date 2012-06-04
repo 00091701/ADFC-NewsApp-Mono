@@ -1,0 +1,2 @@
+ADFC-NewsApp-Mono
+=================
