@@ -1,0 +1,20 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NewsAppDroid", "NewsAppDroid\NewsAppDroid.csproj", "{A406E85D-E6BB-4B55-AB16-81E7740CF49C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A406E85D-E6BB-4B55-AB16-81E7740CF49C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A406E85D-E6BB-4B55-AB16-81E7740CF49C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A406E85D-E6BB-4B55-AB16-81E7740CF49C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A406E85D-E6BB-4B55-AB16-81E7740CF49C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		StartupItem = NewsAppDroid\NewsAppDroid.csproj
+	EndGlobalSection
+EndGlobal
