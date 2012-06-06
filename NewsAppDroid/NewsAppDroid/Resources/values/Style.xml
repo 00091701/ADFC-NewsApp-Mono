@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<style name="MainTheme" parent="android:Theme">
+		<item name="android:windowNoTitle">true</item>
+		<item name="android:textColor">#ffffff</item>
+	</style>
+	
+	<style name="MailLayout">
+		<item name="android:background">#004B7C</item>
+	</style>
+	
+	<style name="TabContent">
+		<item name="android:background">#004B7C</item>
+	</style>
+	
+	<style name="Headline">
+		<item name="android:textAppearance">?android:attr/textAppearanceMedium</item>
+		<item name="android:textColor">#EE7F00</item>
+		<item name="android:paddingTop">5dp</item>
+		<item name="android:paddingLeft">5dp</item>
+		<item name="android:paddingBottom">10dp</item>
+	</style>
+	
+</resources>

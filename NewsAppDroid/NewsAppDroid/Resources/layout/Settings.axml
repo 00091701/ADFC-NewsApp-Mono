@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:minWidth="25px"
+    android:minHeight="25px"
+    style="@style/MailLayout">
+    <LinearLayout
+        android:orientation="horizontal"
+        android:minWidth="25px"
+        android:minHeight="25px"
+        android:layout_width="fill_parent"
+        android:layout_height="50dp"
+        android:id="@+id/llHeader"
+        android:padding="5dp">
+        <ImageView
+            android:src="@drawable/logo_adfc"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:id="@+id/imageView1" />
+    </LinearLayout>
+    <TextView
+        android:text="Einstellungen"
+        style="@style/Headline"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" />
+    <CheckBox
+        android:text="Auf Termine hinweisen"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/cbDateIndicate"
+        android:paddingLeft="45dp" />
+    <TextView
+        android:text="Daten-Abos"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView1"
+        android:paddingLeft="45dp"
+        android:paddingTop="5dp" />
+    <ListView
+        android:minWidth="25px"
+        android:minHeight="25px"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:id="@+id/lvDataSubscription" />
+</LinearLayout>
