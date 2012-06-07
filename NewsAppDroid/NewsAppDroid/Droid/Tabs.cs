@@ -29,6 +29,7 @@ using Android.OS;
 using Android.Runtime;
 using Android.Views;
 using Android.Widget;
+using de.dhoffmann.mono.adfcnewsapp.buslog.database;
 
 namespace de.dhoffmann.mono.adfcnewsapp.droid
 {
@@ -40,6 +41,9 @@ namespace de.dhoffmann.mono.adfcnewsapp.droid
 			base.OnCreate (bundle);
 			
 			SetContentView(Resource.Layout.Tabs);
+			
+			// Datenbank initialisieren
+			new DBSchema().UpdateDBSchema();
 			
 			TabHost.TabSpec spec;
 			Intent intent;
@@ -68,8 +72,9 @@ namespace de.dhoffmann.mono.adfcnewsapp.droid
 			
 			// -- 
 			
-			StartActivity(typeof(Settings));
-			
+			// Wenn die App noch nicht konfiguriert wurde, die Einstellungen anzeigen.
+			if (!new Config().GetConfig().AppIsConfigured)
+				StartActivity(typeof(Settings));
 		}
 		
 		

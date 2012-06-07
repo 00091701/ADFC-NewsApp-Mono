@@ -42,6 +42,9 @@
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
     <Reference Include="Mono.Android" />
+    <Reference Include="System.Data" />
+    <Reference Include="Mono.Data.Sqlite" />
+    <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Resources\Resource.designer.cs" />
@@ -50,6 +53,9 @@
     <Compile Include="Droid\Dates.cs" />
     <Compile Include="Droid\News.cs" />
     <Compile Include="Droid\Settings.cs" />
+    <Compile Include="BusLog\Database\DataBase.cs" />
+    <Compile Include="BusLog\Database\DBSchema.cs" />
+    <Compile Include="BusLog\Database\Config.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />
@@ -69,5 +75,7 @@
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
   <ItemGroup>
     <Folder Include="Droid\" />
+    <Folder Include="BusLog\" />
+    <Folder Include="BusLog\Database\" />
   </ItemGroup>
 </Project>

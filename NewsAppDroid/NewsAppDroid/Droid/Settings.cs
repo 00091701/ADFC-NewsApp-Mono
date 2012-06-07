@@ -29,6 +29,7 @@ using Android.OS;
 using Android.Runtime;
 using Android.Views;
 using Android.Widget;
+using de.dhoffmann.mono.adfcnewsapp.buslog.database;
 
 namespace de.dhoffmann.mono.adfcnewsapp.droid
 {
@@ -40,6 +41,30 @@ namespace de.dhoffmann.mono.adfcnewsapp.droid
 			base.OnCreate (bundle);
 			
 			SetContentView(Resource.Layout.Settings);
+			
+			CheckBox cbDateIndicate = FindViewById<CheckBox>(Resource.Id.cbDateIndicate);
+			CheckBox cbDataUpdate = FindViewById<CheckBox>(Resource.Id.cbDataUpdate);
+			
+			// Konfiguration laden
+			AppConfig appConfig = new Config().GetConfig();
+			cbDateIndicate.Checked = appConfig.DateIndicate;
+			cbDataUpdate.Checked = appConfig.DataAutomaticUpdate;
+		}
+		
+		protected override void OnStop ()
+		{
+			base.OnStop ();
+			
+			CheckBox cbDateIndicate = FindViewById<CheckBox>(Resource.Id.cbDateIndicate);
+			CheckBox cbDataUpdate = FindViewById<CheckBox>(Resource.Id.cbDataUpdate);
+			
+			// Konfiguration speichern
+			AppConfig appConfig = new AppConfig();
+			appConfig.DateIndicate = cbDateIndicate.Checked;
+			appConfig.DataAutomaticUpdate = cbDataUpdate.Checked;
+			
+			new Config().SetConfig(appConfig);
+
 		}
 	}
 }

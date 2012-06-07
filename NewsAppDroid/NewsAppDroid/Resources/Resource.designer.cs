@@ -40,11 +40,11 @@ namespace de.dhoffmann.mono.adfcnewsapp.droid
 		public partial class Id
 		{
 			
+			// aapt resource value: 0x7f060009
+			public const int cbDataUpdate = 2131099657;
+			
 			// aapt resource value: 0x7f060008
 			public const int cbDateIndicate = 2131099656;
-			
-			// aapt resource value: 0x7f060009
-			public const int checkBox1 = 2131099657;
 			
 			// aapt resource value: 0x7f060005
 			public const int imageView1 = 2131099653;

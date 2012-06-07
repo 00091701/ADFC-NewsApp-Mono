@@ -48,7 +48,7 @@
                 android:text="Daten automatisch aktualisieren"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/checkBox1"
+                android:id="@+id/cbDataUpdate"
                 android:paddingLeft="45dp" />
             <TextView
                 android:text="Daten-Abos"
