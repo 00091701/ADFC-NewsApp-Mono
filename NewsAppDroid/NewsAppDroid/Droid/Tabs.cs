@@ -32,7 +32,7 @@ using Android.Widget;
 
 namespace de.dhoffmann.mono.adfcnewsapp.droid
 {
-	[Activity (Label = "Tabs", Theme = "@style/MainTheme", MainLauncher = true)]			
+	[Activity (Label = "ADFC-News", Icon="@drawable/Icon", Theme = "@style/MainTheme", MainLauncher = true)]			
 	public class Tabs : TabActivity
 	{
 		protected override void OnCreate (Bundle bundle)
