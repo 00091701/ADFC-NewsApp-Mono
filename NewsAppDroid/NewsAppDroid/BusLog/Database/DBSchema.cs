@@ -55,7 +55,11 @@ namespace de.dhoffmann.mono.adfcnewsapp.buslog.database
 				{
 					// Es gibt nur eine letzte Version
 					reader.Read();
-					retVersion = reader.GetInt32(0);
+					
+					if (reader.HasRows)
+						retVersion = reader.GetInt32(0);
+					else
+						retVersion = -1;
 				}
 				
 				conn.Close();
