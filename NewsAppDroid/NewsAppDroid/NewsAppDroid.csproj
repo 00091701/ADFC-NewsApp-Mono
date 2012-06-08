@@ -38,6 +38,7 @@
     <AndroidLinkMode>SdkOnly</AndroidLinkMode>
     <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <AndroidUseSharedRuntime>false</AndroidUseSharedRuntime>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -67,7 +68,6 @@
     <AndroidResource Include="Resources\values\Strings.xml" />
     <AndroidResource Include="Resources\drawable\Icon.png" />
     <AndroidResource Include="Resources\layout\Tabs.axml" />
-    <AndroidResource Include="Resources\drawable\logo_adfc.png" />
     <AndroidResource Include="Resources\layout\News.axml" />
     <AndroidResource Include="Resources\layout\Dates.axml" />
     <AndroidResource Include="Resources\values\Style.xml" />

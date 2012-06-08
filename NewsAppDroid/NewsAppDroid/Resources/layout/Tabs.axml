@@ -15,10 +15,23 @@
         android:id="@+id/llHeader"
         android:padding="5dp">
         <ImageView
-            android:src="@drawable/logo_adfc"
+            android:src="@drawable/Icon"
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
             android:id="@+id/imageView1" />
+        <TextView
+            android:text="ADFC News"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:id="@+id/textView1"
+            android:minHeight="40dp"
+            android:gravity="center_vertical"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:textColor="#EE7F00"
+            android:textSize="30dp"
+            android:textStyle="bold" />
     </LinearLayout>
     <TabHost
         android:id="@android:id/tabhost"
