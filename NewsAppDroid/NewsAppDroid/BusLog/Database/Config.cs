@@ -41,50 +41,53 @@ namespace de.dhoffmann.mono.adfcnewsapp.buslog.database
 		{
 			AppConfig ret = new AppConfig();
 			
-			SqliteConnection conn = GetConnection();
-			
-			using(DbCommand c = conn.CreateCommand())
+			using(SqliteConnection conn = GetConnection())
 			{
-				c.CommandText = "SELECT AppIsConfigured, DateIndicate, DataAutomaticUpdate FROM config Limit 1;";
-				c.CommandType = System.Data.CommandType.Text;
-				conn.Open();
-				
-				using (DbDataReader reader = c.ExecuteReader())
+				using(DbCommand c = conn.CreateCommand())
 				{
-					// Es gibt nur eine letzte Version
-					reader.Read();
+					c.CommandText = "SELECT AppIsConfigured, DateIndicate, DataAutomaticUpdate FROM config Limit 1;";
+					c.CommandType = System.Data.CommandType.Text;
+					conn.Open();
 					
-					if (reader.HasRows)
+					using (DbDataReader reader = c.ExecuteReader())
 					{
-						ret.AppIsConfigured = reader.GetBoolean(0);
-						ret.DateIndicate = reader.GetBoolean(1);
-						ret.DataAutomaticUpdate = reader.GetBoolean(2);
+						// Es gibt nur eine letzte Version
+						reader.Read();
+						
+						if (reader.HasRows)
+						{
+							ret.AppIsConfigured = reader.GetBoolean(0);
+							ret.DateIndicate = reader.GetBoolean(1);
+							ret.DataAutomaticUpdate = reader.GetBoolean(2);
+						}
 					}
+					
+					conn.Close();
 				}
-				
-				conn.Close();
 			}
 			
 			return ret;
 		}
 		
+		
 		public void SetConfig(AppConfig config)
 		{
 			if (config != null)
 			{
-				SqliteConnection conn = GetConnection();
-			
-				using(DbCommand c = conn.CreateCommand())
+				using(SqliteConnection conn = GetConnection())
 				{
-					c.CommandText = "UPDATE config SET AppIsConfigured=1, DateIndicate=" + (config.DateIndicate? "1" : "0") + ", DataAutomaticUpdate=" + (config.DataAutomaticUpdate? "1" : "0") + ";";
-					c.CommandType = System.Data.CommandType.Text;
-					conn.Open();
-					c.ExecuteNonQuery();
-					conn.Close();
+					using(DbCommand c = conn.CreateCommand())
+					{
+						c.CommandText = "UPDATE config SET AppIsConfigured=1, DateIndicate=" + (config.DateIndicate? "1" : "0") + ", DataAutomaticUpdate=" + (config.DataAutomaticUpdate? "1" : "0") + ";";
+						c.CommandType = System.Data.CommandType.Text;
+						conn.Open();
+						c.ExecuteNonQuery();
+						
+						conn.Close();
+					}
 				}
 			}
 		}
-		
 	}
 }
 

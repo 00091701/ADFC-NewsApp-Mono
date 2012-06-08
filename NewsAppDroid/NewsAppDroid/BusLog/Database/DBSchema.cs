@@ -43,26 +43,27 @@ namespace de.dhoffmann.mono.adfcnewsapp.buslog.database
 		{
 			int retVersion = -1;
 			
-			SqliteConnection conn = GetConnection();
-			
-			using(DbCommand c = conn.CreateCommand())
+			using (SqliteConnection conn = GetConnection())
 			{
-				c.CommandText = "SELECT VersionID FROM version ORDER BY VersionID DESC Limit 1;";
-				c.CommandType = System.Data.CommandType.Text;
-				conn.Open();
-				
-				using (DbDataReader reader = c.ExecuteReader())
+				using(DbCommand c = conn.CreateCommand())
 				{
-					// Es gibt nur eine letzte Version
-					reader.Read();
+					c.CommandText = "SELECT VersionID FROM version ORDER BY VersionID DESC Limit 1;";
+					c.CommandType = System.Data.CommandType.Text;
+					conn.Open();
 					
-					if (reader.HasRows)
-						retVersion = reader.GetInt32(0);
-					else
-						retVersion = -1;
+					using (DbDataReader reader = c.ExecuteReader())
+					{
+						// Es gibt nur eine letzte Version
+						reader.Read();
+						
+						if (reader.HasRows)
+							retVersion = reader.GetInt32(0);
+						else
+							retVersion = -1;
+					}
+					
+					conn.Close();
 				}
-				
-				conn.Close();
 			}
 			
 			if (retVersion == -1)
@@ -92,20 +93,22 @@ namespace de.dhoffmann.mono.adfcnewsapp.buslog.database
 			// Befehle an die Datenbank schicken
 			if (commands.Count > 0)
 			{
-				SqliteConnection conn = GetConnection();
-				conn.Open();
-				
-				using(DbCommand c = conn.CreateCommand())
+				using(SqliteConnection conn = GetConnection())
 				{
-					foreach(string cmd in commands)
+					conn.Open();
+					
+					using(DbCommand c = conn.CreateCommand())
 					{
-						c.CommandText = cmd;
-						c.CommandType = System.Data.CommandType.Text;
-						c.ExecuteNonQuery();
+						foreach(string cmd in commands)
+						{
+							c.CommandText = cmd;
+							c.CommandType = System.Data.CommandType.Text;
+							c.ExecuteNonQuery();
+						}
 					}
+					
+					conn.Close();
 				}
-				
-				conn.Close();
 			}
 		}
 	}

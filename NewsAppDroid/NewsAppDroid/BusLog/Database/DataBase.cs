@@ -58,17 +58,19 @@ namespace de.dhoffmann.mono.adfcnewsapp.buslog.database
 					"INSERT INTO version (VersionID, DateCreate) VALUES (0, date('now'))"
 				};
 				
+				conn.Open();
+				
 				foreach(string cmd in commands)
 				{
 					using(DbCommand c = conn.CreateCommand())
 					{
 						c.CommandText = cmd;
 						c.CommandType = CommandType.Text;
-						conn.Open();
 						c.ExecuteNonQuery();
-						conn.Close();
 					}
 				}
+				
+				conn.Close();
 			}
 			
 			return conn;
