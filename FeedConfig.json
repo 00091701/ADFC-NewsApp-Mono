@@ -1,0 +1,17 @@
+{
+    "Feeds": [
+        {
+            "Name": "Braunschweig - News",
+            "Type": "News",
+            "URL": "http://www.adfc-braunschweig.de/rss.xml",
+            "URLType": "RSS",
+            "ShowCategory": ""
+        },
+        {
+            "Name": "Braunschweig - Termine 2012",
+            "Type": "Dates",
+            "URL": "http://www.adfc-braunschweig.de/fileadmin/redaktion/media/Radtouren/ics/Radtouren_2012.ics",
+            "URLType": "ICS"
+        }
+    ]
+}
