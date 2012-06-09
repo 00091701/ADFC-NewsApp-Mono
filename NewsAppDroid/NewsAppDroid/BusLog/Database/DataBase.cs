@@ -24,6 +24,7 @@ using System.IO;
 using Mono.Data.Sqlite;
 using System.Data.SqlClient;
 using System.Data.Common;
+using System.Text;
 
 
 namespace de.dhoffmann.mono.adfcnewsapp.buslog.database
@@ -52,22 +53,17 @@ namespace de.dhoffmann.mono.adfcnewsapp.buslog.database
 			// Eine neue Tabelle für die Versionsverwaltung anlegen.
 			if (!dbExists)
 			{
-				string[] commands = new[]
-				{
-					"CREATE TABLE version (VersionID INTEGER PRIMARY KEY AUTOINCREMENT, DateCreate DATETIME NOT NULL)",
-					"INSERT INTO version (VersionID, DateCreate) VALUES (0, date('now'))"
-				};
+				StringBuilder commands = new StringBuilder();
+				commands.AppendLine("CREATE TABLE version (VersionID INTEGER PRIMARY KEY AUTOINCREMENT, DateCreate DATETIME NOT NULL);");
+				commands.AppendLine("INSERT INTO version (VersionID, DateCreate) VALUES (0, date('now'));");
 				
 				conn.Open();
 				
-				foreach(string cmd in commands)
+				using(DbCommand c = conn.CreateCommand())
 				{
-					using(DbCommand c = conn.CreateCommand())
-					{
-						c.CommandText = cmd;
-						c.CommandType = CommandType.Text;
-						c.ExecuteNonQuery();
-					}
+					c.CommandText = commands.ToString();
+					c.CommandType = CommandType.Text;
+					c.ExecuteNonQuery();
 				}
 				
 				conn.Close();

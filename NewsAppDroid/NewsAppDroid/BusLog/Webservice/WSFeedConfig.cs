@@ -81,7 +81,7 @@ namespace de.dhoffmann.mono.adfcnewsapp.buslog.webservice
 					feedConfig.Name = (string)feed["Name"];
 					feedConfig.Url = (string)feed["URL"];
 					
-					if (feed.ContainsKey("ShowCategory"))
+					if (feed.ContainsKey("ShowCategory") && !string.IsNullOrEmpty((string)feed["ShowCategory"]))
 						feedConfig.ShowCategory = (string)feed["ShowCategory"];
 					
 					switch((string)feed["FeedType"])

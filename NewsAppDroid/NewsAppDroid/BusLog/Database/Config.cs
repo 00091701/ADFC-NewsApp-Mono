@@ -23,6 +23,7 @@ using Mono.Data.Sqlite;
 using System.Data.Common;
 using System.Collections.Generic;
 using de.dhoffmann.mono.adfcnewsapp.buslog.webservice;
+using System.Text;
 
 namespace de.dhoffmann.mono.adfcnewsapp.buslog.database
 {
@@ -111,14 +112,17 @@ namespace de.dhoffmann.mono.adfcnewsapp.buslog.database
 						{
 							if (reader.HasRows)
 							{
+								try {
 								ret.Add(new WSFeedConfig.FeedConfig()
 								{
 									Name = reader.GetString(0),
 									FeedType = (WSFeedConfig.FeedTypes)reader.GetInt32(1),
 									Url = reader.GetString(2),
 									UrlType = (WSFeedConfig.UrlTypes)reader.GetInt32(3),
-									ShowCategory = reader.GetString(4)
+									ShowCategory = (!reader.IsDBNull(4)? reader.GetString(4) : null)
 								});
+								}catch(Exception e) {
+									int i = 0;i++;}
 							}
 						}
 					}
@@ -136,29 +140,39 @@ namespace de.dhoffmann.mono.adfcnewsapp.buslog.database
 			if (feedsConfig == null)
 				return;
 			
-			List<string> commands = new List<string>();
-			// Alle Feeds entfernen
-			commands.Add("DELETE * FROM feedconfig;");
+			List<WSFeedConfig.FeedConfig> dbFeedsConfig = GetWSConfig();
 			
-			// Und die aktuellen hinzufügen
-			foreach (WSFeedConfig.FeedConfig feed in feedsConfig)
-				commands.Add("INSERT INTO feedconfig (Name, FeedType, URL, URLType, ShowCategory) VALUES ('" + feed.Name + "', " + (int)feed.FeedType + ", '" + feed.Url + "', " + (int)feed.UrlType + ", '" + feed.ShowCategory + "');");
+			StringBuilder commands = new StringBuilder();
 			
-			using(SqliteConnection conn = GetConnection())
+			// Feeds die noch nicht in der DB sind hinzufügen
+			foreach(WSFeedConfig.FeedConfig feedConfig in feedsConfig)
 			{
-				conn.Open();
-				
-				using(DbCommand c = conn.CreateCommand())
+				if (!dbFeedsConfig.Exists(p => p.Url == feedConfig.Url && p.ShowCategory == feedConfig.ShowCategory))
+					commands.AppendLine("INSERT INTO feedconfig (Name, FeedType, URL, URLType, ShowCategory) VALUES ('" + feedConfig.Name + "', " + (int)feedConfig.FeedType + ", '" + feedConfig.Url + "', " + (int)feedConfig.UrlType + ", " + (!String.IsNullOrEmpty(feedConfig.ShowCategory)? "'" + feedConfig.ShowCategory + "'" : "NULL") + ");");
+			}
+			
+			// Einträge die es nicht mehr gibt entfernen.
+			foreach(WSFeedConfig.FeedConfig dbFeed in dbFeedsConfig)
+			{
+				if (!feedsConfig.Exists(p => p.Url == dbFeed.Url && p.ShowCategory == dbFeed.ShowCategory))
+					commands.AppendLine("DELETE FROM feedconfig WHERE URL='" + dbFeed.Url + "' AND ShowCategory='" + dbFeed.ShowCategory + "';");
+			}
+			
+			if (commands.Length > 0)
+			{
+				using(SqliteConnection conn = GetConnection())
 				{
-					foreach(string cmd in commands)
+					conn.Open();
+					
+					using(DbCommand c = conn.CreateCommand())
 					{
-						c.CommandText = cmd;
+						c.CommandText = commands.ToString();
 						c.CommandType = System.Data.CommandType.Text;
 						c.ExecuteNonQuery();
 					}
+					
+					conn.Close();
 				}
-				
-				conn.Close();
 			}
 		}
 	}

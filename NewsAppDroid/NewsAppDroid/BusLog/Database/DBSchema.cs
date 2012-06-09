@@ -23,6 +23,7 @@ using System.Collections.Generic;
 using Mono.Data.Sqlite;
 using System.Data.SqlClient;
 using System.Data.Common;
+using System.Text;
 
 namespace de.dhoffmann.mono.adfcnewsapp.buslog.database
 {
@@ -78,21 +79,21 @@ namespace de.dhoffmann.mono.adfcnewsapp.buslog.database
 		/// </summary>
 		public void UpdateDBSchema()
 		{
-			List<string> commands = new List<string>();
+			StringBuilder commands = new StringBuilder();
 			
 			int currentVersion = GetDBVersion();
 			
 			// Befehle für die Schemaaktualisierung zusmmen sammeln.
 			if (currentVersion <= 0)
 			{
-				commands.Add("CREATE TABLE config (AppIsConfigured BOOLEAN, DateIndicate BOOLEAN, DataAutomaticUpdate BOOLEAN);");
-				commands.Add("INSERT INTO config (AppIsConfigured, DateIndicate, DataAutomaticUpdate) VALUES (0, 0, 0);");
-				commands.Add("CREATe TABLE feedconfig (Name VARCHAR(100), FeedType (INTEGER), URL VARCHAR(250), URLType INTEGER, ShowCategory VARCHAR(100));");
-				commands.Add("INSERT INTO version (DateCreate) VALUES (date('now'));");
+				commands.AppendLine("CREATE TABLE config (AppIsConfigured BOOLEAN NOT NULL, DateIndicate BOOLEAN NOT NULL, DataAutomaticUpdate BOOLEAN NOT NULL);");
+				commands.AppendLine("INSERT INTO config (AppIsConfigured, DateIndicate, DataAutomaticUpdate) VALUES (0, 0, 0);");
+				commands.AppendLine("CREATE TABLE feedconfig (Name VARCHAR(100) NOT NULL, FeedType INTEGER NOT NULL, URL VARCHAR(250) NOT NULL, URLType INTEGER NOT NULL, ShowCategory VARCHAR(100));");
+				commands.AppendLine("INSERT INTO version (DateCreate) VALUES (date('now'));");
 			}
 			
 			// Befehle an die Datenbank schicken
-			if (commands.Count > 0)
+			if (commands.Length > 0)
 			{
 				using(SqliteConnection conn = GetConnection())
 				{
@@ -100,12 +101,9 @@ namespace de.dhoffmann.mono.adfcnewsapp.buslog.database
 					
 					using(DbCommand c = conn.CreateCommand())
 					{
-						foreach(string cmd in commands)
-						{
-							c.CommandText = cmd;
-							c.CommandType = System.Data.CommandType.Text;
-							c.ExecuteNonQuery();
-						}
+						c.CommandText = commands.ToString();
+						c.CommandType = System.Data.CommandType.Text;
+						c.ExecuteNonQuery();
 					}
 					
 					conn.Close();
