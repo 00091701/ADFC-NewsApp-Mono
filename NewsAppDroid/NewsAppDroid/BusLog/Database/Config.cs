@@ -112,7 +112,6 @@ namespace de.dhoffmann.mono.adfcnewsapp.buslog.database
 						{
 							if (reader.HasRows)
 							{
-								try {
 								ret.Add(new WSFeedConfig.FeedConfig()
 								{
 									Name = reader.GetString(0),
@@ -121,8 +120,6 @@ namespace de.dhoffmann.mono.adfcnewsapp.buslog.database
 									UrlType = (WSFeedConfig.UrlTypes)reader.GetInt32(3),
 									ShowCategory = (!reader.IsDBNull(4)? reader.GetString(4) : null)
 								});
-								}catch(Exception e) {
-									int i = 0;i++;}
 							}
 						}
 					}
