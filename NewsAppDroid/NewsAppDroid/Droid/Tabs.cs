@@ -30,6 +30,7 @@ using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 using de.dhoffmann.mono.adfcnewsapp.buslog.database;
+using de.dhoffmann.mono.adfcnewsapp.buslog;
 
 namespace de.dhoffmann.mono.adfcnewsapp.droid
 {
@@ -73,7 +74,7 @@ namespace de.dhoffmann.mono.adfcnewsapp.droid
 			// -- 
 			
 			// Wenn die App noch nicht konfiguriert wurde, die Einstellungen anzeigen.
-			if (!new Config().GetConfig().AppIsConfigured)
+			if (!new Config().GetAppConfig().AppIsConfigured)
 				StartActivity(typeof(Settings));
 		}
 		
@@ -92,6 +93,9 @@ namespace de.dhoffmann.mono.adfcnewsapp.droid
 			{
 				case Resource.Id.menuSettings:
 					StartActivity(typeof(Settings));
+					break;
+				case Resource.Id.menuGetDataNow:
+					new FeedHelper().UpdateFeeds();
 					break;
 			}
 			

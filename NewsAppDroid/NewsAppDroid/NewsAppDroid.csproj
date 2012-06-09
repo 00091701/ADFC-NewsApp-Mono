@@ -48,6 +48,9 @@
     <Reference Include="System.Data" />
     <Reference Include="Mono.Data.Sqlite" />
     <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Json" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.ServiceModel.Web" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Resources\Resource.designer.cs" />
@@ -59,6 +62,9 @@
     <Compile Include="BusLog\Database\DataBase.cs" />
     <Compile Include="BusLog\Database\DBSchema.cs" />
     <Compile Include="BusLog\Database\Config.cs" />
+    <Compile Include="BusLog\Webservice\WebServiceBase.cs" />
+    <Compile Include="BusLog\FeedHelper.cs" />
+    <Compile Include="BusLog\Webservice\WSFeedConfig.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />
@@ -79,5 +85,6 @@
     <Folder Include="Droid\" />
     <Folder Include="BusLog\" />
     <Folder Include="BusLog\Database\" />
+    <Folder Include="BusLog\Webservice\" />
   </ItemGroup>
 </Project>

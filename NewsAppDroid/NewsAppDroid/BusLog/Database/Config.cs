@@ -21,6 +21,8 @@
 using System;
 using Mono.Data.Sqlite;
 using System.Data.Common;
+using System.Collections.Generic;
+using de.dhoffmann.mono.adfcnewsapp.buslog.webservice;
 
 namespace de.dhoffmann.mono.adfcnewsapp.buslog.database
 {
@@ -37,7 +39,7 @@ namespace de.dhoffmann.mono.adfcnewsapp.buslog.database
 		{
 		}
 		
-		public AppConfig GetConfig()
+		public AppConfig GetAppConfig()
 		{
 			AppConfig ret = new AppConfig();
 			
@@ -70,22 +72,93 @@ namespace de.dhoffmann.mono.adfcnewsapp.buslog.database
 		}
 		
 		
-		public void SetConfig(AppConfig config)
+		public void SetAppConfig(AppConfig config)
 		{
-			if (config != null)
+			if (config == null)
+				return;
+			
+			using(SqliteConnection conn = GetConnection())
 			{
-				using(SqliteConnection conn = GetConnection())
+				using(DbCommand c = conn.CreateCommand())
 				{
-					using(DbCommand c = conn.CreateCommand())
+					c.CommandText = "UPDATE config SET AppIsConfigured=1, DateIndicate=" + (config.DateIndicate? "1" : "0") + ", DataAutomaticUpdate=" + (config.DataAutomaticUpdate? "1" : "0") + ";";
+					c.CommandType = System.Data.CommandType.Text;
+					conn.Open();
+					c.ExecuteNonQuery();
+					
+					conn.Close();
+				}
+			}
+		}
+		
+		
+		public List<WSFeedConfig.FeedConfig> GetWSConfig()
+		{
+			List<WSFeedConfig.FeedConfig> ret = new List<WSFeedConfig.FeedConfig>();
+			
+			using(SqliteConnection conn = GetConnection())
+			{
+				using(DbCommand c = conn.CreateCommand())
+				{
+					conn.Open();
+					
+					c.CommandText = "SELECT Name, FeedType, URL, URLType, ShowCategory FROM feedconfig;";
+					c.CommandType = System.Data.CommandType.Text;
+					
+					using (DbDataReader reader = c.ExecuteReader())
 					{
-						c.CommandText = "UPDATE config SET AppIsConfigured=1, DateIndicate=" + (config.DateIndicate? "1" : "0") + ", DataAutomaticUpdate=" + (config.DataAutomaticUpdate? "1" : "0") + ";";
-						c.CommandType = System.Data.CommandType.Text;
-						conn.Open();
-						c.ExecuteNonQuery();
+						while (reader.Read())
+						{
+							if (reader.HasRows)
+							{
+								ret.Add(new WSFeedConfig.FeedConfig()
+								{
+									Name = reader.GetString(0),
+									FeedType = (WSFeedConfig.FeedTypes)reader.GetInt32(1),
+									Url = reader.GetString(2),
+									UrlType = (WSFeedConfig.UrlTypes)reader.GetInt32(3),
+									ShowCategory = reader.GetString(4)
+								});
+							}
+						}
+					}
 						
-						conn.Close();
+					conn.Close();
+				}
+			}
+			
+			return ret;
+		}
+		
+		
+		public void SetWSConfig(List<WSFeedConfig.FeedConfig> feedsConfig)
+		{
+			if (feedsConfig == null)
+				return;
+			
+			List<string> commands = new List<string>();
+			// Alle Feeds entfernen
+			commands.Add("DELETE * FROM feedconfig;");
+			
+			// Und die aktuellen hinzufügen
+			foreach (WSFeedConfig.FeedConfig feed in feedsConfig)
+				commands.Add("INSERT INTO feedconfig (Name, FeedType, URL, URLType, ShowCategory) VALUES ('" + feed.Name + "', " + (int)feed.FeedType + ", '" + feed.Url + "', " + (int)feed.UrlType + ", '" + feed.ShowCategory + "');");
+			
+			using(SqliteConnection conn = GetConnection())
+			{
+				conn.Open();
+				
+				using(DbCommand c = conn.CreateCommand())
+				{
+					foreach(string cmd in commands)
+					{
+						c.CommandText = cmd;
+						c.CommandType = System.Data.CommandType.Text;
+						c.ExecuteNonQuery();
 					}
 				}
+				
+				conn.Close();
 			}
 		}
 	}

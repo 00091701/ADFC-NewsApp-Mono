@@ -46,7 +46,7 @@ namespace de.dhoffmann.mono.adfcnewsapp.droid
 			CheckBox cbDataUpdate = FindViewById<CheckBox>(Resource.Id.cbDataUpdate);
 			
 			// Konfiguration laden
-			AppConfig appConfig = new Config().GetConfig();
+			AppConfig appConfig = new Config().GetAppConfig();
 			cbDateIndicate.Checked = appConfig.DateIndicate;
 			cbDataUpdate.Checked = appConfig.DataAutomaticUpdate;
 		}
@@ -63,8 +63,7 @@ namespace de.dhoffmann.mono.adfcnewsapp.droid
 			appConfig.DateIndicate = cbDateIndicate.Checked;
 			appConfig.DataAutomaticUpdate = cbDataUpdate.Checked;
 			
-			new Config().SetConfig(appConfig);
-
+			new Config().SetAppConfig(appConfig);
 		}
 	}
 }

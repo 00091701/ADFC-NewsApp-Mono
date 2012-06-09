@@ -87,6 +87,7 @@ namespace de.dhoffmann.mono.adfcnewsapp.buslog.database
 			{
 				commands.Add("CREATE TABLE config (AppIsConfigured BOOLEAN, DateIndicate BOOLEAN, DataAutomaticUpdate BOOLEAN);");
 				commands.Add("INSERT INTO config (AppIsConfigured, DateIndicate, DataAutomaticUpdate) VALUES (0, 0, 0);");
+				commands.Add("CREATe TABLE feedconfig (Name VARCHAR(100), FeedType (INTEGER), URL VARCHAR(250), URLType INTEGER, ShowCategory VARCHAR(100));");
 				commands.Add("INSERT INTO version (DateCreate) VALUES (date('now'));");
 			}
 			
