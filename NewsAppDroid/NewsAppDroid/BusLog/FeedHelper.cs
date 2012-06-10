@@ -40,11 +40,11 @@ namespace de.dhoffmann.mono.adfcnewsapp.buslog
 			bgWorker.DoWork += delegate(object sender, DoWorkEventArgs e) 
 			{	
 				// Konfiguration vom Webserver laden
-				Console.WriteLine("Konfiguration vom Webserver laden");
+				System.Diagnostics.Debug.WriteLine("Konfiguration vom Webserver laden");
 				List<WSFeedConfig.FeedConfig> feedsConfig = new WSFeedConfig().GetFeedConfig();
 				
 				// Konfiguration in der Datenbank speichern
-				Console.WriteLine("Konfiguration in der Datenbank speichern");
+				System.Diagnostics.Debug.WriteLine("Konfiguration in der Datenbank speichern");
 				new Config().SetWSConfig(feedsConfig);
 				
 			};
