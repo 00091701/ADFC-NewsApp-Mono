@@ -54,8 +54,8 @@ namespace de.dhoffmann.mono.adfcnewsapp.buslog.database
 			if (!dbExists)
 			{
 				StringBuilder commands = new StringBuilder();
-				commands.AppendLine("CREATE TABLE version (VersionID INTEGER PRIMARY KEY AUTOINCREMENT, DateCreate DATETIME NOT NULL);");
-				commands.AppendLine("INSERT INTO version (VersionID, DateCreate) VALUES (0, date('now'));");
+				commands.AppendLine("CREATE TABLE version (VersionID INTEGER PRIMARY KEY AUTOINCREMENT, DateCreate BIGINT NOT NULL);");
+				commands.AppendLine("INSERT INTO version (VersionID, DateCreate) VALUES (0, " + Convert.ToInt64(DateTime.Now.Subtract(new DateTime(1970, 1, 1)).TotalSeconds).ToString() + ");");
 				
 				conn.Open();
 				

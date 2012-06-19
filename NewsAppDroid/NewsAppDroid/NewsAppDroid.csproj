@@ -15,7 +15,7 @@
     <AndroidApplication>True</AndroidApplication>
     <AndroidResgenFile>Resources\Resource.designer.cs</AndroidResgenFile>
     <AssemblyName>NewsAppDroid</AssemblyName>
-    <DeployExternal>true</DeployExternal>
+    <DeployExternal>false</DeployExternal>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -65,6 +65,9 @@
     <Compile Include="BusLog\Webservice\WebServiceBase.cs" />
     <Compile Include="BusLog\FeedHelper.cs" />
     <Compile Include="BusLog\Webservice\WSFeedConfig.cs" />
+    <Compile Include="BusLog\Webservice\Download.cs" />
+    <Compile Include="BusLog\FeedImport\Rss.cs" />
+    <Compile Include="BusLog\Database\Rss.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />
@@ -86,5 +89,6 @@
     <Folder Include="BusLog\" />
     <Folder Include="BusLog\Database\" />
     <Folder Include="BusLog\Webservice\" />
+    <Folder Include="BusLog\FeedImport\" />
   </ItemGroup>
 </Project>

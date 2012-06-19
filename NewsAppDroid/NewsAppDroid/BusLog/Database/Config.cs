@@ -44,29 +44,36 @@ namespace de.dhoffmann.mono.adfcnewsapp.buslog.database
 		{
 			AppConfig ret = new AppConfig();
 			
-			using(SqliteConnection conn = GetConnection())
+			try
 			{
-				using(DbCommand c = conn.CreateCommand())
+				using(SqliteConnection conn = GetConnection())
 				{
-					c.CommandText = "SELECT AppIsConfigured, DateIndicate, DataAutomaticUpdate FROM config Limit 1;";
-					c.CommandType = System.Data.CommandType.Text;
-					conn.Open();
-					
-					using (DbDataReader reader = c.ExecuteReader())
+					using(DbCommand c = conn.CreateCommand())
 					{
-						// Es gibt nur eine letzte Version
-						reader.Read();
+						c.CommandText = "SELECT AppIsConfigured, DateIndicate, DataAutomaticUpdate FROM config Limit 1;";
+						c.CommandType = System.Data.CommandType.Text;
+						conn.Open();
 						
-						if (reader.HasRows)
+						using (DbDataReader reader = c.ExecuteReader())
 						{
-							ret.AppIsConfigured = reader.GetBoolean(0);
-							ret.DateIndicate = reader.GetBoolean(1);
-							ret.DataAutomaticUpdate = reader.GetBoolean(2);
+							// Es gibt nur eine letzte Version
+							reader.Read();
+							
+							if (reader.HasRows)
+							{
+								ret.AppIsConfigured = reader.GetBoolean(0);
+								ret.DateIndicate = reader.GetBoolean(1);
+								ret.DataAutomaticUpdate = reader.GetBoolean(2);
+							}
 						}
+						
+						conn.Close();
 					}
-					
-					conn.Close();
 				}
+			}
+			catch(SqliteException ex)
+			{
+				System.Diagnostics.Debug.WriteLine(this.GetType() + ".GetAppConfig() - ex: " + ex.ToString());
 			}
 			
 			return ret;
@@ -78,17 +85,24 @@ namespace de.dhoffmann.mono.adfcnewsapp.buslog.database
 			if (config == null)
 				return;
 			
-			using(SqliteConnection conn = GetConnection())
+			try
 			{
-				using(DbCommand c = conn.CreateCommand())
+				using(SqliteConnection conn = GetConnection())
 				{
-					c.CommandText = "UPDATE config SET AppIsConfigured=1, DateIndicate=" + (config.DateIndicate? "1" : "0") + ", DataAutomaticUpdate=" + (config.DataAutomaticUpdate? "1" : "0") + ";";
-					c.CommandType = System.Data.CommandType.Text;
-					conn.Open();
-					c.ExecuteNonQuery();
-					
-					conn.Close();
+					using(DbCommand c = conn.CreateCommand())
+					{
+						c.CommandText = "UPDATE config SET AppIsConfigured=1, DateIndicate=" + (config.DateIndicate? "1" : "0") + ", DataAutomaticUpdate=" + (config.DataAutomaticUpdate? "1" : "0") + ";";
+						c.CommandType = System.Data.CommandType.Text;
+						conn.Open();
+						c.ExecuteNonQuery();
+						
+						conn.Close();
+					}
 				}
+			}
+			catch(SqliteException ex)
+			{
+				System.Diagnostics.Debug.WriteLine(this.GetType() + ".SetAppConfig() - ex: " + ex.ToString());
 			}
 		}
 		
@@ -97,35 +111,44 @@ namespace de.dhoffmann.mono.adfcnewsapp.buslog.database
 		{
 			List<WSFeedConfig.FeedConfig> ret = new List<WSFeedConfig.FeedConfig>();
 			
-			using(SqliteConnection conn = GetConnection())
+			try
 			{
-				using(DbCommand c = conn.CreateCommand())
+				using(SqliteConnection conn = GetConnection())
 				{
-					conn.Open();
-					
-					c.CommandText = "SELECT Name, FeedType, URL, URLType, ShowCategory FROM feedconfig;";
-					c.CommandType = System.Data.CommandType.Text;
-					
-					using (DbDataReader reader = c.ExecuteReader())
+					using(DbCommand c = conn.CreateCommand())
 					{
-						while (reader.Read())
+						conn.Open();
+						
+						c.CommandText = "SELECT FeedID, IsActive, Name, FeedType, URL, URLType, CategoryFilter FROM feedconfig ORDER BY Name, FeedType, CategoryFilter;";
+						c.CommandType = System.Data.CommandType.Text;
+						
+						using (DbDataReader reader = c.ExecuteReader())
 						{
-							if (reader.HasRows)
+							while (reader.Read())
 							{
-								ret.Add(new WSFeedConfig.FeedConfig()
+								if (reader.HasRows)
 								{
-									Name = reader.GetString(0),
-									FeedType = (WSFeedConfig.FeedTypes)reader.GetInt32(1),
-									Url = reader.GetString(2),
-									UrlType = (WSFeedConfig.UrlTypes)reader.GetInt32(3),
-									ShowCategory = (!reader.IsDBNull(4)? reader.GetString(4) : null)
-								});
+									ret.Add(new WSFeedConfig.FeedConfig()
+									{
+										FeedID = reader.GetInt32(0),
+										IsActive = reader.GetBoolean(1),
+										Name = reader.GetString(2),
+										FeedType = (WSFeedConfig.FeedTypes)reader.GetInt32(3),
+										Url = reader.GetString(4),
+										UrlType = (WSFeedConfig.UrlTypes)reader.GetInt32(5),
+										CategoryFilter = (!reader.IsDBNull(6)? reader.GetString(6) : null)
+									});
+								}
 							}
 						}
+							
+						conn.Close();
 					}
-						
-					conn.Close();
 				}
+			}
+			catch(SqliteException ex)
+			{
+				System.Diagnostics.Debug.WriteLine(this.GetType() + ".GetWSConfig() - ex: " + ex.ToString());
 			}
 			
 			return ret;
@@ -144,32 +167,39 @@ namespace de.dhoffmann.mono.adfcnewsapp.buslog.database
 			// Feeds die noch nicht in der DB sind hinzufügen
 			foreach(WSFeedConfig.FeedConfig feedConfig in feedsConfig)
 			{
-				if (!dbFeedsConfig.Exists(p => p.Url == feedConfig.Url && p.ShowCategory == feedConfig.ShowCategory))
-					commands.AppendLine("INSERT INTO feedconfig (Name, FeedType, URL, URLType, ShowCategory) VALUES ('" + feedConfig.Name + "', " + (int)feedConfig.FeedType + ", '" + feedConfig.Url + "', " + (int)feedConfig.UrlType + ", " + (!String.IsNullOrEmpty(feedConfig.ShowCategory)? "'" + feedConfig.ShowCategory + "'" : "NULL") + ");");
+				if (!dbFeedsConfig.Exists(p => p.Url == feedConfig.Url && p.CategoryFilter == feedConfig.CategoryFilter))
+					commands.AppendLine("INSERT INTO feedconfig (IsActive, Name, FeedType, URL, URLType, CategoryFilter) VALUES (0, '" + feedConfig.Name + "', " + (int)feedConfig.FeedType + ", '" + feedConfig.Url + "', " + (int)feedConfig.UrlType + ", " + (!String.IsNullOrEmpty(feedConfig.CategoryFilter)? "'" + feedConfig.CategoryFilter + "'" : "NULL") + ");");
 			}
 			
 			// Einträge die es nicht mehr gibt entfernen.
 			foreach(WSFeedConfig.FeedConfig dbFeed in dbFeedsConfig)
 			{
-				if (!feedsConfig.Exists(p => p.Url == dbFeed.Url && p.ShowCategory == dbFeed.ShowCategory))
-					commands.AppendLine("DELETE FROM feedconfig WHERE URL='" + dbFeed.Url + "' AND ShowCategory='" + dbFeed.ShowCategory + "';");
+				if (!feedsConfig.Exists(p => p.Url == dbFeed.Url && p.CategoryFilter == dbFeed.CategoryFilter))
+					commands.AppendLine("DELETE FROM feedconfig WHERE URL='" + dbFeed.Url + "' AND CategoryFilter='" + dbFeed.CategoryFilter + "';");
 			}
 			
 			if (commands.Length > 0)
 			{
-				using(SqliteConnection conn = GetConnection())
+				try
 				{
-					conn.Open();
-					
-					using(DbCommand c = conn.CreateCommand())
+					using(SqliteConnection conn = GetConnection())
 					{
-						c.CommandText = commands.ToString();
-						c.CommandType = System.Data.CommandType.Text;
-						c.ExecuteNonQuery();
+						conn.Open();
+						
+						using(DbCommand c = conn.CreateCommand())
+						{
+							c.CommandText = commands.ToString();
+							c.CommandType = System.Data.CommandType.Text;
+							c.ExecuteNonQuery();
+						}
+						
+						conn.Close();
 					}
-					
-					conn.Close();
 				}
+				catch(SqliteException ex)
+				{
+					System.Diagnostics.Debug.WriteLine(this.GetType() + ".SetWSConfig() - ex: " + ex.ToString());
+				}	
 			}
 		}
 	}

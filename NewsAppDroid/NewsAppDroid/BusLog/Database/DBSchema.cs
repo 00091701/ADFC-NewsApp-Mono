@@ -88,8 +88,10 @@ namespace de.dhoffmann.mono.adfcnewsapp.buslog.database
 			{
 				commands.AppendLine("CREATE TABLE config (AppIsConfigured BOOLEAN NOT NULL, DateIndicate BOOLEAN NOT NULL, DataAutomaticUpdate BOOLEAN NOT NULL);");
 				commands.AppendLine("INSERT INTO config (AppIsConfigured, DateIndicate, DataAutomaticUpdate) VALUES (0, 0, 0);");
-				commands.AppendLine("CREATE TABLE feedconfig (Name VARCHAR(100) NOT NULL, FeedType INTEGER NOT NULL, URL VARCHAR(250) NOT NULL, URLType INTEGER NOT NULL, ShowCategory VARCHAR(100));");
-				commands.AppendLine("INSERT INTO version (DateCreate) VALUES (date('now'));");
+				commands.AppendLine("CREATE TABLE feedconfig (FeedID INTEGER PRIMARY KEY AUTOINCREMENT, IsActive BOOLEAN NOT NULL, Name VARCHAR(100) NOT NULL, FeedType INTEGER NOT NULL, URL VARCHAR(250) NOT NULL, URLType INTEGER NOT NULL, CategoryFilter VARCHAR(100));");
+				commands.AppendLine("CREATE TABLE rssfeeds (FeedID INTEGER PRIMARY KEY AUTOINCREMENT, DateCreate BIGINT NOT NULL, Title VARCHAR(200), Link VARCHAR(250), Description VARCHAR(500), LastBuildDate BIGINT);");
+				commands.AppendLine("CREATE TABLE rssfeeditem (ItemID INTEGER PRIMARY KEY AUTOINCREMENT, FeedID INTEGER NOT NULL, DateCreate BIGINT NOT NULL, Title VARCHAR(200), Link VARCHAR(250), Description VARCHAR(1000), Category VARCHAR(100), PubDate BIGINT, IsRead BOOLEAN);");
+				commands.AppendLine("INSERT INTO version (DateCreate) VALUES (" + Convert.ToInt64(DateTime.Now.Subtract(new DateTime(1970, 1, 1)).TotalSeconds).ToString() + ");");
 			}
 			
 			// Befehle an die Datenbank schicken

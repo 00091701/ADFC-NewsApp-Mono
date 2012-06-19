@@ -5,7 +5,7 @@
             "FeedType": "News",
             "URL": "http://www.adfc-braunschweig.de/rss.xml",
             "URLType": "RSS",
-            "ShowCategory": ""
+            "CategoryFilter": ""
         },
         {
             "Name": "Braunschweig - Termine 2012",

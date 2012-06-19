@@ -45,11 +45,13 @@ namespace de.dhoffmann.mono.adfcnewsapp.buslog.webservice
 		
 		public class FeedConfig
 		{
+			public int FeedID { get; set; }
+			public bool IsActive { get; set; }
 			public string Name { get; set; }
 			public FeedTypes FeedType { get; set; }
 			public string Url { get; set; }
 			public UrlTypes UrlType { get; set; }
-			public string ShowCategory { get; set; }
+			public string CategoryFilter { get; set; }
 		}
 		
 		
@@ -62,14 +64,23 @@ namespace de.dhoffmann.mono.adfcnewsapp.buslog.webservice
 		{
 			List<FeedConfig> ret = null;
 			
+			// Zentrale Konfigurationsdatei
 			string url = "https://raw.github.com/00091701/ADFC-NewsApp-Mono/master/FeedConfig.json";
+			JsonValue jsonValue = null;
 			
-			HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
-			request.AllowAutoRedirect = true;
-			request.AutomaticDecompression = DecompressionMethods.Deflate;
-			request.Method = "GET";
-			
-			JsonValue jsonValue = (JsonObject)JsonObject.Load(request.GetResponse().GetResponseStream());
+			try
+			{
+				HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+				request.AllowAutoRedirect = true;
+				request.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
+				request.Method = "GET";
+				
+				jsonValue = (JsonObject)JsonObject.Load(request.GetResponse().GetResponseStream());
+			}
+			catch(WebException ex)
+			{
+				System.Diagnostics.Debug.WriteLine(string.Format("Fehler beim Abruf des Feeds: {0} - ex: ", url, ex.ToString()));
+			}
 			
 			if (jsonValue != null && jsonValue.Count > 0)
 			{
@@ -81,8 +92,8 @@ namespace de.dhoffmann.mono.adfcnewsapp.buslog.webservice
 					feedConfig.Name = (string)feed["Name"];
 					feedConfig.Url = (string)feed["URL"];
 					
-					if (feed.ContainsKey("ShowCategory") && !string.IsNullOrEmpty((string)feed["ShowCategory"]))
-						feedConfig.ShowCategory = (string)feed["ShowCategory"];
+					if (feed.ContainsKey("CategoryFilter") && !string.IsNullOrEmpty((string)feed["CategoryFilter"]))
+						feedConfig.CategoryFilter = (string)feed["CategoryFilter"];
 					
 					switch((string)feed["FeedType"])
 					{
