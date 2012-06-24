@@ -39,7 +39,16 @@ namespace de.dhoffmann.mono.adfcnewsapp.buslog.database
 		public Config ()
 		{
 		}
-		
+
+
+		public class FeedSettings
+		{
+			public int FeedID { get; set; }
+			public string Title { get; set; }
+			public bool IsActive { get; set; }
+		}
+
+
 		public AppConfig GetAppConfig()
 		{
 			AppConfig ret = new AppConfig();
@@ -169,6 +178,8 @@ namespace de.dhoffmann.mono.adfcnewsapp.buslog.database
 			{
 				if (!dbFeedsConfig.Exists(p => p.Url == feedConfig.Url && p.CategoryFilter == feedConfig.CategoryFilter))
 					commands.AppendLine("INSERT INTO feedconfig (IsActive, Name, FeedType, URL, URLType, CategoryFilter) VALUES (0, '" + feedConfig.Name + "', " + (int)feedConfig.FeedType + ", '" + feedConfig.Url + "', " + (int)feedConfig.UrlType + ", " + (!String.IsNullOrEmpty(feedConfig.CategoryFilter)? "'" + feedConfig.CategoryFilter + "'" : "NULL") + ");");
+				else
+					commands.AppendLine("UPDATE feedconfig SET IsActive=" + (feedConfig.IsActive? "1" : "0") + " WHERE FeedID=" + feedConfig.FeedID + ";");
 			}
 			
 			// Einträge die es nicht mehr gibt entfernen.

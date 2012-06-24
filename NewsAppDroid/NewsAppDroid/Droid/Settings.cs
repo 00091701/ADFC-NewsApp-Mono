@@ -30,31 +30,48 @@ using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 using de.dhoffmann.mono.adfcnewsapp.buslog.database;
+using de.dhoffmann.mono.adfcnewsapp.androidhelper;
+using de.dhoffmann.mono.adfcnewsapp.buslog.webservice;
 
 namespace de.dhoffmann.mono.adfcnewsapp.droid
 {
 	[Activity (Label = "Settings", Theme = "@style/MainTheme")]			
 	public class Settings : Activity
 	{
+		private SettingsFeedListAdapter settingsFeedListAdapter;
+
 		protected override void OnCreate (Bundle bundle)
 		{
 			base.OnCreate (bundle);
 			
 			SetContentView(Resource.Layout.Settings);
-			
+		}
+
+		protected override void OnResume ()
+		{
+			base.OnResume ();
+
 			CheckBox cbDateIndicate = FindViewById<CheckBox>(Resource.Id.cbDateIndicate);
 			CheckBox cbDataUpdate = FindViewById<CheckBox>(Resource.Id.cbDataUpdate);
 			
 			// Konfiguration laden
-			AppConfig appConfig = new Config().GetAppConfig();
+			Config config = new Config();
+			AppConfig appConfig = config.GetAppConfig();
 			cbDateIndicate.Checked = appConfig.DateIndicate;
 			cbDataUpdate.Checked = appConfig.DataAutomaticUpdate;
+
+			List<WSFeedConfig.FeedConfig> feedConfig = config.GetWSConfig();
+
+			ListView lvDataSubscription = FindViewById<ListView>(Resource.Id.lvDataSubscription);
+			settingsFeedListAdapter = new SettingsFeedListAdapter(this, feedConfig);
+			lvDataSubscription.Adapter = settingsFeedListAdapter;
 		}
-		
-		protected override void OnStop ()
+
+
+		protected override void OnPause ()
 		{
-			base.OnStop ();
-			
+			base.OnPause ();
+
 			CheckBox cbDateIndicate = FindViewById<CheckBox>(Resource.Id.cbDateIndicate);
 			CheckBox cbDataUpdate = FindViewById<CheckBox>(Resource.Id.cbDataUpdate);
 			
@@ -62,9 +79,15 @@ namespace de.dhoffmann.mono.adfcnewsapp.droid
 			AppConfig appConfig = new AppConfig();
 			appConfig.DateIndicate = cbDateIndicate.Checked;
 			appConfig.DataAutomaticUpdate = cbDataUpdate.Checked;
-			
-			new Config().SetAppConfig(appConfig);
+
+			Config config = new Config();
+			config.SetAppConfig(appConfig);
+			config.SetWSConfig(settingsFeedListAdapter.GetFeedConfig);
 		}
+		
+		protected override void OnStop ()
+		{
+			base.OnStop ();		}
 	}
 }
 

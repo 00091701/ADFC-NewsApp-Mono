@@ -42,7 +42,6 @@ namespace de.dhoffmann.mono.adfcnewsapp.buslog.database
 			
 			try
 			{
-			
 				using(SqliteConnection conn = GetConnection())
 				{
 					using(DbCommand c = conn.CreateCommand())

@@ -43,6 +43,9 @@ namespace de.dhoffmann.mono.adfcnewsapp.droid
 			// aapt resource value: 0x7f060008
 			public const int cbDateIndicate = 2131099656;
 			
+			// aapt resource value: 0x7f06000b
+			public const int cbFeedItem = 2131099659;
+			
 			// aapt resource value: 0x7f060005
 			public const int imageView1 = 2131099653;
 			
@@ -91,7 +94,10 @@ namespace de.dhoffmann.mono.adfcnewsapp.droid
 			public const int Settings = 2130903043;
 			
 			// aapt resource value: 0x7f030004
-			public const int Tabs = 2130903044;
+			public const int SettingsFeedListItem = 2130903044;
+			
+			// aapt resource value: 0x7f030005
+			public const int Tabs = 2130903045;
 			
 			private Layout()
 			{

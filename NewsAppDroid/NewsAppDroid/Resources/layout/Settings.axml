@@ -33,7 +33,7 @@
             android:textSize="30dp"
             android:textStyle="bold" />
     </LinearLayout>
-    <ScrollView
+    <LinearLayout
         android:minWidth="25px"
         android:minHeight="25px"
         android:layout_width="fill_parent"
@@ -64,7 +64,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/textView1"
                 android:paddingLeft="45dp"
-                android:paddingTop="5dp"
+                android:paddingTop="15dp"
                 android:textColor="#ffffffff"
                 android:textSize="16dp" />
             <ListView
@@ -74,5 +74,5 @@
                 android:layout_height="fill_parent"
                 android:id="@+id/lvDataSubscription" />
         </LinearLayout>
-    </ScrollView>
+    </LinearLayout>
 </LinearLayout>

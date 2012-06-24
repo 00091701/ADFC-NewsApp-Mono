@@ -68,6 +68,7 @@
     <Compile Include="BusLog\Webservice\Download.cs" />
     <Compile Include="BusLog\FeedImport\Rss.cs" />
     <Compile Include="BusLog\Database\Rss.cs" />
+    <Compile Include="AndroidHelper\SettingsFeedListAdapter.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />
@@ -82,6 +83,7 @@
     <AndroidResource Include="Resources\values\Style.xml" />
     <AndroidResource Include="Resources\layout\Settings.axml" />
     <AndroidResource Include="Resources\layout\Menu.axml" />
+    <AndroidResource Include="Resources\layout\SettingsFeedListItem.axml" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
   <ItemGroup>
@@ -90,5 +92,6 @@
     <Folder Include="BusLog\Database\" />
     <Folder Include="BusLog\Webservice\" />
     <Folder Include="BusLog\FeedImport\" />
+    <Folder Include="AndroidHelper\" />
   </ItemGroup>
 </Project>
