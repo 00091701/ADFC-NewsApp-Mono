@@ -29,17 +29,29 @@ using Android.OS;
 using Android.Runtime;
 using Android.Views;
 using Android.Widget;
+using de.dhoffmann.mono.adfcnewsapp.buslog;
+using de.dhoffmann.mono.adfcnewsapp.buslog.feedimport;
+using de.dhoffmann.mono.adfcnewsapp.androidhelper;
 
 namespace de.dhoffmann.mono.adfcnewsapp.droid
 {
 	[Activity (Label = "News")]			
 	public class News : Activity
 	{
+		private NewsListItemAdapter adapter;
+
 		protected override void OnCreate (Bundle bundle)
 		{
 			base.OnCreate (bundle);
 
 			SetContentView(Resource.Layout.News);
+
+			List<Rss.RssItem> items = new de.dhoffmann.mono.adfcnewsapp.buslog.database.Rss().GetActiveFeedItems(false);
+			adapter = new NewsListItemAdapter(this, items);
+
+			ListView lvNews = FindViewById<ListView>(Resource.Id.lvNews);
+			lvNews.Adapter = adapter;
+
 		}
 	}
 }

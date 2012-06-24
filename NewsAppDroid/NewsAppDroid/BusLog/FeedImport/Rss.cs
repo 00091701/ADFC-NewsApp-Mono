@@ -55,6 +55,7 @@ namespace de.dhoffmann.mono.adfcnewsapp.buslog.feedimport
 			public string Description { get; set; }
 			public string Category { get; set; }
 			public DateTime? PubDate { get; set; }
+			public bool IsRead { get; set; }
 		}
 		
 		
@@ -127,7 +128,8 @@ namespace de.dhoffmann.mono.adfcnewsapp.buslog.feedimport
 					
 					// Das Datum der letzten Daten importieren
 					DateTime? dbLastBuildDate = dbRss.GetLastBuildDate(feedID);
-	dbLastBuildDate = null;				
+					dbLastBuildDate = null;
+
 					// Müssen die Items wirklich geparsed werden?
 					if(!dbLastBuildDate.HasValue || (ret != null && ret.Header != null && ret.Header.LastBuildDate.HasValue && dbLastBuildDate.Value < ret.Header.LastBuildDate.Value))
 					{

@@ -83,7 +83,7 @@ namespace de.dhoffmann.mono.adfcnewsapp.buslog.database
 					
 						using(DbCommand c = conn.CreateCommand())
 						{
-							c.CommandText = "SELECT ItemID, FeedID, Title, Link, Description, Category, PubDate FROM rssfeeditem WHERE FeedID=" + feedID + " ORDER BY PubDate;";
+							c.CommandText = "SELECT ItemID, FeedID, Title, Link, Description, Category, PubDate, IsRead FROM rssfeeditem WHERE FeedID=" + feedID + " ORDER BY PubDate;";
 							c.CommandType = System.Data.CommandType.Text;
 							conn.Open();
 							
@@ -114,6 +114,8 @@ namespace de.dhoffmann.mono.adfcnewsapp.buslog.database
 										
 										if (!reader.IsDBNull(6))
 											rssItem.PubDate = new DateTime(1970, 1, 1, 0, 0, 0, 0).AddSeconds(Convert.ToDouble(reader.GetInt64(6)));
+
+										rssItem.IsRead = reader.GetBoolean(7);
 									}
 									
 									rssItems.Add(rssItem);
@@ -240,6 +242,72 @@ namespace de.dhoffmann.mono.adfcnewsapp.buslog.database
 			
 			return ret;
 		}
+
+
+		public List<de.dhoffmann.mono.adfcnewsapp.buslog.feedimport.Rss.RssItem> GetActiveFeedItems (bool showOnlyUnReadFeedItems)
+		{
+			List<de.dhoffmann.mono.adfcnewsapp.buslog.feedimport.Rss.RssItem> ret = new List<de.dhoffmann.mono.adfcnewsapp.buslog.feedimport.Rss.RssItem>();
+
+			try
+			{
+				using(SqliteConnection conn = GetConnection())
+				{
+					using(DbCommand c = conn.CreateCommand())
+					{
+						c.CommandText = "SELECT ItemID, rssfeeditem.FeedID, Title, Link, Description, Category, PubDate, IsRead " +
+							"FROM rssfeeditem " +
+							"INNER JOIN feedconfig ON (rssfeeditem.FeedID = feedconfig.FeedID) " +
+							"WHERE feedConfig.IsActive = 1 " +
+							(showOnlyUnReadFeedItems? "rssfeeditem.IsRead = 0 " : "") +
+							"ORDER BY PubDate;";
+						c.CommandType = System.Data.CommandType.Text;
+						conn.Open();
+						
+						using (DbDataReader reader = c.ExecuteReader())
+						{
+							while(reader.Read())
+							{
+								feedimport.Rss.RssItem rssItem = new de.dhoffmann.mono.adfcnewsapp.buslog.feedimport.Rss.RssItem();
+								
+								if (reader.HasRows)
+								{
+									rssItem.ItemID = reader.GetInt32(0);
+									rssItem.FeedID = reader.GetInt32(1);
+									
+									if (!reader.IsDBNull(2))
+										rssItem.Title = reader.GetString(2);
+									
+									if (!reader.IsDBNull(3))
+										rssItem.Link = reader.GetString(3);
+									
+									if (!reader.IsDBNull(4))
+										rssItem.Description = reader.GetString(4);
+									
+									if (!reader.IsDBNull(5))
+										rssItem.Category = reader.GetString(5);
+									
+									if (!reader.IsDBNull(6))
+										rssItem.PubDate = new DateTime(1970, 1, 1, 0, 0, 0, 0).AddSeconds(Convert.ToDouble(reader.GetInt64(6)));
+
+									rssItem.IsRead = reader.GetBoolean(7);
+								}
+								
+								ret.Add(rssItem);
+							}
+
+							conn.Close();
+						}
+					}
+				}
+			}
+			catch(SqliteException ex)
+			{
+				System.Diagnostics.Debug.WriteLine(this.GetType().Name + ".GetActiveFeedItems() - ex: " + ex.ToString());
+			}
+
+			return  ret;
+		}
+
 	}
 }
 
