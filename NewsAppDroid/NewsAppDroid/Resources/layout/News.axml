@@ -11,5 +11,6 @@
         android:minHeight="25px"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:id="@+id/lvNews" />
+        android:id="@+id/lvNews"
+        android:cacheColorHint="#00000000" />
 </LinearLayout>

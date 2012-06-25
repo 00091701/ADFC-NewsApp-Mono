@@ -25,6 +25,7 @@ using Mono.Data.Sqlite;
 using System.Data.SqlClient;
 using System.Data.Common;
 using System.Text;
+using System.Collections.Generic;
 
 
 namespace de.dhoffmann.mono.adfcnewsapp.buslog.database
@@ -53,18 +54,19 @@ namespace de.dhoffmann.mono.adfcnewsapp.buslog.database
 			// Eine neue Tabelle für die Versionsverwaltung anlegen.
 			if (!dbExists)
 			{
-				StringBuilder commands = new StringBuilder();
-				commands.AppendLine("CREATE TABLE version (VersionID INTEGER PRIMARY KEY AUTOINCREMENT, DateCreate BIGINT NOT NULL);");
-				commands.AppendLine("INSERT INTO version (VersionID, DateCreate) VALUES (0, " + Convert.ToInt64(DateTime.Now.Subtract(new DateTime(1970, 1, 1)).TotalSeconds).ToString() + ");");
+				List<SqliteCommand> sqlCmds = new List<SqliteCommand>();
+
+				SqliteCommand sqlCmd = new SqliteCommand("CREATE TABLE version (VersionID INTEGER PRIMARY KEY AUTOINCREMENT, DateCreate BIGINT NOT NULL);", conn);
+				sqlCmds.Add(sqlCmd);
+
+				SqliteCommand sqlCmd2 = new SqliteCommand("INSERT INTO version (VersionID, DateCreate) VALUES (0, @DateCreate);", conn);
+				sqlCmd2.Parameters.AddWithValue("@DateCreate", Convert.ToInt64(DateTime.Now.Subtract(new DateTime(1970, 1, 1)).TotalSeconds).ToString());
+				sqlCmds.Add(sqlCmd2);
 				
 				conn.Open();
-				
-				using(DbCommand c = conn.CreateCommand())
-				{
-					c.CommandText = commands.ToString();
-					c.CommandType = CommandType.Text;
-					c.ExecuteNonQuery();
-				}
+
+				foreach(SqliteCommand cmd in sqlCmds)
+					cmd.ExecuteNonQuery();
 				
 				conn.Close();
 			}

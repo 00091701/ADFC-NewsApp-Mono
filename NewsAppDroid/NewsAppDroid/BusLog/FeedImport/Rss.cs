@@ -109,14 +109,19 @@ namespace de.dhoffmann.mono.adfcnewsapp.buslog.feedimport
 					
 					if (qDescription != null)
 						description = qDescription.Value;
-					
-					var qLastBuildDate = channel.Descendants("lastBuildDate").First();
+
 					DateTime lastBuildDate = DateTime.MinValue;
-					
-					// TODO prüfen
-					if (qLastBuildDate != null)
-						lastBuildDate = DateTime.Parse(qLastBuildDate.Value);
-					
+					try
+					{
+						var qLastBuildDate = channel.Descendants("lastBuildDate").First();
+
+						// TODO prüfen
+						if (qLastBuildDate != null)
+							lastBuildDate = DateTime.Parse(qLastBuildDate.Value);
+					}
+					catch(Exception)
+					{ ; }
+
 					ret.Header = new RssHeader()
 					{
 						FeedID = feedID,
@@ -156,15 +161,26 @@ namespace de.dhoffmann.mono.adfcnewsapp.buslog.feedimport
 								var qiDescription = item.Descendants("description").First();
 								if (qiDescription != null)
 									rssItem.Description = qiDescription.Value;
-								
-								var qiCategory = item.Descendants("category").First();
-								if (qiCategory != null)
-									rssItem.Category = qiCategory.Value;
-								
-								// TODO prüfen!!
-								var qiPubDate = item.Descendants("pubDate").First();
-								if (qiPubDate != null)
-									rssItem.PubDate = DateTime.Parse(qiPubDate.Value);
+
+								// Nicht alle haben diesen Node
+								try
+								{
+									var qiCategory = item.Descendants("category").First();
+									if (qiCategory != null)
+										rssItem.Category = qiCategory.Value;
+								}
+								catch(Exception)
+								{ ; }
+
+								try
+								{
+									// TODO prüfen!!
+									var qiPubDate = item.Descendants("pubDate").First();
+									if (qiPubDate != null)
+										rssItem.PubDate = DateTime.Parse(qiPubDate.Value);
+								}
+								catch(Exception)
+								{ ; }
 								
 								rssItems.Add(rssItem);
 							}

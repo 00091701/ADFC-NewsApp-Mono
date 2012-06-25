@@ -59,11 +59,11 @@ namespace de.dhoffmann.mono.adfcnewsapp.buslog.database
 				{
 					using(DbCommand c = conn.CreateCommand())
 					{
-						c.CommandText = "SELECT AppIsConfigured, DateIndicate, DataAutomaticUpdate FROM config Limit 1;";
-						c.CommandType = System.Data.CommandType.Text;
+						SqliteCommand sqlCmd = new SqliteCommand("SELECT AppIsConfigured, DateIndicate, DataAutomaticUpdate FROM config Limit 1;", conn);
+
 						conn.Open();
 						
-						using (DbDataReader reader = c.ExecuteReader())
+						using (DbDataReader reader = sqlCmd.ExecuteReader())
 						{
 							// Es gibt nur eine letzte Version
 							reader.Read();
@@ -100,11 +100,12 @@ namespace de.dhoffmann.mono.adfcnewsapp.buslog.database
 				{
 					using(DbCommand c = conn.CreateCommand())
 					{
-						c.CommandText = "UPDATE config SET AppIsConfigured=1, DateIndicate=" + (config.DateIndicate? "1" : "0") + ", DataAutomaticUpdate=" + (config.DataAutomaticUpdate? "1" : "0") + ";";
-						c.CommandType = System.Data.CommandType.Text;
+						SqliteCommand sqlCmd = new SqliteCommand("UPDATE config SET AppIsConfigured=1, DateIndicate = @DateIndicate, DataAutomaticUpdate = @DataAutomaticUpdate;", conn);
+						sqlCmd.Parameters.AddWithValue("@DateIndicate", (config.DateIndicate? "1" : "0"));
+						sqlCmd.Parameters.AddWithValue("@DataAutomaticUpdate", (config.DataAutomaticUpdate? "1" : "0"));
+
 						conn.Open();
-						c.ExecuteNonQuery();
-						
+						sqlCmd.ExecuteNonQuery();
 						conn.Close();
 					}
 				}
@@ -126,12 +127,11 @@ namespace de.dhoffmann.mono.adfcnewsapp.buslog.database
 				{
 					using(DbCommand c = conn.CreateCommand())
 					{
+						SqliteCommand sqlCmd = new SqliteCommand("SELECT FeedID, IsActive, Name, FeedType, URL, URLType, CategoryFilter FROM feedconfig ORDER BY Name, FeedType, CategoryFilter;", conn);
+
 						conn.Open();
-						
-						c.CommandText = "SELECT FeedID, IsActive, Name, FeedType, URL, URLType, CategoryFilter FROM feedconfig ORDER BY Name, FeedType, CategoryFilter;";
-						c.CommandType = System.Data.CommandType.Text;
-						
-						using (DbDataReader reader = c.ExecuteReader())
+
+						using (DbDataReader reader = sqlCmd.ExecuteReader())
 						{
 							while (reader.Read())
 							{
@@ -170,48 +170,66 @@ namespace de.dhoffmann.mono.adfcnewsapp.buslog.database
 				return;
 			
 			List<WSFeedConfig.FeedConfig> dbFeedsConfig = GetWSConfig();
-			
-			StringBuilder commands = new StringBuilder();
-			
-			// Feeds die noch nicht in der DB sind hinzufügen
-			foreach(WSFeedConfig.FeedConfig feedConfig in feedsConfig)
+
+			List<SqliteCommand> sqlCmds = new List<SqliteCommand>();
+
+			try
 			{
-				if (!dbFeedsConfig.Exists(p => p.Url == feedConfig.Url && p.CategoryFilter == feedConfig.CategoryFilter))
-					commands.AppendLine("INSERT INTO feedconfig (IsActive, Name, FeedType, URL, URLType, CategoryFilter) VALUES (0, '" + feedConfig.Name + "', " + (int)feedConfig.FeedType + ", '" + feedConfig.Url + "', " + (int)feedConfig.UrlType + ", " + (!String.IsNullOrEmpty(feedConfig.CategoryFilter)? "'" + feedConfig.CategoryFilter + "'" : "NULL") + ");");
-				else
-					commands.AppendLine("UPDATE feedconfig SET IsActive=" + (feedConfig.IsActive? "1" : "0") + " WHERE FeedID=" + feedConfig.FeedID + ";");
-			}
-			
-			// Einträge die es nicht mehr gibt entfernen.
-			foreach(WSFeedConfig.FeedConfig dbFeed in dbFeedsConfig)
-			{
-				if (!feedsConfig.Exists(p => p.Url == dbFeed.Url && p.CategoryFilter == dbFeed.CategoryFilter))
-					commands.AppendLine("DELETE FROM feedconfig WHERE URL='" + dbFeed.Url + "' AND CategoryFilter='" + dbFeed.CategoryFilter + "';");
-			}
-			
-			if (commands.Length > 0)
-			{
-				try
+				using(SqliteConnection conn = GetConnection())
 				{
-					using(SqliteConnection conn = GetConnection())
+					// Feeds die noch nicht in der DB sind hinzufügen
+					foreach(WSFeedConfig.FeedConfig feedConfig in feedsConfig)
+					{
+						if (!dbFeedsConfig.Exists(p => p.Url == feedConfig.Url && p.CategoryFilter == feedConfig.CategoryFilter))
+						{
+							SqliteCommand sqlCmd = new SqliteCommand("INSERT INTO feedconfig (IsActive, Name, FeedType, URL, URLType, CategoryFilter) VALUES (0, @Name, @FeedType, @Url, @UrlType, @CategoryFilter);", conn);
+							sqlCmd.Parameters.AddWithValue("@Name", feedConfig.Name);
+							sqlCmd.Parameters.AddWithValue("@FeedType", (int)feedConfig.FeedType);
+							sqlCmd.Parameters.AddWithValue("@Url", feedConfig.Url);
+							sqlCmd.Parameters.AddWithValue("@UrlType", (int)feedConfig.UrlType);
+							sqlCmd.Parameters.AddWithValue("@CategoryFilter", feedConfig.CategoryFilter);
+
+							sqlCmds.Add(sqlCmd);
+						}
+						else
+						{
+							SqliteCommand sqlCmd = new SqliteCommand("UPDATE feedconfig SET IsActive=@IsActive WHERE FeedID=@FeedID;", conn);
+							sqlCmd.Parameters.AddWithValue("@IsActive", feedConfig.IsActive);
+							sqlCmd.Parameters.AddWithValue("@FeedID", feedConfig.FeedID);
+
+							sqlCmds.Add(sqlCmd);
+						}
+					}
+					
+					// Einträge die es nicht mehr gibt entfernen.
+					foreach(WSFeedConfig.FeedConfig dbFeed in dbFeedsConfig)
+					{
+						if (!feedsConfig.Exists(p => p.Url == dbFeed.Url && p.CategoryFilter == dbFeed.CategoryFilter))
+						{
+							SqliteCommand sqlCmd = new SqliteCommand("DELETE FROM feedconfig WHERE URL=@Url AND CategoryFilter=@CategoryFilter;", conn);
+							sqlCmd.Parameters.AddWithValue("@Url", dbFeed.Url);
+							sqlCmd.Parameters.AddWithValue("@CategoryFilter", dbFeed.CategoryFilter);
+
+							sqlCmds.Add(sqlCmd);
+						}
+					}
+					
+					if (sqlCmds.Count > 0)
 					{
 						conn.Open();
-						
-						using(DbCommand c = conn.CreateCommand())
-						{
-							c.CommandText = commands.ToString();
-							c.CommandType = System.Data.CommandType.Text;
-							c.ExecuteNonQuery();
-						}
-						
+
+						foreach(SqliteCommand sqlCmd in sqlCmds)
+							sqlCmd.ExecuteNonQuery();
+
 						conn.Close();
 					}
 				}
-				catch(SqliteException ex)
-				{
-					System.Diagnostics.Debug.WriteLine(this.GetType() + ".SetWSConfig() - ex: " + ex.ToString());
-				}	
 			}
+			catch(SqliteException ex)
+			{
+				System.Diagnostics.Debug.WriteLine(this.GetType() + ".SetWSConfig() - ex: " + ex.ToString());
+			}	
+
 		}
 	}
 }

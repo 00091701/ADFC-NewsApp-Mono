@@ -50,7 +50,7 @@ namespace de.dhoffmann.mono.adfcnewsapp.droid
 			Intent intent;
 			
 			// -- 
-			
+			/*
 			intent = new Intent(this, typeof(Dates));
 			intent.AddFlags(ActivityFlags.NewTask);
 			
@@ -59,7 +59,7 @@ namespace de.dhoffmann.mono.adfcnewsapp.droid
 			spec.SetContent(intent);
 			
 			TabHost.AddTab(spec);
-			
+			*/
 			// -- 
 			
 			intent = new Intent(this, typeof(News));

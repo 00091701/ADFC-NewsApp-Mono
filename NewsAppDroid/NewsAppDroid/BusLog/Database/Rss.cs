@@ -44,88 +44,84 @@ namespace de.dhoffmann.mono.adfcnewsapp.buslog.database
 			{
 				using(SqliteConnection conn = GetConnection())
 				{
-					using(DbCommand c = conn.CreateCommand())
+					SqliteCommand sqlCmd = new SqliteCommand("SELECT FeedID, Title, Link, Description, LastBuildDate FROM rssfeeds WHERE FeedID=@FeedID LIMIT 1;", conn);
+					sqlCmd.Parameters.AddWithValue("@FeedID", feedID);
+
+					conn.Open();
+					
+					using (DbDataReader reader = sqlCmd.ExecuteReader())
 					{
-						c.CommandText = "SELECT FeedID, Title, Link, Description, LastBuildDate FROM rssfeeds WHERE FeedID=" + feedID + " LIMIT 1;";
-						c.CommandType = System.Data.CommandType.Text;
-						conn.Open();
+						reader.Read();
 						
-						using (DbDataReader reader = c.ExecuteReader())
+						if (reader.HasRows)
 						{
-							reader.Read();
+							feedimport.Rss.RssHeader rssHeader = new de.dhoffmann.mono.adfcnewsapp.buslog.feedimport.Rss.RssHeader();
+							rssHeader.FeedID = reader.GetInt32(0);
 							
-							if (reader.HasRows)
-							{
-								feedimport.Rss.RssHeader rssHeader = new de.dhoffmann.mono.adfcnewsapp.buslog.feedimport.Rss.RssHeader();
-								rssHeader.FeedID = reader.GetInt32(0);
-								
-								if (!reader.IsDBNull(1))
-									rssHeader.Title = reader.GetString(1);
-								
-								if (!reader.IsDBNull(2))
-									rssHeader.Link = reader.GetString(2);
-								
-								if (!reader.IsDBNull(3))
-									rssHeader.Description = reader.GetString(3);
-								
-								if (!reader.IsDBNull(4))
-									rssHeader.LastBuildDate = new DateTime(1970, 1, 1, 0, 0, 0, 0).AddSeconds(Convert.ToDouble(reader.GetInt64(4)));
-								
-								ret.Header = rssHeader;
-							}
+							if (!reader.IsDBNull(1))
+								rssHeader.Title = reader.GetString(1);
+							
+							if (!reader.IsDBNull(2))
+								rssHeader.Link = reader.GetString(2);
+							
+							if (!reader.IsDBNull(3))
+								rssHeader.Description = reader.GetString(3);
+							
+							if (!reader.IsDBNull(4))
+								rssHeader.LastBuildDate = new DateTime(1970, 1, 1, 0, 0, 0, 0).AddSeconds(Convert.ToDouble(reader.GetInt64(4)));
+							
+							ret.Header = rssHeader;
 						}
-						
-						conn.Close();
 					}
+					
+					conn.Close();
+
 					
 					if (ret.Header != null)
 					{
-					
-						using(DbCommand c = conn.CreateCommand())
-						{
-							c.CommandText = "SELECT ItemID, FeedID, Title, Link, Description, Category, PubDate, IsRead FROM rssfeeditem WHERE FeedID=" + feedID + " ORDER BY PubDate;";
-							c.CommandType = System.Data.CommandType.Text;
-							conn.Open();
-							
-							using (DbDataReader reader = c.ExecuteReader())
-							{
-								List<feedimport.Rss.RssItem> rssItems = new List<de.dhoffmann.mono.adfcnewsapp.buslog.feedimport.Rss.RssItem>();
-								
-								while(reader.Read())
-								{
-									feedimport.Rss.RssItem rssItem = new de.dhoffmann.mono.adfcnewsapp.buslog.feedimport.Rss.RssItem();
-									
-									if (reader.HasRows)
-									{
-										rssItem.ItemID = reader.GetInt32(0);
-										rssItem.FeedID = reader.GetInt32(1);
-										
-										if (!reader.IsDBNull(2))
-											rssItem.Title = reader.GetString(2);
-										
-										if (!reader.IsDBNull(3))
-											rssItem.Link = reader.GetString(3);
-										
-										if (!reader.IsDBNull(4))
-											rssItem.Description = reader.GetString(4);
-										
-										if (!reader.IsDBNull(5))
-											rssItem.Category = reader.GetString(5);
-										
-										if (!reader.IsDBNull(6))
-											rssItem.PubDate = new DateTime(1970, 1, 1, 0, 0, 0, 0).AddSeconds(Convert.ToDouble(reader.GetInt64(6)));
+						SqliteCommand sqlCmd2 = new SqliteCommand("SELECT ItemID, FeedID, Title, Link, Description, Category, PubDate, IsRead FROM rssfeeditem WHERE FeedID=@FeedID ORDER BY PubDate;", conn);
+						sqlCmd2.Parameters.AddWithValue("@FeedID", feedID);
 
-										rssItem.IsRead = reader.GetBoolean(7);
-									}
+						conn.Open();
+						
+						using (DbDataReader reader = sqlCmd2.ExecuteReader())
+						{
+							List<feedimport.Rss.RssItem> rssItems = new List<de.dhoffmann.mono.adfcnewsapp.buslog.feedimport.Rss.RssItem>();
+							
+							while(reader.Read())
+							{
+								feedimport.Rss.RssItem rssItem = new de.dhoffmann.mono.adfcnewsapp.buslog.feedimport.Rss.RssItem();
+								
+								if (reader.HasRows)
+								{
+									rssItem.ItemID = reader.GetInt32(0);
+									rssItem.FeedID = reader.GetInt32(1);
 									
-									rssItems.Add(rssItem);
+									if (!reader.IsDBNull(2))
+										rssItem.Title = reader.GetString(2);
+									
+									if (!reader.IsDBNull(3))
+										rssItem.Link = reader.GetString(3);
+									
+									if (!reader.IsDBNull(4))
+										rssItem.Description = reader.GetString(4);
+									
+									if (!reader.IsDBNull(5))
+										rssItem.Category = reader.GetString(5);
+									
+									if (!reader.IsDBNull(6))
+										rssItem.PubDate = new DateTime(1970, 1, 1, 0, 0, 0, 0).AddSeconds(Convert.ToDouble(reader.GetInt64(6)));
+
+									rssItem.IsRead = reader.GetBoolean(7);
 								}
 								
-								ret.Items = rssItems;
+								rssItems.Add(rssItem);
 							}
 							
-							conn.Close();
+							ret.Items = rssItems;
 						}
+						
+						conn.Close();
 					}
 				}
 			}
@@ -154,28 +150,24 @@ namespace de.dhoffmann.mono.adfcnewsapp.buslog.database
 					// Header anlegen
 					if (dbRssFeed == null || dbRssFeed.Header == null)
 					{
-						using(DbCommand c = conn.CreateCommand())
-						{
-							c.CommandText = "INSERT INTO rssfeeds (FeedID, DateCreate, Title, Link, Description, LastBuildDate) VALUES (" + 
-								rssFeed.Header.FeedID + ", " +
-								"date('now'), " + 
-								(!String.IsNullOrEmpty(rssFeed.Header.Title)? "'" + rssFeed.Header.Title + "'" : "'Kein Titel'") + ", " +
-								(!String.IsNullOrEmpty(rssFeed.Header.Link)? "'" + rssFeed.Header.Link + "'" : "NULL") + ", " +
-								(!String.IsNullOrEmpty(rssFeed.Header.Description)? "'" + rssFeed.Header.Description + "'" : "NULL") + ", " +
-								((rssFeed.Header.LastBuildDate.HasValue)? Convert.ToInt64(rssFeed.Header.LastBuildDate.Value.Subtract(new DateTime(1970, 1, 1)).TotalSeconds).ToString() : "NULL") +
-								");";
-							c.CommandType = System.Data.CommandType.Text;
-							conn.Open();
-							c.ExecuteNonQuery();
-							conn.Close();
-						}
+						SqliteCommand sqlCmd = new SqliteCommand("INSERT INTO rssfeeds (FeedID, DateCreate, Title, Link, Description, LastBuildDate) VALUES (" + 
+						                                         "@FeedID, date('now'), @Title, @Link, @Description, @LastBuildDate);", conn);
+						sqlCmd.Parameters.AddWithValue("@FeedID", rssFeed.Header.FeedID);
+						sqlCmd.Parameters.AddWithValue("@Title", (!String.IsNullOrEmpty(rssFeed.Header.Title)? "'" + rssFeed.Header.Title + "'" : "'Kein Titel'"));
+						sqlCmd.Parameters.AddWithValue("@Link", (!String.IsNullOrEmpty(rssFeed.Header.Link)? "'" + rssFeed.Header.Link + "'" : "NULL"));
+						sqlCmd.Parameters.AddWithValue("@Description", (!String.IsNullOrEmpty(rssFeed.Header.Description)? "'" + rssFeed.Header.Description + "'" : "NULL"));
+						sqlCmd.Parameters.AddWithValue("@LastBuildDate", ((rssFeed.Header.LastBuildDate.HasValue)? Convert.ToInt64(rssFeed.Header.LastBuildDate.Value.Subtract(new DateTime(1970, 1, 1)).TotalSeconds).ToString() : "NULL"));
+
+						conn.Open();
+						sqlCmd.ExecuteNonQuery();
+						conn.Close();
 					}
 					
 					// Items anlegen
 					if (rssFeed.Items != null && rssFeed.Items.Count > 0)
 					{
-						StringBuilder commands = new StringBuilder();
-						
+						List<SqliteCommand> sqlCmds = new List<SqliteCommand>();
+
 						foreach (feedimport.Rss.RssItem row in rssFeed.Items)
 						{
 							bool fInsertRow = true;
@@ -190,29 +182,27 @@ namespace de.dhoffmann.mono.adfcnewsapp.buslog.database
 							// Zeile in die DB eintragen
 							if (fInsertRow)
 							{
-								commands.AppendLine("INSERT INTO rssfeeditem (FeedID, DateCreate, Title, Link, Description, Category, PubDate, IsRead) VALUES (" + 
-									row.FeedID + ", " +
-								    Convert.ToInt64(DateTime.Now.Subtract(new DateTime(1970, 1, 1)).TotalSeconds).ToString() + ", " +
-								    (!String.IsNullOrEmpty(row.Title)? "'" + row.Title + "'" : "'Kein Titel'") + ", " +
-								    (!String.IsNullOrEmpty(row.Link)? "'" + row.Link + "'" : "NULL") + ", " +
-								    (!String.IsNullOrEmpty(row.Description)? "'" + row.Description + "'" : "NULL") + ", " +
-								    (!String.IsNullOrEmpty(row.Category)? "'" + row.Category + "'" : "NULL") + ", " +
-								    (!row.PubDate.HasValue? "'" + row.PubDate.ToString() + "'" : "NULL") + ", " +
-								    "0 " +
-								    ");");
+								SqliteCommand sqlCmd = new SqliteCommand("INSERT INTO rssfeeditem (FeedID, DateCreate, Title, Link, Description, Category, PubDate, IsRead) VALUES (" + 
+								                                         "@FeedID, @DateCreate, @Title, @Link, @Description, @Category, @PubDate, @IsRead)", conn);
+								sqlCmd.Parameters.AddWithValue("@FeedID", row.FeedID);
+								sqlCmd.Parameters.AddWithValue("@DateCreate", Convert.ToInt64(DateTime.Now.Subtract(new DateTime(1970, 1, 1)).TotalSeconds).ToString());
+								sqlCmd.Parameters.AddWithValue("@Title", (!String.IsNullOrEmpty(row.Title)? "'" + row.Title + "'" : "'Kein Titel'"));
+								sqlCmd.Parameters.AddWithValue("@Link", (!String.IsNullOrEmpty(row.Link)? "'" + row.Link + "'" : "NULL"));
+								sqlCmd.Parameters.AddWithValue("@Description", (!String.IsNullOrEmpty(row.Description)? "'" + row.Description + "'" : "NULL"));
+								sqlCmd.Parameters.AddWithValue("@Category", (!String.IsNullOrEmpty(row.Category)? "'" + row.Category + "'" : "NULL"));
+								sqlCmd.Parameters.AddWithValue("@PubDate", (!row.PubDate.HasValue? "'" + row.PubDate.ToString() + "'" : "NULL"));
+								sqlCmd.Parameters.AddWithValue("@IsRead", 0);
+
+								sqlCmds.Add(sqlCmd);
 							}
 						}
 						
-						if (commands != null && commands.Length > 0)
+						if (sqlCmds != null && sqlCmds.Count > 0)
 						{
-							using(DbCommand c = conn.CreateCommand())
-							{
-								c.CommandText = commands.ToString();
-								c.CommandType = System.Data.CommandType.Text;
-								conn.Open();
-								c.ExecuteNonQuery();
-								conn.Close();
-							}
+							conn.Open();
+							foreach(SqliteCommand cmd in sqlCmds)
+								cmd.ExecuteNonQuery();
+							conn.Close();
 						}
 					}
 					
@@ -287,8 +277,16 @@ namespace de.dhoffmann.mono.adfcnewsapp.buslog.database
 										rssItem.Category = reader.GetString(5);
 									
 									if (!reader.IsDBNull(6))
-										rssItem.PubDate = new DateTime(1970, 1, 1, 0, 0, 0, 0).AddSeconds(Convert.ToDouble(reader.GetInt64(6)));
-
+									{
+										// TODO prüfen
+										try
+										{
+											var x = reader.GetFieldType(6);
+											rssItem.PubDate = new DateTime(1970, 1, 1, 0, 0, 0, 0).AddSeconds(Convert.ToDouble(reader.GetInt64(6)));
+										}
+										catch(Exception)
+										{}
+									}
 									rssItem.IsRead = reader.GetBoolean(7);
 								}
 								
