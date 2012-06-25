@@ -1,6 +1,28 @@
 {
     "Feeds": [
         {
+            "Name": "Amberg - News",
+            "FeedType": "News",
+            "URL": "http://www.adfc-amberg.de/ADFC-Amberg.xml",
+            "URLType": "RSS",
+            "CategoryFilter": ""
+        },
+        {
+            "Name": "Augsburg - News",
+            "FeedType": "News",
+            "URL": "http://www.adfc-augsburg.de/index.php?format=feed&type=rss",
+            "URLType": "RSS",
+            "CategoryFilter": ""
+        },
+        
+        {
+            "Name": "Bayern - News",
+            "FeedType": "News",
+            "URL": "http://www.adfc-toel-wor.de/rss.xml",
+            "URLType": "RSS",
+            "CategoryFilter": ""
+        },
+        {
             "Name": "Braunschweig - News",
             "FeedType": "News",
             "URL": "http://www.adfc-braunschweig.de/rss.xml",
@@ -8,9 +30,22 @@
             "CategoryFilter": ""
         },
         {
-            "Name": "Braunschweig - Termine 2012",
+            "Name": "Bremen - News",
+            "FeedType": "News",
+            "URL": "http://www.adfc-bremen.de/index.php?id=53&type=100",
+            "URLType": "RSS",
+            "CategoryFilter": ""
+        },
+        {
+            "Name": "Braunschweig - Radtouren",
             "FeedType": "Dates",
-            "URL": "http://www.adfc-braunschweig.de/fileadmin/redaktion/media/Radtouren/ics/Radtouren_2012.ics",
+            "URL": "https://www.google.com/calendar/ical/aog2q8lqog1emfe03u2dm8ehn0%40group.calendar.google.com/public/basic.ics",
+            "URLType": "ICS"
+        },
+        {
+            "Name": "Braunschweig - Veranstaltungen",
+            "FeedType": "Dates",
+            "URL": "https://www.google.com/calendar/ical/ikcd7hqi8pbnjvkbiacfjte2h0%40group.calendar.google.com/public/basic.ics",
             "URLType": "ICS"
         }
     ]
