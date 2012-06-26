@@ -56,11 +56,11 @@ namespace de.dhoffmann.mono.adfcnewsapp.buslog.database
 			{
 				List<SqliteCommand> sqlCmds = new List<SqliteCommand>();
 
-				SqliteCommand sqlCmd = new SqliteCommand("CREATE TABLE version (VersionID INTEGER PRIMARY KEY AUTOINCREMENT, DateCreate BIGINT NOT NULL);", conn);
+				SqliteCommand sqlCmd = new SqliteCommand("CREATE TABLE version (VersionID INTEGER PRIMARY KEY AUTOINCREMENT, DateCreate DATETIME NOT NULL);", conn);
 				sqlCmds.Add(sqlCmd);
 
 				SqliteCommand sqlCmd2 = new SqliteCommand("INSERT INTO version (VersionID, DateCreate) VALUES (0, @DateCreate);", conn);
-				sqlCmd2.Parameters.AddWithValue("@DateCreate", Convert.ToInt64(DateTime.Now.Subtract(new DateTime(1970, 1, 1)).TotalSeconds).ToString());
+				sqlCmd2.Parameters.AddWithValue("@DateCreate", DateTime.Now);
 				sqlCmds.Add(sqlCmd2);
 				
 				conn.Open();

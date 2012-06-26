@@ -32,6 +32,8 @@ using Android.Widget;
 using de.dhoffmann.mono.adfcnewsapp.buslog.database;
 using de.dhoffmann.mono.adfcnewsapp.androidhelper;
 using de.dhoffmann.mono.adfcnewsapp.buslog.webservice;
+using System.ComponentModel;
+using de.dhoffmann.mono.adfcnewsapp.buslog;
 
 namespace de.dhoffmann.mono.adfcnewsapp.droid
 {
@@ -51,6 +53,45 @@ namespace de.dhoffmann.mono.adfcnewsapp.droid
 		{
 			base.OnResume ();
 
+			bool firstRun = Intent.GetBooleanExtra("FirstRun", false);
+
+			if (!firstRun)
+				BindMyData();
+			else 
+			{
+				BackgroundWorker bgWorker = new BackgroundWorker();
+
+				bgWorker.DoWork += delegate(object sender, DoWorkEventArgs e) 
+				{
+					RunOnUiThread(delegate() 
+					{
+						AlertDialog dlgInfo = new AlertDialog.Builder(this).Create();
+	     				dlgInfo.SetTitle("Hinweis");
+	     				dlgInfo.SetMessage("In diesem Moment wird die Basiskonfiguration von einem Webserver geladen.\n\n" +
+						                   "Warten Sie daher bitte einen kleinen Moment.\nAnschließend können Sie " +
+						                   "Termine und Neuigkeiten von verschiedenen Ortgruppen abonnieren.\n\n" +
+						                   "Die Einstellungen werden automatisch beim verlassen der Konfiguration gespeichert." + 
+						                   "\n\nBitte drücken Sie jetzt die 'Zurück-Taste' und warten einen Moment.");
+	     				dlgInfo.Show();
+					});
+
+					new FeedHelper().UpdateFeeds();
+				};
+
+				bgWorker.RunWorkerCompleted += delegate(object sender, RunWorkerCompletedEventArgs e) 
+				{
+					RunOnUiThread(delegate() 
+					{
+						BindMyData();
+					});
+				};
+
+				bgWorker.RunWorkerAsync();
+			}
+		}
+
+		private void BindMyData()
+		{
 			CheckBox cbDateIndicate = FindViewById<CheckBox>(Resource.Id.cbDateIndicate);
 			CheckBox cbDataUpdate = FindViewById<CheckBox>(Resource.Id.cbDataUpdate);
 			

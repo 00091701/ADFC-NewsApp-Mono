@@ -59,24 +59,25 @@ namespace de.dhoffmann.mono.adfcnewsapp.buslog.database
 				{
 					using(DbCommand c = conn.CreateCommand())
 					{
-						SqliteCommand sqlCmd = new SqliteCommand("SELECT AppIsConfigured, DateIndicate, DataAutomaticUpdate FROM config Limit 1;", conn);
-
-						conn.Open();
-						
-						using (DbDataReader reader = sqlCmd.ExecuteReader())
+						using (SqliteCommand sqlCmd = new SqliteCommand("SELECT AppIsConfigured, DateIndicate, DataAutomaticUpdate FROM config Limit 1;", conn))
 						{
-							// Es gibt nur eine letzte Version
-							reader.Read();
+							conn.Open();
 							
-							if (reader.HasRows)
+							using (DbDataReader reader = sqlCmd.ExecuteReader())
 							{
-								ret.AppIsConfigured = reader.GetBoolean(0);
-								ret.DateIndicate = reader.GetBoolean(1);
-								ret.DataAutomaticUpdate = reader.GetBoolean(2);
+								// Es gibt nur eine letzte Version
+								reader.Read();
+								
+								if (reader.HasRows)
+								{
+									ret.AppIsConfigured = reader.GetBoolean(0);
+									ret.DateIndicate = reader.GetBoolean(1);
+									ret.DataAutomaticUpdate = reader.GetBoolean(2);
+								}
 							}
+							
+							conn.Close();
 						}
-						
-						conn.Close();
 					}
 				}
 			}
@@ -100,13 +101,15 @@ namespace de.dhoffmann.mono.adfcnewsapp.buslog.database
 				{
 					using(DbCommand c = conn.CreateCommand())
 					{
-						SqliteCommand sqlCmd = new SqliteCommand("UPDATE config SET AppIsConfigured=1, DateIndicate = @DateIndicate, DataAutomaticUpdate = @DataAutomaticUpdate;", conn);
-						sqlCmd.Parameters.AddWithValue("@DateIndicate", (config.DateIndicate? "1" : "0"));
-						sqlCmd.Parameters.AddWithValue("@DataAutomaticUpdate", (config.DataAutomaticUpdate? "1" : "0"));
+						using (SqliteCommand sqlCmd = new SqliteCommand("UPDATE config SET AppIsConfigured=1, DateIndicate = @DateIndicate, DataAutomaticUpdate = @DataAutomaticUpdate;", conn))
+						{
+							sqlCmd.Parameters.AddWithValue("@DateIndicate", config.DateIndicate);
+							sqlCmd.Parameters.AddWithValue("@DataAutomaticUpdate", config.DataAutomaticUpdate);
 
-						conn.Open();
-						sqlCmd.ExecuteNonQuery();
-						conn.Close();
+							conn.Open();
+							sqlCmd.ExecuteNonQuery();
+							conn.Close();
+						}
 					}
 				}
 			}
@@ -127,31 +130,32 @@ namespace de.dhoffmann.mono.adfcnewsapp.buslog.database
 				{
 					using(DbCommand c = conn.CreateCommand())
 					{
-						SqliteCommand sqlCmd = new SqliteCommand("SELECT FeedID, IsActive, Name, FeedType, URL, URLType, CategoryFilter FROM feedconfig ORDER BY Name, FeedType, CategoryFilter;", conn);
-
-						conn.Open();
-
-						using (DbDataReader reader = sqlCmd.ExecuteReader())
+						using (SqliteCommand sqlCmd = new SqliteCommand("SELECT FeedID, IsActive, Name, FeedType, URL, URLType, CategoryFilter FROM feedconfig ORDER BY Name, FeedType, CategoryFilter;", conn))
 						{
-							while (reader.Read())
+							conn.Open();
+
+							using (DbDataReader reader = sqlCmd.ExecuteReader())
 							{
-								if (reader.HasRows)
+								while (reader.Read())
 								{
-									ret.Add(new WSFeedConfig.FeedConfig()
+									if (reader.HasRows)
 									{
-										FeedID = reader.GetInt32(0),
-										IsActive = reader.GetBoolean(1),
-										Name = reader.GetString(2),
-										FeedType = (WSFeedConfig.FeedTypes)reader.GetInt32(3),
-										Url = reader.GetString(4),
-										UrlType = (WSFeedConfig.UrlTypes)reader.GetInt32(5),
-										CategoryFilter = (!reader.IsDBNull(6)? reader.GetString(6) : null)
-									});
+										ret.Add(new WSFeedConfig.FeedConfig()
+										{
+											FeedID = reader.GetInt32(0),
+											IsActive = reader.GetBoolean(1),
+											Name = reader.GetString(2),
+											FeedType = (WSFeedConfig.FeedTypes)reader.GetInt32(3),
+											Url = reader.GetString(4),
+											UrlType = (WSFeedConfig.UrlTypes)reader.GetInt32(5),
+											CategoryFilter = (!reader.IsDBNull(6)? reader.GetString(6) : null)
+										});
+									}
 								}
 							}
+								
+							conn.Close();
 						}
-							
-						conn.Close();
 					}
 				}
 			}

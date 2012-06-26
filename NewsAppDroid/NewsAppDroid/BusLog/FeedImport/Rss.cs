@@ -24,6 +24,7 @@ using System.Collections.Generic;
 using System.Xml;
 using System.Xml.Linq;
 using System.Linq;
+using Android.Text;
 
 
 namespace de.dhoffmann.mono.adfcnewsapp.buslog.feedimport
@@ -96,7 +97,8 @@ namespace de.dhoffmann.mono.adfcnewsapp.buslog.feedimport
 					string title = null;
 					
 					if (qTitle != null)
-						title = qTitle.Value;
+						title = Html.FromHtml(qTitle.Value).ToString().Replace("￼", "").Trim();
+						
 					
 					var qLink = channel.Descendants("link").First();
 					string link = null;
@@ -108,7 +110,7 @@ namespace de.dhoffmann.mono.adfcnewsapp.buslog.feedimport
 					string description = null;
 					
 					if (qDescription != null)
-						description = qDescription.Value;
+						description = Html.FromHtml(qDescription.Value).ToString().Replace("￼", "").Trim();
 
 					DateTime lastBuildDate = DateTime.MinValue;
 					try
@@ -152,7 +154,7 @@ namespace de.dhoffmann.mono.adfcnewsapp.buslog.feedimport
 								
 								var qiTitle = item.Descendants("title").First();
 								if (qiTitle != null)
-									rssItem.Title = qiTitle.Value;
+									rssItem.Title = Html.FromHtml(qiTitle.Value).ToString().Replace("￼", "").Trim();
 								
 								var qiLink = item.Descendants("link").First();
 								if (qiLink != null)
@@ -160,14 +162,14 @@ namespace de.dhoffmann.mono.adfcnewsapp.buslog.feedimport
 								
 								var qiDescription = item.Descendants("description").First();
 								if (qiDescription != null)
-									rssItem.Description = qiDescription.Value;
+									rssItem.Description = Html.FromHtml(qiDescription.Value).ToString().Replace("￼", "").Trim();
 
 								// Nicht alle haben diesen Node
 								try
 								{
 									var qiCategory = item.Descendants("category").First();
 									if (qiCategory != null)
-										rssItem.Category = qiCategory.Value;
+										rssItem.Category = Html.FromHtml(qiCategory.Value).ToString().Replace("￼", "").Trim();
 								}
 								catch(Exception)
 								{ ; }

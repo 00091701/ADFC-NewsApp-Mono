@@ -46,6 +46,25 @@ namespace de.dhoffmann.mono.adfcnewsapp.droid
 
 			SetContentView(Resource.Layout.News);
 
+			ListView lvNews = FindViewById<ListView>(Resource.Id.lvNews);
+			lvNews.ItemClick += delegate(object sender, AdapterView.ItemClickEventArgs e) 
+			{
+				if (adapter == null || adapter.GetEntries == null)
+					return;
+
+				Rss.RssItem entry = adapter.GetEntries[e.Position];
+				Intent intent = new Intent(this, typeof(NewsDetails));
+				intent.PutExtra("FeedID", entry.FeedID);
+				intent.PutExtra("FeedItemID", entry.ItemID);
+
+				StartActivity(intent);
+			};
+		}
+
+		protected override void OnResume ()
+		{
+			base.OnResume ();
+
 			List<Rss.RssItem> items = new de.dhoffmann.mono.adfcnewsapp.buslog.database.Rss().GetActiveFeedItems(false);
 			adapter = new NewsListItemAdapter(this, items);
 

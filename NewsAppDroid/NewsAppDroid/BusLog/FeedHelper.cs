@@ -32,53 +32,57 @@ namespace de.dhoffmann.mono.adfcnewsapp.buslog
 		public FeedHelper ()
 		{
 		}
-		
-		public void UpdateFeeds()
+
+		public void UpdateBGFeeds()
 		{
 			BackgroundWorker bgWorker = new BackgroundWorker();
 			
 			bgWorker.DoWork += delegate(object sender, DoWorkEventArgs e) 
-			{	
-				// Konfiguration vom Webserver laden
-				System.Diagnostics.Debug.WriteLine("Konfiguration vom Webserver laden");
-				List<WSFeedConfig.FeedConfig> feedsConfig = new WSFeedConfig().GetFeedConfig();
-				
-				System.Diagnostics.Debug.WriteLine("Konfiguration in der Datenbank speichern");
-				
-				Config config = new Config();
-				
-				// Konfiguration in der Datenbank speichern
-				config.SetWSConfig(feedsConfig);
-				
-				// Neu aus der DB laden um auch die FeedID zu bekommen.
-				feedsConfig = config.GetWSConfig();
-				
-				System.Diagnostics.Debug.WriteLine("Feeds importieren");
-				
-				foreach(WSFeedConfig.FeedConfig feed in feedsConfig)
-				{
-					// Nur aktive feeds laden
-					if (!feed.IsActive)
-						continue;
-					
-					string webSource = new Download().DownloadWebSource(feed.Url);
-					
-					if (!string.IsNullOrEmpty(webSource))
-					{
-						switch(feed.FeedType)
-						{
-							case WSFeedConfig.FeedTypes.News:
-								new feedimport.Rss().ImportRss(feed, webSource);
-								break;
-						}
-					}
-				}
-				
-				System.Diagnostics.Debug.WriteLine("Feedimport abgeschlossen.");
-				
+			{
+				UpdateFeeds();
 			};
 			
 			bgWorker.RunWorkerAsync();
+		}
+
+		public void UpdateFeeds()
+		{		
+			// Konfiguration vom Webserver laden
+			System.Diagnostics.Debug.WriteLine("Konfiguration vom Webserver laden");
+			List<WSFeedConfig.FeedConfig> feedsConfig = new WSFeedConfig().GetFeedConfig();
+			
+			System.Diagnostics.Debug.WriteLine("Konfiguration in der Datenbank speichern");
+			
+			Config config = new Config();
+			
+			// Konfiguration in der Datenbank speichern
+			config.SetWSConfig(feedsConfig);
+			
+			// Neu aus der DB laden um auch die FeedID zu bekommen.
+			feedsConfig = config.GetWSConfig();
+			
+			System.Diagnostics.Debug.WriteLine("Feeds importieren");
+			
+			foreach(WSFeedConfig.FeedConfig feed in feedsConfig)
+			{
+				// Nur aktive feeds laden
+				if (!feed.IsActive)
+					continue;
+				
+				string webSource = new Download().DownloadWebSource(feed.Url);
+				
+				if (!string.IsNullOrEmpty(webSource))
+				{
+					switch(feed.FeedType)
+					{
+						case WSFeedConfig.FeedTypes.News:
+							new feedimport.Rss().ImportRss(feed, webSource);
+							break;
+					}
+				}
+			}
+			
+			System.Diagnostics.Debug.WriteLine("Feedimport abgeschlossen.");
 		}
 
 		

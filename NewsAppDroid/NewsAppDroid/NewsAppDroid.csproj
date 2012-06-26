@@ -70,6 +70,7 @@
     <Compile Include="BusLog\Database\Rss.cs" />
     <Compile Include="AndroidHelper\SettingsFeedListAdapter.cs" />
     <Compile Include="AndroidHelper\NewsListItemAdapter.cs" />
+    <Compile Include="Droid\NewsDetails.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />
@@ -86,6 +87,7 @@
     <AndroidResource Include="Resources\layout\Menu.axml" />
     <AndroidResource Include="Resources\layout\SettingsFeedListItem.axml" />
     <AndroidResource Include="Resources\layout\NewsListItem.axml" />
+    <AndroidResource Include="Resources\layout\NewsDetails.axml" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
   <ItemGroup>

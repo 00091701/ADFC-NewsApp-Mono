@@ -37,11 +37,11 @@ namespace de.dhoffmann.mono.adfcnewsapp.droid
 	[Activity (Label = "ADFC-News", Icon="@drawable/Icon", Theme = "@style/MainTheme", MainLauncher = true)]			
 	public class Tabs : TabActivity
 	{
-		protected override void OnCreate (Bundle bundle)
+		protected override void OnCreate(Bundle bundle)
 		{
-			base.OnCreate (bundle);
+			base.OnCreate(bundle);
 			
-			SetContentView(Resource.Layout.Tabs);
+			SetContentView (Resource.Layout.Tabs);
 			
 			// Datenbank initialisieren
 			new DBSchema().UpdateDBSchema();
@@ -62,20 +62,24 @@ namespace de.dhoffmann.mono.adfcnewsapp.droid
 			*/
 			// -- 
 			
-			intent = new Intent(this, typeof(News));
-			intent.AddFlags(ActivityFlags.NewTask);
+			intent = new Intent (this, typeof(News));
+			intent.AddFlags (ActivityFlags.NewTask);
 			
-			spec = TabHost.NewTabSpec("TabNews");
-			spec.SetIndicator("Neuigkeiten");
-			spec.SetContent(intent);
+			spec = TabHost.NewTabSpec ("TabNews");
+			spec.SetIndicator ("Neuigkeiten");
+			spec.SetContent (intent);
 			
 			TabHost.AddTab(spec);
 			
 			// -- 
 			
 			// Wenn die App noch nicht konfiguriert wurde, die Einstellungen anzeigen.
-			if (!new Config().GetAppConfig().AppIsConfigured)
-				StartActivity(typeof(Settings));
+			if (!new Config().GetAppConfig ().AppIsConfigured) 
+			{
+				Intent setIntent = new Android.Content.Intent(this, typeof(Settings));
+				setIntent.PutExtra("FirstRun", true);
+				StartActivity(setIntent);
+			}
 		}
 		
 		
@@ -95,7 +99,7 @@ namespace de.dhoffmann.mono.adfcnewsapp.droid
 					StartActivity(typeof(Settings));
 					break;
 				case Resource.Id.menuGetDataNow:
-					new FeedHelper().UpdateFeeds();
+					new FeedHelper() .UpdateBGFeeds();
 					break;
 			}
 			

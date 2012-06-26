@@ -91,6 +91,14 @@ namespace de.dhoffmann.mono.adfcnewsapp.androidhelper
 			}
 		}
 		#endregion
+
+		public List<Rss.RssItem> GetEntries 
+		{
+			get
+			{
+				return entries;
+			}
+		}
 	}
 }
 

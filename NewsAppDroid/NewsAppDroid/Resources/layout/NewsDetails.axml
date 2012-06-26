@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:minWidth="25px"
+    android:minHeight="25px"
+    style="@style/MailLayout">
+    <LinearLayout
+        android:orientation="horizontal"
+        android:minWidth="25px"
+        android:minHeight="25px"
+        android:layout_width="fill_parent"
+        android:layout_height="50dp"
+        android:id="@+id/llHeader"
+        android:padding="5dp">
+        <ImageView
+            android:src="@drawable/Icon"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:id="@+id/imageView1" />
+        <TextView
+            android:text="ADFC News"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:id="@+id/textView1"
+            android:minHeight="40dp"
+            android:gravity="center_vertical"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:textColor="#EE7F00"
+            android:textSize="30dp"
+            android:textStyle="bold" />
+    </LinearLayout>
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:padding="5dp">
+        <LinearLayout
+            android:orientation="vertical"
+            android:minWidth="25px"
+            android:minHeight="25px"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent">
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp">
+                <TextView
+                    android:id="@+id/tvNewsDetailDate"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Date" />
+                <TextView
+                    android:id="@+id/tvNewsDetailFeedTitle"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="OG" />
+            </LinearLayout>
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:gravity="center">
+                <Button
+                    android:text="Beitrag im Web anzeigen"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/btnWebsite" />
+                <Button
+                    android:text="Share"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/btnShare" />
+            </LinearLayout>
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:text="Medium Text"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/tvNewsItemHeadline"
+                    android:layout_marginBottom="5dp" />
+                <TextView
+                    android:id="@+id/tvNewsDetail"
+                    android:text="Text"
+                    android:singleLine="false"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <WebView
+                    android:id="@+id/wvNewsDetail"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent" />
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>
