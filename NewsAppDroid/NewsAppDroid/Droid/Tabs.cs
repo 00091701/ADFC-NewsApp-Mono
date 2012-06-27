@@ -86,7 +86,7 @@ namespace de.dhoffmann.mono.adfcnewsapp.droid
 		public override bool OnCreateOptionsMenu (IMenu menu)
 		{
 			MenuInflater menuInflater = new Android.Views.MenuInflater(this);
-			menuInflater.Inflate(Resource.Layout.Menu, menu);
+			menuInflater.Inflate(Resource.Layout.TabsMenu, menu);
 			
 			return true;
 		}
@@ -99,7 +99,7 @@ namespace de.dhoffmann.mono.adfcnewsapp.droid
 					StartActivity(typeof(Settings));
 					break;
 				case Resource.Id.menuGetDataNow:
-					new FeedHelper() .UpdateBGFeeds();
+					new FeedHelper().UpdateBGFeeds();
 					break;
 			}
 			

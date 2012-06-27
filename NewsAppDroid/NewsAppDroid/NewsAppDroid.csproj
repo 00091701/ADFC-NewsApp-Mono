@@ -84,10 +84,11 @@
     <AndroidResource Include="Resources\layout\Dates.axml" />
     <AndroidResource Include="Resources\values\Style.xml" />
     <AndroidResource Include="Resources\layout\Settings.axml" />
-    <AndroidResource Include="Resources\layout\Menu.axml" />
     <AndroidResource Include="Resources\layout\SettingsFeedListItem.axml" />
     <AndroidResource Include="Resources\layout\NewsListItem.axml" />
     <AndroidResource Include="Resources\layout\NewsDetails.axml" />
+    <AndroidResource Include="Resources\layout\TabsMenu.axml" />
+    <AndroidResource Include="Resources\layout\NewsDetailsMenu.axml" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
   <ItemGroup>

@@ -264,7 +264,7 @@ namespace de.dhoffmann.mono.adfcnewsapp.buslog.database
 							"FROM rssfeeditem " +
 							"INNER JOIN feedconfig ON (rssfeeditem.FeedID = feedconfig.FeedID) " +
 							"WHERE feedConfig.IsActive = 1 " +
-							(showOnlyUnReadFeedItems? "rssfeeditem.IsRead = 0 " : "") +
+							(showOnlyUnReadFeedItems? "AND rssfeeditem.IsRead = 0 " : "") +
 							"ORDER BY PubDate DESC;";
 						c.CommandType = System.Data.CommandType.Text;
 						conn.Open();
@@ -319,6 +319,33 @@ namespace de.dhoffmann.mono.adfcnewsapp.buslog.database
 			}
 
 			return  ret;
+		}
+
+
+		public void MarkItemsAsRead (int? feedItemID, bool markAsRead)
+		{
+			try 
+			{
+				using (SqliteConnection conn = GetConnection()) 
+				{
+					using (SqliteCommand sqlCmd = new SqliteCommand("UPDATE rssfeeditem SET IsRead=@IsRead " +
+					                                                (feedItemID.HasValue? "WHERE ItemID=@ItemID;" : ";"), conn))
+					{
+						if (feedItemID.HasValue)
+							sqlCmd.Parameters.AddWithValue ("@ItemID", feedItemID);
+
+						sqlCmd.Parameters.AddWithValue ("@IsRead", markAsRead);
+
+						conn.Open ();
+						sqlCmd.ExecuteNonQuery();
+						conn.Close();
+					}
+				}
+			} 
+			catch (SqliteException ex) 
+			{
+				System.Diagnostics.Debug.WriteLine(this.GetType().Name + ".MarkItemAsRead() - ex: " + ex.ToString());
+			}
 		}
 	}
 }

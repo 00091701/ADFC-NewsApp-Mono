@@ -39,8 +39,9 @@ namespace de.dhoffmann.mono.adfcnewsapp.droid
 	public class News : Activity
 	{
 		private NewsListItemAdapter adapter;
+		private bool showOnlyUnreadNews = true;
 
-		protected override void OnCreate (Bundle bundle)
+		protected override void OnCreate(Bundle bundle)
 		{
 			base.OnCreate (bundle);
 
@@ -61,16 +62,66 @@ namespace de.dhoffmann.mono.adfcnewsapp.droid
 			};
 		}
 
-		protected override void OnResume ()
+		protected override void OnResume()
 		{
 			base.OnResume ();
 
-			List<Rss.RssItem> items = new de.dhoffmann.mono.adfcnewsapp.buslog.database.Rss().GetActiveFeedItems(false);
+			LoadNews();
+		}
+
+
+		private void LoadNews()
+		{
+			List<Rss.RssItem> items = new de.dhoffmann.mono.adfcnewsapp.buslog.database.Rss().GetActiveFeedItems(showOnlyUnreadNews);
 			adapter = new NewsListItemAdapter(this, items);
 
 			ListView lvNews = FindViewById<ListView>(Resource.Id.lvNews);
 			lvNews.Adapter = adapter;
+		}
 
+		public override bool OnPrepareOptionsMenu (IMenu menu)
+		{
+			var item = menu.FindItem(Resource.Id.menuShowReadNews);
+
+			if (!showOnlyUnreadNews)
+				item.SetTitle("Ungelesene News");
+			else
+				item.SetTitle("Alle News");
+
+			return base.OnPrepareOptionsMenu (menu);
+		}
+
+
+		public override bool OnOptionsItemSelected(IMenuItem item)
+		{
+			switch(item.ItemId)
+			{
+				case Resource.Id.menuSettings:
+					StartActivity(typeof(Settings));
+					break;
+
+				case Resource.Id.menuGetDataNow:
+					new FeedHelper().UpdateBGFeeds();
+					break;
+
+				case Resource.Id.menuShowReadNews:
+					showOnlyUnreadNews = !showOnlyUnreadNews;
+
+					LoadNews();
+
+					if (!showOnlyUnreadNews)
+						item.SetTitle("Ungelesene News");
+					else
+						item.SetTitle("Alle News");
+					break;
+		
+				case Resource.Id.menuMarkAllRead:
+					new buslog.database.Rss().MarkItemsAsRead(null, true);
+					LoadNews();
+					break;
+			}
+			
+			return true;
 		}
 	}
 }

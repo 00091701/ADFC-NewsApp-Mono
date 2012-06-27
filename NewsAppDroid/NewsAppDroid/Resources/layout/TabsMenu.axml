@@ -7,4 +7,10 @@
     <item
         android:id="@+id/menuGetDataNow"
         android:title="Aktualisieren" />
+    <item
+        android:id="@+id/menuShowReadNews"
+        android:title="Alle News" />
+    <item
+        android:id="@+id/menuMarkAllRead"
+        android:title="Alle als gelesen markieren" />
 </menu>

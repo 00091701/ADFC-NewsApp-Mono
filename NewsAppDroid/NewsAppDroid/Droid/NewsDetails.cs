@@ -30,6 +30,8 @@ namespace de.dhoffmann.mono.adfcnewsapp.droid
 
 			if (feedItemID >= 0) 
 			{
+				new buslog.database.Rss().MarkItemsAsRead(feedItemID, true);
+
 				buslog.feedimport.Rss.RssFeed rssfeed = new de.dhoffmann.mono.adfcnewsapp.buslog.database.Rss().GetRssFeed(feedID, feedItemID);
 
 				if (rssfeed.Items.First().PubDate.HasValue)
@@ -70,6 +72,30 @@ namespace de.dhoffmann.mono.adfcnewsapp.droid
 					StartActivity(Intent.CreateChooser(intent, "Share via"));
 				};
 			}
+		}
+
+		public override bool OnCreateOptionsMenu (IMenu menu)
+		{
+			MenuInflater menuInflater = new Android.Views.MenuInflater(this);
+			menuInflater.Inflate(Resource.Layout.NewsDetailsMenu, menu);
+			
+			return true;
+		}
+		
+		public override bool OnOptionsItemSelected (IMenuItem item)
+		{
+			switch(item.ItemId)
+			{
+				case Resource.Id.menuMarkAsUnread:
+					int feedItemID = Intent.GetIntExtra ("FeedItemID", -1);
+					
+					if (feedItemID >= 0) 
+						new buslog.database.Rss().MarkItemsAsRead(feedItemID, false);
+
+					break;
+			}
+			
+			return true;
 		}
 	}
 }
