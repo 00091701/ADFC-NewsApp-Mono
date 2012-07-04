@@ -16,13 +16,14 @@
     <AndroidResgenFile>Resources\Resource.designer.cs</AndroidResgenFile>
     <AssemblyName>NewsAppDroid</AssemblyName>
     <DeployExternal>false</DeployExternal>
+    <AndroidManifest>Properties\AndroidManifest.xml</AndroidManifest>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug</OutputPath>
-    <DefineConstants>DEBUG;</DefineConstants>
+    <DefineConstants>DEBUG;MONODROID;</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
@@ -39,6 +40,7 @@
     <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <AndroidUseSharedRuntime>false</AndroidUseSharedRuntime>
+    <DefineConstants>MONODROID;</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -71,10 +73,15 @@
     <Compile Include="AndroidHelper\SettingsFeedListAdapter.cs" />
     <Compile Include="AndroidHelper\NewsListItemAdapter.cs" />
     <Compile Include="Droid\NewsDetails.cs" />
+    <Compile Include="AndroidService\NewsAppBroadcastReceiver.cs" />
+    <Compile Include="AndroidService\NewsAppService.cs" />
+    <Compile Include="BusLog\Database\DBHelper.cs" />
+    <Compile Include="BusLog\Logging.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />
     <None Include="Assets\AboutAssets.txt" />
+    <None Include="Properties\AndroidManifest.xml" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\values\Strings.xml" />
@@ -98,5 +105,6 @@
     <Folder Include="BusLog\Webservice\" />
     <Folder Include="BusLog\FeedImport\" />
     <Folder Include="AndroidHelper\" />
+    <Folder Include="AndroidService\" />
   </ItemGroup>
 </Project>

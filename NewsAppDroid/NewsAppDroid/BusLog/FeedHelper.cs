@@ -23,23 +23,50 @@ using System.ComponentModel;
 using de.dhoffmann.mono.adfcnewsapp.buslog.webservice;
 using System.Collections.Generic;
 using de.dhoffmann.mono.adfcnewsapp.buslog.database;
+using de.dhoffmann.mono.adfcnewsapp.droid.buslog;
 
 
 namespace de.dhoffmann.mono.adfcnewsapp.buslog
 {
 	public class FeedHelper
 	{
+#if MONODROID
+		Android.App.Activity activity;
+#endif
+		private static Object lockObject = new Object();
+
 		public FeedHelper ()
 		{
 		}
 
+#if MONODROID
+		public void UpdateBGFeeds(Android.App.Activity activity)
+		{
+			this.activity = activity;
+#else
 		public void UpdateBGFeeds()
 		{
+#endif
 			BackgroundWorker bgWorker = new BackgroundWorker();
 			
 			bgWorker.DoWork += delegate(object sender, DoWorkEventArgs e) 
 			{
 				UpdateFeeds();
+			};
+
+			bgWorker.RunWorkerCompleted += delegate(object sender, RunWorkerCompletedEventArgs e) 
+			{
+#if MONODROID
+				activity.RunOnUiThread(delegate() 
+				{
+					if (this.activity.GetType().ToString () == "de.dhoffmann.mono.adfcnewsapp.droid.News")
+					{
+						de.dhoffmann.mono.adfcnewsapp.droid.News aNews = (de.dhoffmann.mono.adfcnewsapp.droid.News)this.activity;
+						aNews.LoadNews();
+						Android.Widget.Toast.MakeText(this.activity, "Die Newsfeeds sind aktualisiert.", Android.Widget.ToastLength.Short).Show();
+					}
+				});
+#endif
 			};
 			
 			bgWorker.RunWorkerAsync();
@@ -47,46 +74,46 @@ namespace de.dhoffmann.mono.adfcnewsapp.buslog
 
 		public void UpdateFeeds()
 		{		
-			// Konfiguration vom Webserver laden
-			System.Diagnostics.Debug.WriteLine("Konfiguration vom Webserver laden");
-			List<WSFeedConfig.FeedConfig> feedsConfig = new WSFeedConfig().GetFeedConfig();
-			
-			System.Diagnostics.Debug.WriteLine("Konfiguration in der Datenbank speichern");
-			
-			Config config = new Config();
-			
-			// Konfiguration in der Datenbank speichern
-			config.SetWSConfig(feedsConfig);
-			
-			// Neu aus der DB laden um auch die FeedID zu bekommen.
-			feedsConfig = config.GetWSConfig();
-			
-			System.Diagnostics.Debug.WriteLine("Feeds importieren");
-			
-			foreach(WSFeedConfig.FeedConfig feed in feedsConfig)
+			lock(lockObject)
 			{
-				// Nur aktive feeds laden
-				if (!feed.IsActive)
-					continue;
+				// Konfiguration vom Webserver laden
+				Logging.Log(this, Logging.LoggingTypeDebug, "Konfiguration vom Webserver laden");
+				List<WSFeedConfig.FeedConfig> feedsConfig = new WSFeedConfig().GetFeedConfig();
 				
-				string webSource = new Download().DownloadWebSource(feed.Url);
+				Logging.Log(this, Logging.LoggingTypeDebug, "Konfiguration in der Datenbank speichern");
 				
-				if (!string.IsNullOrEmpty(webSource))
+				Config config = new Config(this);
+				
+				// Konfiguration in der Datenbank speichern
+				config.SetWSConfig(feedsConfig);
+				
+				// Neu aus der DB laden um auch die FeedID zu bekommen.
+				feedsConfig = config.GetWSConfig();
+
+				Logging.Log(this, Logging.LoggingTypeInfo, "Feedimport start.");
+				
+				foreach(WSFeedConfig.FeedConfig feed in feedsConfig)
 				{
-					switch(feed.FeedType)
+					// Nur aktive feeds laden
+					if (!feed.IsActive)
+						continue;
+					
+					string webSource = new Download().DownloadWebSource(feed.Url);
+					
+					if (!string.IsNullOrEmpty(webSource))
 					{
-						case WSFeedConfig.FeedTypes.News:
-							new feedimport.Rss().ImportRss(feed, webSource);
-							break;
+						switch(feed.FeedType)
+						{
+							case WSFeedConfig.FeedTypes.News:
+								new feedimport.Rss().ImportRss(feed, webSource);
+								break;
+						}
 					}
 				}
-			}
-			
-			System.Diagnostics.Debug.WriteLine("Feedimport abgeschlossen.");
-		}
 
-		
-		
+				Logging.Log(this, Logging.LoggingTypeInfo, "Feedimport abgeschlossen.");
+			}
+		}
 	}
 }
 

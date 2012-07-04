@@ -34,6 +34,7 @@ using de.dhoffmann.mono.adfcnewsapp.androidhelper;
 using de.dhoffmann.mono.adfcnewsapp.buslog.webservice;
 using System.ComponentModel;
 using de.dhoffmann.mono.adfcnewsapp.buslog;
+using de.dhoffmann.mono.adfcnewsapp.droid.buslog;
 
 namespace de.dhoffmann.mono.adfcnewsapp.droid
 {
@@ -45,6 +46,8 @@ namespace de.dhoffmann.mono.adfcnewsapp.droid
 		protected override void OnCreate (Bundle bundle)
 		{
 			base.OnCreate (bundle);
+
+			Logging.Log(this, Logging.LoggingTypeDebug, "OnCreate");
 			
 			SetContentView(Resource.Layout.Settings);
 		}
@@ -96,7 +99,7 @@ namespace de.dhoffmann.mono.adfcnewsapp.droid
 			CheckBox cbDataUpdate = FindViewById<CheckBox>(Resource.Id.cbDataUpdate);
 			
 			// Konfiguration laden
-			Config config = new Config();
+			Config config = new Config(this);
 			AppConfig appConfig = config.GetAppConfig();
 			cbDateIndicate.Checked = appConfig.DateIndicate;
 			cbDataUpdate.Checked = appConfig.DataAutomaticUpdate;
@@ -121,14 +124,15 @@ namespace de.dhoffmann.mono.adfcnewsapp.droid
 			appConfig.DateIndicate = cbDateIndicate.Checked;
 			appConfig.DataAutomaticUpdate = cbDataUpdate.Checked;
 
-			Config config = new Config();
+			Config config = new Config(this);
 			config.SetAppConfig(appConfig);
 			config.SetWSConfig(settingsFeedListAdapter.GetFeedConfig);
 		}
 		
 		protected override void OnStop ()
 		{
-			base.OnStop ();		}
+			base.OnStop ();		
+		}
 	}
 }
 

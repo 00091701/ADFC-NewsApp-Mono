@@ -40,7 +40,7 @@ namespace de.dhoffmann.mono.adfcnewsapp.buslog.database
 		protected SqliteConnection GetConnection()
 		{
 			string docPath = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
-			string dbFilename = Path.Combine(docPath, "News.db");
+			string dbFilename = Path.Combine(docPath, database.DBHelper.DATABASENAME);
 			
 			bool dbExists = File.Exists (dbFilename);
 			

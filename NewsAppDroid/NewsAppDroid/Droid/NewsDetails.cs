@@ -10,6 +10,10 @@ using Android.OS;
 using Android.Runtime;
 using Android.Views;
 using Android.Widget;
+using de.dhoffmann.mono.adfcnewsapp;
+using de.dhoffmann.mono.adfcnewsapp.buslog;
+using de.dhoffmann.mono.adfcnewsapp.buslog.database;
+using de.dhoffmann.mono.adfcnewsapp.droid.buslog;
 
 namespace de.dhoffmann.mono.adfcnewsapp.droid
 {
@@ -23,6 +27,8 @@ namespace de.dhoffmann.mono.adfcnewsapp.droid
 		{
 			base.OnCreate (bundle);
 
+			Logging.Log(this, Logging.LoggingTypeDebug, "OnCreate");
+
 			SetContentView (Resource.Layout.NewsDetails);
 
 			int feedID = Intent.GetIntExtra ("FeedID", -1);
@@ -30,9 +36,9 @@ namespace de.dhoffmann.mono.adfcnewsapp.droid
 
 			if (feedItemID >= 0) 
 			{
-				new buslog.database.Rss().MarkItemsAsRead(feedItemID, true);
+				new de.dhoffmann.mono.adfcnewsapp.buslog.database.Rss().MarkItemsAsRead(feedItemID, true);
 
-				buslog.feedimport.Rss.RssFeed rssfeed = new de.dhoffmann.mono.adfcnewsapp.buslog.database.Rss().GetRssFeed(feedID, feedItemID);
+				de.dhoffmann.mono.adfcnewsapp.buslog.feedimport.Rss.RssFeed rssfeed = new de.dhoffmann.mono.adfcnewsapp.buslog.database.Rss().GetRssFeed(feedID, feedItemID);
 
 				if (rssfeed.Items.First().PubDate.HasValue)
 				{
@@ -90,7 +96,7 @@ namespace de.dhoffmann.mono.adfcnewsapp.droid
 					int feedItemID = Intent.GetIntExtra ("FeedItemID", -1);
 					
 					if (feedItemID >= 0) 
-						new buslog.database.Rss().MarkItemsAsRead(feedItemID, false);
+						new de.dhoffmann.mono.adfcnewsapp.buslog.database.Rss().MarkItemsAsRead(feedItemID, false);
 
 					break;
 			}

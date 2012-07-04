@@ -46,16 +46,16 @@ namespace de.dhoffmann.mono.adfcnewsapp.droid.buslog
 				case 0:
 					loggingMessage += "VERBOSE";
 					break;
-				case 0:
+				case 1:
 					loggingMessage += "DEBUG";
 					break;
-				case 0:
+				case 2:
 					loggingMessage += "INFO";
 					break;
-				case 0:
+				case 3:
 					loggingMessage += "WARN";
 					break;
-				case 0:
+				case 4:
 					loggingMessage += "ERROR";
 					break;
 			}

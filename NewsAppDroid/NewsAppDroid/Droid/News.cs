@@ -32,6 +32,7 @@ using Android.Widget;
 using de.dhoffmann.mono.adfcnewsapp.buslog;
 using de.dhoffmann.mono.adfcnewsapp.buslog.feedimport;
 using de.dhoffmann.mono.adfcnewsapp.androidhelper;
+using de.dhoffmann.mono.adfcnewsapp.droid.buslog;
 
 namespace de.dhoffmann.mono.adfcnewsapp.droid
 {
@@ -45,7 +46,13 @@ namespace de.dhoffmann.mono.adfcnewsapp.droid
 		{
 			base.OnCreate (bundle);
 
+			Logging.Log(this, Logging.LoggingTypeDebug, "OnCreate");
+
 			SetContentView(Resource.Layout.News);
+
+			if (Intent.GetBooleanExtra("RELOADFEEDS", false))
+				new FeedHelper().UpdateBGFeeds(this);
+
 
 			ListView lvNews = FindViewById<ListView>(Resource.Id.lvNews);
 			lvNews.ItemClick += delegate(object sender, AdapterView.ItemClickEventArgs e) 
@@ -66,11 +73,15 @@ namespace de.dhoffmann.mono.adfcnewsapp.droid
 		{
 			base.OnResume ();
 
+			// Feeds aktualisieren
+			if (Intent.GetBooleanExtra("RELOADFEEDS", false))
+				new FeedHelper().UpdateBGFeeds(this);
+
 			LoadNews();
 		}
 
 
-		private void LoadNews()
+		public void LoadNews()
 		{
 			List<Rss.RssItem> items = new de.dhoffmann.mono.adfcnewsapp.buslog.database.Rss().GetActiveFeedItems(showOnlyUnreadNews);
 			adapter = new NewsListItemAdapter(this, items);
@@ -97,11 +108,12 @@ namespace de.dhoffmann.mono.adfcnewsapp.droid
 			switch(item.ItemId)
 			{
 				case Resource.Id.menuSettings:
-					StartActivity(typeof(Settings));
+					Intent setIntent = new Intent(this, typeof(Settings));
+					StartActivityForResult(setIntent, 0);
 					break;
 
 				case Resource.Id.menuGetDataNow:
-					new FeedHelper().UpdateBGFeeds();
+					new FeedHelper().UpdateBGFeeds(this);
 					break;
 
 				case Resource.Id.menuShowReadNews:
@@ -116,12 +128,20 @@ namespace de.dhoffmann.mono.adfcnewsapp.droid
 					break;
 		
 				case Resource.Id.menuMarkAllRead:
-					new buslog.database.Rss().MarkItemsAsRead(null, true);
+					new de.dhoffmann.mono.adfcnewsapp.buslog.database.Rss().MarkItemsAsRead(null, true);
 					LoadNews();
 					break;
 			}
 			
 			return true;
+		}
+
+		protected override void OnActivityResult (int requestCode, Result resultCode, Android.Content.Intent data)
+		{
+			base.OnActivityResult (requestCode, resultCode, data);
+
+			if (resultCode == Result.Canceled)
+				new FeedHelper().UpdateBGFeeds(this);
 		}
 	}
 }

@@ -24,6 +24,12 @@ using System.Data.Common;
 using System.Collections.Generic;
 using de.dhoffmann.mono.adfcnewsapp.buslog.webservice;
 using System.Text;
+#if MONODROID
+using Android.Database;
+using Android.Database.Sqlite;
+#endif
+
+
 
 namespace de.dhoffmann.mono.adfcnewsapp.buslog.database
 {
@@ -36,8 +42,10 @@ namespace de.dhoffmann.mono.adfcnewsapp.buslog.database
 	
 	public class Config : DataBase
 	{
-		public Config ()
+		//object context;
+		public Config(object context)
 		{
+		//	this.context = context;
 		}
 
 
@@ -52,14 +60,48 @@ namespace de.dhoffmann.mono.adfcnewsapp.buslog.database
 		public AppConfig GetAppConfig()
 		{
 			AppConfig ret = new AppConfig();
-			
+			string sqlCommand = "SELECT AppIsConfigured, DateIndicate, DataAutomaticUpdate FROM config Limit 1;";
+
+#if MONODROID
+			if ((int)Android.OS.Build.VERSION.SdkInt < 77)
+			{
+				/*
+				 * http://pastebin.com/tNPmzXND
+				 * http://www.c-sharpcorner.com/UploadFile/88b6e5/sqlitedatabase-connectivity/
+				 * 
+				try
+				{
+					DBHelper dbHelper = new DBHelper((Android.Content.Context)context);
+					Android.Database.Sqlite.SQLiteDatabase sqlDB = dbHelper.ReadableDatabase;
+
+
+					Cursor reader = sqlDB.RawQuery(sqlCommand, null);
+					while(result.moveToNext())
+					{
+						ret.AppIsConfigured = reader.GetBoolean(0);
+						ret.DateIndicate = reader.GetBoolean(1);
+						ret.DataAutomaticUpdate = reader.GetBoolean(2);
+					}
+
+					dbHelper.Close();
+				}
+				catch(Exception ex)
+				{
+					System.Diagnostics.Debug.WriteLine(this.GetType() + ".GetAppConfig() - ex: " + ex.ToString());
+				}
+
+				return ret;
+				*/
+			}
+#endif
+
 			try
 			{
 				using(SqliteConnection conn = GetConnection())
 				{
 					using(DbCommand c = conn.CreateCommand())
 					{
-						using (SqliteCommand sqlCmd = new SqliteCommand("SELECT AppIsConfigured, DateIndicate, DataAutomaticUpdate FROM config Limit 1;", conn))
+						using (SqliteCommand sqlCmd = new SqliteCommand(sqlCommand, conn))
 						{
 							conn.Open();
 							
@@ -85,7 +127,7 @@ namespace de.dhoffmann.mono.adfcnewsapp.buslog.database
 			{
 				System.Diagnostics.Debug.WriteLine(this.GetType() + ".GetAppConfig() - ex: " + ex.ToString());
 			}
-			
+
 			return ret;
 		}
 		

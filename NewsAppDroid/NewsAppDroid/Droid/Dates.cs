@@ -29,6 +29,7 @@ using Android.OS;
 using Android.Runtime;
 using Android.Views;
 using Android.Widget;
+using de.dhoffmann.mono.adfcnewsapp.droid.buslog;
 
 namespace de.dhoffmann.mono.adfcnewsapp.droid
 {
@@ -38,6 +39,8 @@ namespace de.dhoffmann.mono.adfcnewsapp.droid
 		protected override void OnCreate (Bundle bundle)
 		{
 			base.OnCreate (bundle);
+
+			Logging.Log(this, Logging.LoggingTypeDebug, "OnCreate");
 
 			SetContentView(Resource.Layout.Dates);
 		}

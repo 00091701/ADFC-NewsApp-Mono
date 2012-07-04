@@ -25,6 +25,7 @@ using Mono.Data.Sqlite;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using de.dhoffmann.mono.adfcnewsapp.droid.buslog;
 
 
 namespace de.dhoffmann.mono.adfcnewsapp.buslog.database
@@ -315,7 +316,7 @@ namespace de.dhoffmann.mono.adfcnewsapp.buslog.database
 			}
 			catch(SqliteException ex)
 			{
-				System.Diagnostics.Debug.WriteLine(this.GetType().Name + ".GetActiveFeedItems() - ex: " + ex.ToString());
+				Logging.Log(this, Logging.LoggingTypeError, "SQLException", ex);
 			}
 
 			return  ret;

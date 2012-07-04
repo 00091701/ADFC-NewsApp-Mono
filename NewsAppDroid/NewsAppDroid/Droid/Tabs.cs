@@ -31,6 +31,7 @@ using Android.Views;
 using Android.Widget;
 using de.dhoffmann.mono.adfcnewsapp.buslog.database;
 using de.dhoffmann.mono.adfcnewsapp.buslog;
+using de.dhoffmann.mono.adfcnewsapp.droid.buslog;
 
 namespace de.dhoffmann.mono.adfcnewsapp.droid
 {
@@ -40,6 +41,8 @@ namespace de.dhoffmann.mono.adfcnewsapp.droid
 		protected override void OnCreate(Bundle bundle)
 		{
 			base.OnCreate(bundle);
+
+			Logging.Log(this, Logging.LoggingTypeDebug, "OnCreate");
 			
 			SetContentView (Resource.Layout.Tabs);
 			
@@ -74,14 +77,29 @@ namespace de.dhoffmann.mono.adfcnewsapp.droid
 			// -- 
 			
 			// Wenn die App noch nicht konfiguriert wurde, die Einstellungen anzeigen.
-			if (!new Config().GetAppConfig ().AppIsConfigured) 
+			if (!new Config(this).GetAppConfig().AppIsConfigured) 
 			{
 				Intent setIntent = new Android.Content.Intent(this, typeof(Settings));
 				setIntent.PutExtra("FirstRun", true);
-				StartActivity(setIntent);
+				StartActivityForResult(setIntent, 0);
 			}
 		}
-		
+
+		protected override void OnActivityResult (int requestCode, Result resultCode, Android.Content.Intent data)
+		{
+			base.OnActivityResult (requestCode, resultCode, data);
+
+			if (resultCode == Result.Canceled)
+			{
+				News activityNews = LocalActivityManager.GetActivity("TabNews") as News;
+				if (activityNews != null)
+				{
+					Toast.MakeText(activityNews, "Die Newsfeeds werden aktualisiert.", Android.Widget.ToastLength.Short).Show();
+					new FeedHelper().UpdateBGFeeds(activityNews);
+				}
+			}
+		}
+
 		
 		public override bool OnCreateOptionsMenu (IMenu menu)
 		{
@@ -96,10 +114,12 @@ namespace de.dhoffmann.mono.adfcnewsapp.droid
 			switch(item.ItemId)
 			{
 				case Resource.Id.menuSettings:
-					StartActivity(typeof(Settings));
+					Intent setIntent = new Android.Content.Intent(this, typeof(Settings));
+					StartActivityForResult(setIntent, 0);
 					break;
+
 				case Resource.Id.menuGetDataNow:
-					new FeedHelper().UpdateBGFeeds();
+					new FeedHelper().UpdateBGFeeds(this);
 					break;
 			}
 			
