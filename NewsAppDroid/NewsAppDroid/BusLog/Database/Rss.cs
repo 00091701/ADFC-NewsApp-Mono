@@ -25,7 +25,7 @@ using Mono.Data.Sqlite;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using de.dhoffmann.mono.adfcnewsapp.droid.buslog;
+using de.dhoffmann.mono.adfcnewsapp.buslog;
 
 
 namespace de.dhoffmann.mono.adfcnewsapp.buslog.database

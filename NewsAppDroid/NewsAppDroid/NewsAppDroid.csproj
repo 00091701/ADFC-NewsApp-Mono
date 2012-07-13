@@ -73,10 +73,10 @@
     <Compile Include="AndroidHelper\SettingsFeedListAdapter.cs" />
     <Compile Include="AndroidHelper\NewsListItemAdapter.cs" />
     <Compile Include="Droid\NewsDetails.cs" />
-    <Compile Include="AndroidService\NewsAppBroadcastReceiver.cs" />
-    <Compile Include="AndroidService\NewsAppService.cs" />
     <Compile Include="BusLog\Database\DBHelper.cs" />
     <Compile Include="BusLog\Logging.cs" />
+    <Compile Include="AndroidService\NewsAppBroadcastReceiver.cs" />
+    <Compile Include="AndroidService\NewsAppAlarmService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />
@@ -96,6 +96,7 @@
     <AndroidResource Include="Resources\layout\NewsDetails.axml" />
     <AndroidResource Include="Resources\layout\TabsMenu.axml" />
     <AndroidResource Include="Resources\layout\NewsDetailsMenu.axml" />
+    <AndroidResource Include="Resources\drawable\Share.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
   <ItemGroup>

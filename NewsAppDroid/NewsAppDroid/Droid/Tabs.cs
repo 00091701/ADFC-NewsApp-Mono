@@ -31,7 +31,7 @@ using Android.Views;
 using Android.Widget;
 using de.dhoffmann.mono.adfcnewsapp.buslog.database;
 using de.dhoffmann.mono.adfcnewsapp.buslog;
-using de.dhoffmann.mono.adfcnewsapp.droid.buslog;
+using de.dhoffmann.mono.adfcnewsapp.AndroidService;
 
 namespace de.dhoffmann.mono.adfcnewsapp.droid
 {
@@ -95,7 +95,12 @@ namespace de.dhoffmann.mono.adfcnewsapp.droid
 				if (activityNews != null)
 				{
 					Toast.MakeText(activityNews, "Die Newsfeeds werden aktualisiert.", Android.Widget.ToastLength.Short).Show();
-					new FeedHelper().UpdateBGFeeds(activityNews);
+					// new FeedHelper().UpdateBGFeeds(activityNews);
+
+					AlarmManager alarmManager = (AlarmManager) GetSystemService(Context.AlarmService);
+					PendingIntent pendingIntent = PendingIntent.GetBroadcast(this, 0, new Intent(this, typeof(NewsAppAlarmService)), 0);
+					alarmManager.SetInexactRepeating(AlarmType.ElapsedRealtimeWakeup, SystemClock.ElapsedRealtime() + 60, AlarmManager.IntervalHalfDay, pendingIntent);
+
 				}
 			}
 		}

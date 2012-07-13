@@ -32,7 +32,6 @@ using Android.Widget;
 using de.dhoffmann.mono.adfcnewsapp;
 using de.dhoffmann.mono.adfcnewsapp.buslog;
 using de.dhoffmann.mono.adfcnewsapp.buslog.database;
-using de.dhoffmann.mono.adfcnewsapp.droid.buslog;
 
 namespace de.dhoffmann.mono.adfcnewsapp.droid
 {

@@ -29,7 +29,7 @@ using Android.OS;
 using Android.Runtime;
 using Android.Views;
 using Android.Widget;
-using de.dhoffmann.mono.adfcnewsapp.droid.buslog;
+using de.dhoffmann.mono.adfcnewsapp.buslog;
 
 namespace de.dhoffmann.mono.adfcnewsapp.droid
 {

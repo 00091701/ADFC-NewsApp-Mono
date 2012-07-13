@@ -71,9 +71,11 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/btnWebsite" />
                 <Button
-                    android:text="Share"
+                    android:text=""
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:background="@drawable/Share"
+                    android:layout_marginLeft="5dp"
                     android:id="@+id/btnShare" />
             </LinearLayout>
             <LinearLayout

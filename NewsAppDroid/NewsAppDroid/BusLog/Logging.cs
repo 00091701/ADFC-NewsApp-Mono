@@ -20,7 +20,7 @@
 
 using System;
 
-namespace de.dhoffmann.mono.adfcnewsapp.droid.buslog
+namespace de.dhoffmann.mono.adfcnewsapp.buslog
 {
 	public class Logging
 	{

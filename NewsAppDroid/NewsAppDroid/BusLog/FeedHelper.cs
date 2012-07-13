@@ -23,7 +23,7 @@ using System.ComponentModel;
 using de.dhoffmann.mono.adfcnewsapp.buslog.webservice;
 using System.Collections.Generic;
 using de.dhoffmann.mono.adfcnewsapp.buslog.database;
-using de.dhoffmann.mono.adfcnewsapp.droid.buslog;
+using de.dhoffmann.mono.adfcnewsapp.buslog;
 
 
 namespace de.dhoffmann.mono.adfcnewsapp.buslog

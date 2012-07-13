@@ -34,7 +34,6 @@ using de.dhoffmann.mono.adfcnewsapp.androidhelper;
 using de.dhoffmann.mono.adfcnewsapp.buslog.webservice;
 using System.ComponentModel;
 using de.dhoffmann.mono.adfcnewsapp.buslog;
-using de.dhoffmann.mono.adfcnewsapp.droid.buslog;
 
 namespace de.dhoffmann.mono.adfcnewsapp.droid
 {
