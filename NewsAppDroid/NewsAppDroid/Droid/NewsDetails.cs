@@ -91,7 +91,7 @@ namespace de.dhoffmann.mono.adfcnewsapp.droid
 					intent.SetType("text/plain");
 
 					intent.PutExtra(Android.Content.Intent.ExtraSubject, "Neues vom ADFC");
-					intent.PutExtra(Android.Content.Intent.ExtraText, description + "\n\n\n" + url + "\n\npowered by: APP");
+					intent.PutExtra(Android.Content.Intent.ExtraText, description + "\n\n\n" + url + "\n\npowered by: ADFC-News\nhttps://play.google.com/store/apps/details?id=de.dhoffmann.mono.adfcnewsapp");
 
 					StartActivity(Intent.CreateChooser(intent, "Share via"));
 				};
