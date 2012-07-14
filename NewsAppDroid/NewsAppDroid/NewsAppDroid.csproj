@@ -41,6 +41,7 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <AndroidUseSharedRuntime>false</AndroidUseSharedRuntime>
     <DefineConstants>MONODROID;</DefineConstants>
+    <AssemblyOriginatorKeyFile>..\..\..\..\Android-Keystore\AndNaviki</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
