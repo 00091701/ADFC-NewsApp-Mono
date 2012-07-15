@@ -47,6 +47,7 @@ namespace de.dhoffmann.mono.adfcnewsapp.buslog
 		public void UpdateBGFeeds()
 		{
 #endif
+			Logging.Log(this, Logging.LoggingTypeDebug, "UpdateBGFeeds()");
 			BackgroundWorker bgWorker = new BackgroundWorker();
 			
 			bgWorker.DoWork += delegate(object sender, DoWorkEventArgs e) 
@@ -57,6 +58,7 @@ namespace de.dhoffmann.mono.adfcnewsapp.buslog
 			bgWorker.RunWorkerCompleted += delegate(object sender, RunWorkerCompletedEventArgs e) 
 			{
 #if MONODROID
+				Logging.Log(this, Logging.LoggingTypeDebug, "UpdateBGFeeds() - RunWorkerCompleted");
 				activity.RunOnUiThread(delegate() 
 				{
 					if (this.activity.GetType().ToString () == "de.dhoffmann.mono.adfcnewsapp.droid.News")
@@ -74,8 +76,11 @@ namespace de.dhoffmann.mono.adfcnewsapp.buslog
 
 		public void UpdateFeeds()
 		{		
+			Logging.Log(this, Logging.LoggingTypeDebug, "UpdateFeeds() - before lock");
 			lock(lockObject)
 			{
+				Logging.Log(this, Logging.LoggingTypeDebug, "UpdateFeeds() - in lock");
+
 				// Konfiguration vom Webserver laden
 				Logging.Log(this, Logging.LoggingTypeDebug, "Konfiguration vom Webserver laden");
 				List<WSFeedConfig.FeedConfig> feedsConfig = new WSFeedConfig().GetFeedConfig();

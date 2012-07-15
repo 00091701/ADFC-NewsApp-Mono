@@ -95,7 +95,7 @@ namespace de.dhoffmann.mono.adfcnewsapp.droid
 				if (activityNews != null)
 				{
 					Toast.MakeText(activityNews, "Die Newsfeeds werden aktualisiert.", Android.Widget.ToastLength.Short).Show();
-					// new FeedHelper().UpdateBGFeeds(activityNews);
+					new FeedHelper().UpdateBGFeeds(activityNews);
 
 					AlarmManager alarmManager = (AlarmManager) GetSystemService(Context.AlarmService);
 					PendingIntent pendingIntent = PendingIntent.GetBroadcast(this, 0, new Intent(this, typeof(NewsAppAlarmService)), 0);
