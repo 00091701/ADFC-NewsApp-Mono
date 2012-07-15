@@ -73,7 +73,11 @@ namespace de.dhoffmann.mono.adfcnewsapp.droid
 						                   "Warten Sie daher bitte einen kleinen Moment.\nAnschließend können Sie " +
 						                   "Termine und Neuigkeiten von verschiedenen Ortgruppen abonnieren.\n\n" +
 						                   "Die Einstellungen werden automatisch beim verlassen der Konfiguration gespeichert." + 
-						                   "\n\nBitte drücken Sie jetzt die 'Zurück-Taste' und warten einen Moment.");
+						                   "\n\nBitte drücken Sie jetzt die 'Zurück-Taste' und warten einen Moment." +
+						                   "\n\nNachdem Sie die gewünschten Einstellungen vorgenommen haben, drücken Sie bitte " +
+						                   "nochmal auf die 'Zurück-Taste' die gewünschten Nachrichten werden dann aktualisiert und " +
+						                   "stehen kurz danach zur Verfügung."
+						                   );
 	     				dlgInfo.Show();
 					});
 
