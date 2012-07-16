@@ -59,8 +59,7 @@ namespace de.dhoffmann.mono.adfcnewsapp.buslog.database
 				SqliteCommand sqlCmd = new SqliteCommand("CREATE TABLE version (VersionID INTEGER PRIMARY KEY AUTOINCREMENT, DateCreate DATETIME NOT NULL);", conn);
 				sqlCmds.Add(sqlCmd);
 
-				SqliteCommand sqlCmd2 = new SqliteCommand("INSERT INTO version (VersionID, DateCreate) VALUES (0, @DateCreate);", conn);
-				sqlCmd2.Parameters.AddWithValue("@DateCreate", DateTime.Now);
+				SqliteCommand sqlCmd2 = new SqliteCommand("INSERT INTO version (VersionID, DateCreate) VALUES (0, date('now'));", conn);
 				sqlCmds.Add(sqlCmd2);
 				
 				conn.Open();
