@@ -39,7 +39,7 @@ namespace de.dhoffmann.mono.adfcnewsapp.droid
 	public class News : Activity
 	{
 		private NewsListItemAdapter adapter;
-		private bool showOnlyUnreadNews = true;
+		private bool showOnlyUnreadNews = false;
 
 		protected override void OnCreate(Bundle bundle)
 		{

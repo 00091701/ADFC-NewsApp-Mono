@@ -31,6 +31,7 @@ using Android.Views;
 using Android.Widget;
 using de.dhoffmann.mono.adfcnewsapp.buslog.feedimport;
 using de.dhoffmann.mono.adfcnewsapp.droid;
+using Android.Graphics;
 
 namespace de.dhoffmann.mono.adfcnewsapp.androidhelper
 {
@@ -69,6 +70,10 @@ namespace de.dhoffmann.mono.adfcnewsapp.androidhelper
 			var view = (convertView ?? context.LayoutInflater.Inflate(Resource.Layout.NewsListItem, parent, false)) as LinearLayout;
 
 			TextView tvName = view.FindViewById<TextView>(Resource.Id.tvName);
+
+			if (!entry.IsRead)
+				tvName.SetTypeface(Typeface.DefaultBold, TypefaceStyle.Bold);
+
 			tvName.Text = entry.Title;
 
 			TextView tvDate = view.FindViewById<TextView>(Resource.Id.tvDate);

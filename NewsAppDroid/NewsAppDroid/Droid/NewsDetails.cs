@@ -32,6 +32,7 @@ using Android.Widget;
 using de.dhoffmann.mono.adfcnewsapp;
 using de.dhoffmann.mono.adfcnewsapp.buslog;
 using de.dhoffmann.mono.adfcnewsapp.buslog.database;
+using de.dhoffmann.mono.adfcnewsapp.buslog.feedimport;
 
 namespace de.dhoffmann.mono.adfcnewsapp.droid
 {
@@ -48,12 +49,34 @@ namespace de.dhoffmann.mono.adfcnewsapp.droid
 			Logging.Log(this, Logging.LoggingTypeDebug, "OnCreate");
 
 			SetContentView (Resource.Layout.NewsDetails);
+		}
+
+		protected override void OnResume ()
+		{
+			base.OnResume ();
 
 			int feedID = Intent.GetIntExtra ("FeedID", -1);
 			int feedItemID = Intent.GetIntExtra ("FeedItemID", -1);
 
 			if (feedItemID >= 0) 
 			{
+				Button btnNextNewsEntry = FindViewById<Button>(Resource.Id.btnNextNewsEntry);
+
+				List<de.dhoffmann.mono.adfcnewsapp.buslog.feedimport.Rss.RssItem> rssItems = new de.dhoffmann.mono.adfcnewsapp.buslog.database.Rss().GetActiveFeedItems(true);
+				btnNextNewsEntry.Visibility = ViewStates.Gone;
+
+				if (rssItems != null && rssItems.Count > 1)
+				{
+					for (int nIndex=0; nIndex<rssItems.Count-1; nIndex++)
+					{
+						if (rssItems[nIndex].ItemID == feedItemID)
+						{
+							btnNextNewsEntry.Visibility = ViewStates.Visible;
+							break;
+						}
+					}
+				}
+
 				new de.dhoffmann.mono.adfcnewsapp.buslog.database.Rss().MarkItemsAsRead(feedItemID, true);
 
 				de.dhoffmann.mono.adfcnewsapp.buslog.feedimport.Rss.RssFeed rssfeed = new de.dhoffmann.mono.adfcnewsapp.buslog.database.Rss().GetRssFeed(feedID, feedItemID);
@@ -91,9 +114,31 @@ namespace de.dhoffmann.mono.adfcnewsapp.droid
 					intent.SetType("text/plain");
 
 					intent.PutExtra(Android.Content.Intent.ExtraSubject, "Neues vom ADFC");
-					intent.PutExtra(Android.Content.Intent.ExtraText, description + "\n\n\n" + url + "\n\npowered by: ADFC-News\nhttps://play.google.com/store/apps/details?id=de.dhoffmann.mono.adfcnewsapp");
+					intent.PutExtra(Android.Content.Intent.ExtraText, description + "\n\n\n" + url + "\n\npowered by: ADFC-News für Android\nhttps://play.google.com/store/apps/details?id=de.dhoffmann.mono.adfcnewsapp");
 
 					StartActivity(Intent.CreateChooser(intent, "Share via"));
+				};
+
+				btnNextNewsEntry.Click += delegate(object sender, EventArgs e) 
+				{
+					rssItems = new de.dhoffmann.mono.adfcnewsapp.buslog.database.Rss().GetActiveFeedItems(false);
+
+					if (rssItems != null && rssItems.Count > 1)
+					{
+						for (int nIndex=1; nIndex<rssItems.Count; nIndex++)
+						{
+							if (rssItems[nIndex-1].ItemID == feedItemID)
+							{
+								Intent i = new Android.Content.Intent(this, typeof(NewsDetails));
+								i.PutExtra("FeedID", rssItems[nIndex].FeedID);
+								i.PutExtra("FeedItemID", rssItems[nIndex].ItemID);
+
+								StartActivity(i);
+								this.Finish();
+								break;
+							}
+						}
+					}
 				};
 			}
 		}
