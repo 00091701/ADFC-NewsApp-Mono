@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="1" android:versionName="1.0" package="de.dhoffmann.mono.adfcnewsapp">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="2" android:versionName="1.1" package="de.dhoffmann.mono.adfcnewsapp">
 	<uses-sdk android:minSdkVersion="8" />
 	<application android:label="ADFC-News" android:icon="@drawable/icon">
 	</application>
