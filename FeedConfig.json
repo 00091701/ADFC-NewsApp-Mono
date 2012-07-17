@@ -1,6 +1,13 @@
 {
     "Feeds": [
         {
+            "Name": "ADFC-Blog",
+            "FeedType": "News",
+            "URL": "http://adfc-blog.de/feed/",
+            "URLType": "RSS",
+            "CategoryFilter": ""
+        },
+        {
             "Name": "Amberg - News",
             "FeedType": "News",
             "URL": "http://www.adfc-amberg.de/ADFC-Amberg.xml",
@@ -47,6 +54,26 @@
             "FeedType": "Dates",
             "URL": "https://www.google.com/calendar/ical/ikcd7hqi8pbnjvkbiacfjte2h0%40group.calendar.google.com/public/basic.ics",
             "URLType": "ICS"
+        },
+        {
+            "Name": "Coburg - News",
+            "FeedType": "News",
+            "URL": "http://www.adfc-coburg.de/cms/index.php?format=feed&type=rss",
+            "URLType": "RSS"
+        },
+        {
+            "Name": "Dachau - News",
+            "FeedType": "News",
+            "URL": "http://www.adfc-dachau.de/feed/",
+            "URLType": "RSS"
+        },
+        {
+            "Name": "Dresden - News",
+            "FeedType": "News",
+            "URL": "http://www.adfc-dresden.de/index.php?option=com_ninjarsssyndicator&feed_id=1&format=raw",
+            "URLType": "RSS"
         }
+
+
     ]
 }
