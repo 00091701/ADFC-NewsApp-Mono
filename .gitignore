@@ -1,6 +1,9 @@
 NewsAppDroid/NewsAppDroid/bin/*
 NewsAppDroid/NewsAppDroid/obj/*
+NewsAppTouch/NewsAppTouch/bin/*
+NewsAppTouch/NewsAppTouch/obj/*
 NewsAppDroid/NewsAppDroid.userprefs
+NewsAppTouch/NewsAppTouch.userprefs
 .DS_Store
 NewsAppDroid/CreateMarketVersion.sh
 
