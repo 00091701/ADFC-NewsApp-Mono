@@ -8,12 +8,12 @@ using MonoTouch.Foundation;
 
 namespace De.Dhoffmann.Mono.Adfcnewsapp.Touch
 {
-	[Register ("RootViewController")]
-	partial class RootViewController
+	[Register ("NewsDetailViewController")]
+	partial class NewsDetailViewController
 	{
+		
 		void ReleaseDesignerOutlets ()
 		{
 		}
 	}
 }
-

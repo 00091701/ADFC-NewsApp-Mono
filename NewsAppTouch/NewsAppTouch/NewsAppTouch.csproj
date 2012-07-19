@@ -83,28 +83,82 @@
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
     <Reference Include="monotouch" />
+    <Reference Include="System.Data" />
+    <Reference Include="Mono.Data.Sqlite" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Json" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Touch\AppDelegate.cs" />
-    <Compile Include="Touch\DetailViewController.cs" />
-    <Compile Include="Touch\DetailViewController.designer.cs">
-      <DependentUpon>DetailViewController.cs</DependentUpon>
-    </Compile>
     <Compile Include="Touch\Main.cs" />
-    <Compile Include="Touch\RootViewController.cs" />
-    <Compile Include="Touch\RootViewController.designer.cs">
-      <DependentUpon>RootViewController.cs</DependentUpon>
+    <Compile Include="..\..\NewsAppDroid\NewsAppDroid\BusLog\FeedHelper.cs">
+      <Link>BusLog\FeedHelper.cs</Link>
     </Compile>
+    <Compile Include="..\..\NewsAppDroid\NewsAppDroid\BusLog\Logging.cs">
+      <Link>BusLog\Logging.cs</Link>
+    </Compile>
+    <Compile Include="..\..\NewsAppDroid\NewsAppDroid\BusLog\Database\Config.cs">
+      <Link>BusLog\Database\Config.cs</Link>
+    </Compile>
+    <Compile Include="..\..\NewsAppDroid\NewsAppDroid\BusLog\Database\DBHelper.cs">
+      <Link>BusLog\Database\DBHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\..\NewsAppDroid\NewsAppDroid\BusLog\Database\DBSchema.cs">
+      <Link>BusLog\Database\DBSchema.cs</Link>
+    </Compile>
+    <Compile Include="..\..\NewsAppDroid\NewsAppDroid\BusLog\Database\DataBase.cs">
+      <Link>BusLog\Database\DataBase.cs</Link>
+    </Compile>
+    <Compile Include="..\..\NewsAppDroid\NewsAppDroid\BusLog\Database\Rss.cs">
+      <Link>BusLog\Database\Rss.cs</Link>
+    </Compile>
+    <Compile Include="..\..\NewsAppDroid\NewsAppDroid\BusLog\FeedImport\Rss.cs">
+      <Link>BusLog\FeedImport\Rss.cs</Link>
+    </Compile>
+    <Compile Include="..\..\NewsAppDroid\NewsAppDroid\BusLog\Webservice\Download.cs">
+      <Link>BusLog\Webservice\Download.cs</Link>
+    </Compile>
+    <Compile Include="..\..\NewsAppDroid\NewsAppDroid\BusLog\Webservice\WSFeedConfig.cs">
+      <Link>BusLog\Webservice\WSFeedConfig.cs</Link>
+    </Compile>
+    <Compile Include="..\..\NewsAppDroid\NewsAppDroid\BusLog\Webservice\WebServiceBase.cs">
+      <Link>BusLog\Webservice\WebServiceBase.cs</Link>
+    </Compile>
+    <Compile Include="Touch\NewsListViewController.cs" />
+    <Compile Include="Touch\NewsListViewController.designer.cs">
+      <DependentUpon>NewsListViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Touch\EinstellungenViewController.cs" />
+    <Compile Include="Touch\EinstellungenViewController.designer.cs">
+      <DependentUpon>EinstellungenViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Touch\NewsDetailViewController.cs" />
+    <Compile Include="Touch\NewsDetailViewController.designer.cs">
+      <DependentUpon>NewsDetailViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Touch\WebViewController.cs" />
+    <Compile Include="Touch\WebViewController.designer.cs">
+      <DependentUpon>WebViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Touch\NewsListCellViewController.cs" />
+    <Compile Include="Touch\NewsListCellViewController.designer.cs">
+      <DependentUpon>NewsListCellViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="IosHelper\NewsListDataSource.cs" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Touch\MainStoryboard_iPad.storyboard" />
     <InterfaceDefinition Include="Touch\MainStoryboard_iPhone.storyboard" />
+    <InterfaceDefinition Include="Touch\NewsListCellViewController_iPhone.xib" />
+    <InterfaceDefinition Include="Touch\NewsListCellViewController_iPad.xib" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
     <Folder Include="Touch\" />
+    <Folder Include="BusLog\" />
+    <Folder Include="IosHelper\" />
   </ItemGroup>
 </Project>
