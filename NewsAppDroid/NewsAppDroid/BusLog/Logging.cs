@@ -39,6 +39,12 @@ namespace de.dhoffmann.mono.adfcnewsapp.buslog
 
 		public static void Log(object sender, int loggingType, string logMsg, Exception ex)
 		{
+#if DEBUG
+			bool debug = true;
+#else
+			bool debug = false;
+#endif
+
 			string loggingMessage = "Logging type: ";
 
 			switch (loggingType)
@@ -71,6 +77,9 @@ namespace de.dhoffmann.mono.adfcnewsapp.buslog
 				loggingMessage += " - EXCEPTION: " + ex.ToString();
 
 #if MONODROID
+			if (!debug && loggingType <= LoggingTypeDebug)
+				return;
+
 			string tag = "ADFCNewsApp";
 
 			if (loggingType == LoggingTypeWarn)
@@ -85,7 +94,10 @@ namespace de.dhoffmann.mono.adfcnewsapp.buslog
 				Android.Util.Log.Error(tag, loggingMessage);
 #endif
 #if MONOTOUCH
-			System.Diagnostics.Debug.WriteLine(loggingMessage);
+			if (!debug && loggingType > LoggingTypeDebug)
+				Console.WriteLine(loggingMessage);
+			else
+				System.Diagnostics.Debug.WriteLine(loggingMessage);
 #endif
 		}
 	}

@@ -11,9 +11,15 @@ namespace De.Dhoffmann.Mono.Adfcnewsapp.Touch
 	[Register ("NewsListViewController")]
 	partial class NewsListViewController
 	{
+		[Outlet]
+		MonoTouch.UIKit.UITableView tblNewsList { get; set; }
 		
 		void ReleaseDesignerOutlets ()
 		{
+			if (tblNewsList != null) {
+				tblNewsList.Dispose ();
+				tblNewsList = null;
+			}
 		}
 	}
 }

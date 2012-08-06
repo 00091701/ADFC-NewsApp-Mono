@@ -47,6 +47,7 @@
     <CodesignKey>iPhone Developer</CodesignKey>
     <MtouchDebug>true</MtouchDebug>
     <MtouchProfiling>true</MtouchProfiling>
+    <MtouchArch>ARMv7</MtouchArch>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhone' ">
     <DebugType>none</DebugType>
@@ -143,17 +144,13 @@
     <Compile Include="Touch\WebViewController.designer.cs">
       <DependentUpon>WebViewController.cs</DependentUpon>
     </Compile>
-    <Compile Include="Touch\NewsListCellViewController.cs" />
-    <Compile Include="Touch\NewsListCellViewController.designer.cs">
-      <DependentUpon>NewsListCellViewController.cs</DependentUpon>
-    </Compile>
     <Compile Include="IosHelper\NewsListDataSource.cs" />
+    <Compile Include="IosHelper\EinstellungenListDataSource.cs" />
+    <Compile Include="IosHelper\EinstellungenListDelegate.cs" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Touch\MainStoryboard_iPad.storyboard" />
     <InterfaceDefinition Include="Touch\MainStoryboard_iPhone.storyboard" />
-    <InterfaceDefinition Include="Touch\NewsListCellViewController_iPhone.xib" />
-    <InterfaceDefinition Include="Touch\NewsListCellViewController_iPad.xib" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

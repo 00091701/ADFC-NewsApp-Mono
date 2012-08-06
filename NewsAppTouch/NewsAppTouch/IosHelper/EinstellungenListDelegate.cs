@@ -17,17 +17,26 @@
  *
  */
 
-using System;
 
-using MonoTouch.Foundation;
+using System;
 using MonoTouch.UIKit;
 
-namespace De.Dhoffmann.Mono.Adfcnewsapp.Touch
+namespace De.Dhoffmann.Mono.Adfcnewsapp.IosHelper
 {
-	public partial class WebViewController : UIViewController
+	public class EinstellungenListDelegate : UITableViewDelegate
 	{
-		public WebViewController (IntPtr handle) : base (handle)
+		public EinstellungenListDelegate ()
 		{
+		}
+
+		public override void RowSelected (UITableView tableView, MonoTouch.Foundation.NSIndexPath indexPath)
+		{
+
+			UITableViewCell cell = tableView.DequeueReusableCell("EinstellungenListCell") as UITableViewCell;
+			((UISwitch)((UIView)cell.Subviews[0]).Subviews[1]).On = !((UISwitch)((UIView)cell.Subviews[0]).Subviews[1]).On;
+
+			// TODO: Implement - see: http://go-mono.com/docs/index.aspx?link=T%3aMonoTouch.Foundation.ModelAttribute
 		}
 	}
 }
+

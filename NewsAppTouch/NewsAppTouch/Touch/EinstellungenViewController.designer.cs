@@ -11,9 +11,25 @@ namespace De.Dhoffmann.Mono.Adfcnewsapp.Touch
 	[Register ("EinstellungenViewController")]
 	partial class EinstellungenViewController
 	{
-		
+		[Outlet]
+		MonoTouch.UIKit.UISwitch swAutoDownload { get; set; }
+
+		[Outlet]
+		MonoTouch.UIKit.UITableView tblEinstellungen { get; set; }
+
+
 		void ReleaseDesignerOutlets ()
 		{
+			if (swAutoDownload != null) {
+				swAutoDownload.Dispose ();
+				swAutoDownload = null;
+			}
+
+			if (tblEinstellungen != null) {
+				tblEinstellungen.Dispose ();
+				tblEinstellungen = null;
+			}
+
 		}
 	}
 }
