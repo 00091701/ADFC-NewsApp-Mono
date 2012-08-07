@@ -1,6 +1,13 @@
 {
     "Feeds": [
         {
+            "Name": "ADFC",
+            "FeedType": "News",
+            "URL": "http://www.adfc.de/news/news-rss",
+            "URLType": "RSS",
+            "CategoryFilter": ""
+        },
+        {
             "Name": "ADFC-Blog",
             "FeedType": "News",
             "URL": "http://adfc-blog.de/feed/",
@@ -71,6 +78,42 @@
             "Name": "Dresden - News",
             "FeedType": "News",
             "URL": "http://www.adfc-dresden.de/index.php?option=com_ninjarsssyndicator&feed_id=1&format=raw",
+            "URLType": "RSS"
+        },
+        {
+            "Name": "Emden - News",
+            "FeedType": "News",
+            "URL": "http://www.adfc-emden.com/index.php?format=feed&type=rss",
+            "URLType": "RSS"
+        },
+        {
+            "Name": "Erlangen - News",
+            "FeedType": "News",
+            "URL": "http://www.adfc-erlangen.de/rss.xml",
+            "URLType": "RSS"
+        },
+        {
+            "Name": "Esslingen - News",
+            "FeedType": "News",            
+            "URL": "http://www.adfc-bw.de/index.php?id=5218&type=100",
+            "URLType": "RSS"
+        },
+        {
+            "Name": "Forchheim - News",
+            "FeedType": "News",
+            "URL": "http://www.adfc-forchheim.de/index.php?format=feed&type=rss",
+            "URLType": "RSS"
+        },
+        {
+            "Name": "Fulda - News",
+            "FeedType": "News",
+            "URL": "http://www.fulda-adfc.de/index.php?format=feed&type=rss",
+            "URLType": "RSS"
+        },
+        {
+            "Name": "Fürstenfeldbruck - News",
+            "FeedType": "News",
+            "URL": "http://www.adfc-ffb.de/rss.xml",
             "URLType": "RSS"
         }
 
