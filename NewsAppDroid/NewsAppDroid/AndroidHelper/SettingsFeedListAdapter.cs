@@ -67,21 +67,34 @@ namespace de.dhoffmann.mono.adfcnewsapp.androidhelper
 
 			WSFeedConfig.FeedConfig entry = entries[position];
 
-			var view = (convertView ?? context.LayoutInflater.Inflate(Resource.Layout.SettingsFeedListItem, parent, false)) as LinearLayout;
+			LinearLayout view;
+			CheckBox cbFeedItem;
 
-			CheckBox cbFeedItem = view.FindViewById<CheckBox>(Resource.Id.cbFeedItem);
+			if (convertView == null)
+			{
+				view = context.LayoutInflater.Inflate(Resource.Layout.SettingsFeedListItem, parent, false) as LinearLayout;
+				cbFeedItem = view.FindViewById<CheckBox>(Resource.Id.cbFeedItem);
+				cbFeedItem.CheckedChange += ItemChecked;
+			}
+			else
+			{
+				view = convertView as LinearLayout;
+				cbFeedItem = view.FindViewById<CheckBox>(Resource.Id.cbFeedItem);
+			}
+
 			cbFeedItem.Text = entry.Name;
+			cbFeedItem.Tag = position;
 			cbFeedItem.Checked = entry.IsActive;
 
-			cbFeedItem.CheckedChange += delegate(object sender, CompoundButton.CheckedChangeEventArgs e) 
-			{
-				if (entries == null)
-					return;
-				else
-					entries[position].IsActive = !entries[position].IsActive;
-			};
+			return view;
+		}
 
-	        return view;
+		private void ItemChecked(object sender, CompoundButton.CheckedChangeEventArgs e)
+		{
+			if (entries == null)
+				return;
+
+			entries[(int)((CheckBox)(sender)).Tag].IsActive = e.IsChecked;
 		}
 
 		public override int Count 
