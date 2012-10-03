@@ -28,7 +28,7 @@ namespace De.Dhoffmann.Mono.Adfcnewsapp.IosHelper
 {
 	public class NewsListDataSource : UITableViewDataSource
 	{
-        List<KeyValuePair<string, Rss.RssItem>> viewData;
+        public List<KeyValuePair<string, Rss.RssItem>> ViewData;
 
 		public NewsListDataSource ()
 		{
@@ -38,18 +38,18 @@ namespace De.Dhoffmann.Mono.Adfcnewsapp.IosHelper
 		{
 			List<de.dhoffmann.mono.adfcnewsapp.buslog.feedimport.Rss.RssItem> rssItems = new de.dhoffmann.mono.adfcnewsapp.buslog.database.Rss().GetActiveFeedItems(false);
 
-			viewData = new List<KeyValuePair<string, Rss.RssItem>>();
+			ViewData = new List<KeyValuePair<string, Rss.RssItem>>();
 			foreach (Rss.RssItem item in rssItems)
-				viewData.Add(new KeyValuePair<string, Rss.RssItem>(item.ItemID.ToString(), item));
+				ViewData.Add(new KeyValuePair<string, Rss.RssItem>(item.ItemID.ToString(), item));
 		}
 
 		#region implemented abstract members of MonoTouch.UIKit.UITableViewDataSource
 		public override int RowsInSection (UITableView tableView, int section)
 		{
-			if (viewData == null)
+			if (ViewData == null)
 				return 0;
 			else
-				return viewData.Count;
+				return ViewData.Count;
 		}
 
 		public override UITableViewCell GetCell (UITableView tableView, MonoTouch.Foundation.NSIndexPath indexPath)
@@ -58,12 +58,17 @@ namespace De.Dhoffmann.Mono.Adfcnewsapp.IosHelper
 			UITableViewCell cell = tableView.DequeueReusableCell("NewsListCell");
 
 			UILabel lbHeadLine = cell.ViewWithTag(100) as UILabel;
-			lbHeadLine.Text = viewData[indexPath.Row].Value.Title;
+			lbHeadLine.Text = ViewData[indexPath.Row].Value.Title;
 
-			if (viewData[indexPath.Row].Value.PubDate.HasValue)
+			if (!ViewData[indexPath.Row].Value.IsRead)
+				lbHeadLine.Font = UIFont.BoldSystemFontOfSize(17);
+			else
+				lbHeadLine.Font = UIFont.SystemFontOfSize(17);
+
+			if (ViewData[indexPath.Row].Value.PubDate.HasValue)
 			{
 				UILabel lbDate = cell.ViewWithTag(101) as UILabel;
-				lbDate.Text = viewData[indexPath.Row].Value.PubDate.Value.ToString();
+				lbDate.Text = ViewData[indexPath.Row].Value.PubDate.Value.ToString();
 			}
 
             return cell;
@@ -72,7 +77,7 @@ namespace De.Dhoffmann.Mono.Adfcnewsapp.IosHelper
 
 		public Rss.RssItem GetRow(int row)
 		{
-			return viewData[row].Value;
+			return ViewData[row].Value;
 		}
 
 	}
