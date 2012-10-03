@@ -26,8 +26,22 @@ namespace De.Dhoffmann.Mono.Adfcnewsapp.Touch
 {
 	public partial class WebViewController : UIViewController
 	{
+		public string GotoUrl {
+			get;
+			set;
+		}
+
 		public WebViewController (IntPtr handle) : base (handle)
 		{
+		}
+
+		public override void ViewDidLoad ()
+		{
+			base.ViewDidLoad ();
+
+			UIWebView webView = View.ViewWithTag(221) as UIWebView;
+			webView.LoadRequest(new NSUrlRequest(new NSUrl(GotoUrl)));
+
 		}
 	}
 }

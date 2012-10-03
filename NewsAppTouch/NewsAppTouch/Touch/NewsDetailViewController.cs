@@ -48,24 +48,17 @@ namespace De.Dhoffmann.Mono.Adfcnewsapp.Touch
 				UITextView txtContent = View.ViewWithTag(202) as UITextView;
 				txtContent.Text = rssFeed.Items[0].Description;
 
-				UIButton btnWeb = View.ViewWithTag(201) as UIButton;
-				btnWeb.TouchUpInside += BtnWeb_Click;
-
 				website = rssFeed.Items[0].Link;
 			}
 		}
 
-		void BtnWeb_Click (object sender, EventArgs e)
+		public override void PrepareForSegue (UIStoryboardSegue segue, NSObject sender)
 		{
-			NSUrl url = new NSUrl(website);
-			if (!UIApplication.SharedApplication.OpenUrl(url))
+			base.PrepareForSegue (segue, sender);
+
+			if (segue.DestinationViewController.GetType() == typeof(WebViewController))
 			{
-				var av = new UIAlertView("Not supported"
-				                         , "Scheme 'tel:' is not supported on this device"
-				                         , null
-				                         , "Ok thanks"
-				                         , null);
-				av.Show();
+				((WebViewController)segue.DestinationViewController).GotoUrl = website;
 			}
 		}
 	}
