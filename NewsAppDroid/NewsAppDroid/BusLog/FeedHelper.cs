@@ -55,7 +55,6 @@ namespace de.dhoffmann.mono.adfcnewsapp.buslog
 #if MONOTOUCH
 		public void UpdateBGFeeds()
 		{
-			this.parentController = parentController;
 #endif
 			Logging.Log(this, Logging.LoggingTypeDebug, "UpdateBGFeeds()");
 			BackgroundWorker bgWorker = new BackgroundWorker();

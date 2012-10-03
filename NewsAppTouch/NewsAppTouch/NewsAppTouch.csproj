@@ -41,7 +41,7 @@
     <DebugType>full</DebugType>
     <Optimize>False</Optimize>
     <OutputPath>bin\iPhone\Debug</OutputPath>
-    <DefineConstants>DEBUG;</DefineConstants>
+    <DefineConstants>DEBUG;MONOTOUCH;</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>False</ConsolePause>
@@ -58,6 +58,7 @@
     <WarningLevel>4</WarningLevel>
     <ConsolePause>False</ConsolePause>
     <CodesignKey>iPhone Developer</CodesignKey>
+    <DefineConstants>MONOTOUCH;</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Ad-Hoc|iPhone' ">
     <DebugType>none</DebugType>
@@ -159,5 +160,25 @@
     <Folder Include="Touch\" />
     <Folder Include="BusLog\" />
     <Folder Include="IosHelper\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="logo_29.png" />
+    <Content Include="logo_50.png" />
+    <Content Include="logo_57.png" />
+    <Content Include="logo_58.png" />
+    <Content Include="logo_72.png" />
+    <Content Include="logo_114.png" />
+    <Content Include="logo_320.png" />
+    <Content Include="logo_512.png" />
+    <Content Include="logo_640.png" />
+    <Content Include="logo_1024.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ITunesArtwork Include="iTunesArtwork" />
+    <ITunesArtwork Include="iTunesArtwork%402x" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Default.png" />
+    <BundleResource Include="Default%402x.png" />
   </ItemGroup>
 </Project>
