@@ -22,6 +22,7 @@ using MonoTouch.UIKit;
 using System.Collections.Generic;
 using De.Dhoffmann.Mono.Adfcnewsapp.Touch;
 using de.dhoffmann.mono.adfcnewsapp.buslog.feedimport;
+using System.Linq;
 
 namespace De.Dhoffmann.Mono.Adfcnewsapp.IosHelper
 {
@@ -68,6 +69,11 @@ namespace De.Dhoffmann.Mono.Adfcnewsapp.IosHelper
             return cell;
 		}
 		#endregion
+
+		public Rss.RssItem GetRow(int row)
+		{
+			return viewData[row].Value;
+		}
 
 	}
 }

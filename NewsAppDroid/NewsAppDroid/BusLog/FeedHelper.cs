@@ -34,18 +34,28 @@ namespace de.dhoffmann.mono.adfcnewsapp.buslog
 		Android.App.Activity activity;
 #endif
 		private static Object lockObject = new Object();
+#if MONOTOUCH
+		private De.Dhoffmann.Mono.Adfcnewsapp.Touch.NewsListViewController parentController;
 
-		public FeedHelper ()
+		public FeedHelper (De.Dhoffmann.Mono.Adfcnewsapp.Touch.NewsListViewController controller)
 		{
+			this.parentController = controller;
 		}
+#endif
 
 #if MONODROID
+		public FeedHelper ()
+		{}
+
 		public void UpdateBGFeeds(Android.App.Activity activity)
 		{
 			this.activity = activity;
-#else
+#endif
+
+#if MONOTOUCH
 		public void UpdateBGFeeds()
 		{
+			this.parentController = parentController;
 #endif
 			Logging.Log(this, Logging.LoggingTypeDebug, "UpdateBGFeeds()");
 			BackgroundWorker bgWorker = new BackgroundWorker();
@@ -57,16 +67,24 @@ namespace de.dhoffmann.mono.adfcnewsapp.buslog
 
 			bgWorker.RunWorkerCompleted += delegate(object sender, RunWorkerCompletedEventArgs e) 
 			{
-#if MONODROID
 				Logging.Log(this, Logging.LoggingTypeDebug, "UpdateBGFeeds() - RunWorkerCompleted");
+#if MONODROID
+				
 				activity.RunOnUiThread(delegate() 
 				{
-					if (this.activity.GetType().ToString () == "de.dhoffmann.mono.adfcnewsapp.droid.News")
+					if (this.activity.GetType() == typeof(de.dhoffmann.mono.adfcnewsapp.droid.News))
 					{
 						de.dhoffmann.mono.adfcnewsapp.droid.News aNews = (de.dhoffmann.mono.adfcnewsapp.droid.News)this.activity;
 						aNews.LoadNews();
 						Android.Widget.Toast.MakeText(this.activity, "Die Newsfeeds sind aktualisiert.", Android.Widget.ToastLength.Short).Show();
 					}
+				});
+#endif
+#if MONOTOUCH
+				parentController.InvokeOnMainThread(delegate 
+				{
+					// TODO: Wartekringel entfernen
+					this.parentController.BindMyData();
 				});
 #endif
 			};

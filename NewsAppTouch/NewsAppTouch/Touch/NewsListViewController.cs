@@ -31,9 +31,15 @@ namespace De.Dhoffmann.Mono.Adfcnewsapp.Touch
 	public partial class NewsListViewController : UITableViewController
 	{
 		private NewsListDataSource dsNewsList;
+		public de.dhoffmann.mono.adfcnewsapp.buslog.feedimport.Rss.RssItem SelectedFeedItem;
 
 		public NewsListViewController (IntPtr handle) : base (handle)
 		{
+		}
+
+		public override void ViewDidAppear (bool animated)
+		{
+			base.ViewDidAppear (animated);
 		}
 
 		public override void ViewDidLoad ()
@@ -44,24 +50,42 @@ namespace De.Dhoffmann.Mono.Adfcnewsapp.Touch
 
 			if (!appConfig.AppIsConfigured)
 			{
-				new FeedHelper().UpdateBGFeeds();
+				UpDateFeeds();
 
 				EinstellungenViewController vcEinstellungen = Storyboard.InstantiateViewController("Einstellungen") as EinstellungenViewController;
+				vcEinstellungen.ScrNewsListVC = this;
 				NavigationController.PushViewController(vcEinstellungen, false);
 			}
 			else
 			{
+				UpDateFeeds();
 				BindMyData();
 			}
 		}
 
 		public void BindMyData ()
 		{
-			new FeedHelper().UpdateBGFeeds();
-
 			dsNewsList = new NewsListDataSource();
 			dsNewsList.LoadData();
 			tblNewsList.DataSource = dsNewsList;
+			tblNewsList.Delegate = new NewsListDelegate(this);
+			tblNewsList.ReloadData();
+		}
+
+		public override void PrepareForSegue (UIStoryboardSegue segue, NSObject sender)
+		{
+			base.PrepareForSegue (segue, sender);
+
+			if (segue.DestinationViewController.GetType() == typeof(NewsDetailViewController))
+			{
+				NewsDetailViewController scrNewsDetailVC = (NewsDetailViewController)segue.DestinationViewController;
+				scrNewsDetailVC.SelectedFeedItem = SelectedFeedItem;
+			}
+		}
+
+		public void UpDateFeeds ()
+		{
+			new FeedHelper(this).UpdateBGFeeds();
 		}
 
 		static bool UserInterfaceIdiomIsPhone 

@@ -30,6 +30,7 @@ namespace De.Dhoffmann.Mono.Adfcnewsapp.Touch
 {
 	public partial class EinstellungenViewController : UIViewController
 	{
+		public NewsListViewController ScrNewsListVC;
 		private EinstellungenListDataSource dsEinstellungenList;
 		public EinstellungenViewController (IntPtr handle) : base (handle)
 		{
@@ -48,7 +49,7 @@ namespace De.Dhoffmann.Mono.Adfcnewsapp.Touch
 
                 bgWorker.DoWork += delegate(object sender, DoWorkEventArgs e)
                 {
-					new FeedHelper().UpdateFeeds();
+					new FeedHelper(ScrNewsListVC).UpdateFeeds();
                 };
 
                 bgWorker.RunWorkerCompleted += delegate(object sender, RunWorkerCompletedEventArgs e)
@@ -81,7 +82,6 @@ namespace De.Dhoffmann.Mono.Adfcnewsapp.Touch
 			dsEinstellungenList = new EinstellungenListDataSource();
 			dsEinstellungenList.LoadData();
 			tblEinstellungen.DataSource = dsEinstellungenList;
-			tblEinstellungen.Delegate = new EinstellungenListDelegate();
 			tblEinstellungen.ReloadData();
 
 			AppConfig appConfig = new Config(this).GetAppConfig();
@@ -105,8 +105,10 @@ namespace De.Dhoffmann.Mono.Adfcnewsapp.Touch
 
 			new Config(this).SetAppConfig(appConfig);
 
-			if (NavigationController.TopViewController.ToString() == "De.Dhoffmann.Mono.Adfcnewsapp.Touch.NewsListViewController")
-				((NewsListViewController)NavigationController.TopViewController).BindMyData();
+			if (NavigationController.TopViewController.GetType() == typeof(NewsListViewController))
+			{
+				((NewsListViewController)NavigationController.TopViewController).UpDateFeeds();
+			}
 		}
 	}
 }

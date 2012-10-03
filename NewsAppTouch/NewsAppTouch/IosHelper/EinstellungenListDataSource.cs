@@ -73,28 +73,31 @@ namespace De.Dhoffmann.Mono.Adfcnewsapp.IosHelper
 			lbHidden.Text = entry.FeedID.ToString();
 
 			uiSwitches.Add(tblSwitch);
-			tblSwitch.ValueChanged += delegate(object sender, EventArgs e) 
-			{
-				UISwitch uiSwitch = (UISwitch)sender;
-				UITableViewCell uiTableCell = (UITableViewCell)((UIView)uiSwitch.Superview).Superview;
-
-				UILabel lbH = uiTableCell.ViewWithTag(204) as UILabel;
-				if (lbH != null && !String.IsNullOrEmpty(lbH.Text))
-				{
-					UITableView uiTableView = (UITableView)uiTableCell.Superview;
-					EinstellungenListDataSource ds = uiTableView.DataSource as EinstellungenListDataSource;
-
-					int feedID = int.Parse(lbH.Text);
-
-					WSFeedConfig.FeedConfig feedConfig = ds.ViewData.Where(p => p.FeedID == feedID).FirstOrDefault();
-					if (feedConfig != null)
-						feedConfig.IsActive = uiSwitch.On;
-				}
-			};
+			tblSwitch.ValueChanged += SwitchValueChanged;
 
 			return cell;
 		}
 		#endregion
+
+
+		public void SwitchValueChanged(object sender, EventArgs e)
+		{
+			UISwitch uiSwitch = (UISwitch)sender;
+			UITableViewCell uiTableCell = (UITableViewCell)((UIView)uiSwitch.Superview).Superview;
+			
+			UILabel lbH = uiTableCell.ViewWithTag(204) as UILabel;
+			if (lbH != null && !String.IsNullOrEmpty(lbH.Text))
+			{
+				UITableView uiTableView = (UITableView)uiTableCell.Superview;
+				EinstellungenListDataSource ds = uiTableView.DataSource as EinstellungenListDataSource;
+				
+				int feedID = int.Parse(lbH.Text);
+				
+				WSFeedConfig.FeedConfig feedConfig = ds.ViewData.Where(p => p.FeedID == feedID).FirstOrDefault();
+				if (feedConfig != null)
+					feedConfig.IsActive = uiSwitch.On;
+			}
+		}
 
 	}
 }
