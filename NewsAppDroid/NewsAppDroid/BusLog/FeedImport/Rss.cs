@@ -24,6 +24,10 @@ using System.Collections.Generic;
 using System.Xml;
 using System.Xml.Linq;
 using System.Linq;
+using System.Text.RegularExpressions;
+using System.Web;
+
+
 #if MONODROID
 using Android.Text;
 #endif
@@ -97,14 +101,9 @@ namespace de.dhoffmann.mono.adfcnewsapp.buslog.feedimport
 					var qTitle = channel.Descendants("title").First();
 					string title = null;
 
-#if MONODROID
 					if (qTitle != null)
-						title = Html.FromHtml(qTitle.Value).ToString().Replace("￼", "").Trim();
-#else
-					if (qTitle != null)
-						title = qTitle.Value.ToString().Trim();
-#endif
-					
+						title = FromHtml(qTitle.Value);
+
 					var qLink = channel.Descendants("link").First();
 					string link = null;
 					
@@ -114,13 +113,9 @@ namespace de.dhoffmann.mono.adfcnewsapp.buslog.feedimport
 					var qDescription = channel.Descendants("description").First();
 					string description = null;
 
-#if MONODROID
 					if (qDescription != null)
-						description = Html.FromHtml(qDescription.Value).ToString().Replace("￼", "").Trim();
-#else
-					if (qDescription != null)
-						description = qDescription.Value.ToString().Trim();
-#endif
+						description = FromHtml(qDescription.Value);
+
 					DateTime lastBuildDate = DateTime.MinValue;
 					try
 					{
@@ -162,38 +157,26 @@ namespace de.dhoffmann.mono.adfcnewsapp.buslog.feedimport
 								rssItem.FeedID = feedID;
 								
 								var qiTitle = item.Descendants("title").First();
-#if MONODROID
+
 								if (qiTitle != null)
-									rssItem.Title = Html.FromHtml(qiTitle.Value).ToString().Replace("￼", "").Trim();
-#else
-								if (qiTitle != null)
-									rssItem.Title = qiTitle.Value.ToString().Trim();
-#endif
-								
+									rssItem.Title = FromHtml(qiTitle.Value);
+
 								var qiLink = item.Descendants("link").First();
 								if (qiLink != null)
 									rssItem.Link = qiLink.Value;
 								
 								var qiDescription = item.Descendants("description").First();
-#if MONODROID
+
 								if (qiDescription != null)
-									rssItem.Description = Html.FromHtml(qiDescription.Value).ToString().Replace("￼", "").Trim();
-#else
-								if (qiDescription != null)
-									rssItem.Description = qiDescription.Value.ToString().Trim();
-#endif
+									rssItem.Description = FromHtml(qiDescription.Value);
 
 								// Nicht alle haben diesen Node
 								try
 								{
 									var qiCategory = item.Descendants("category").First();
-#if MONODROID
+
 									if (qiCategory != null)
-										rssItem.Category = Html.FromHtml(qiCategory.Value).ToString().Replace("￼", "").Trim();
-#else
-									if (qiCategory != null)
-										rssItem.Category = qiCategory.Value.ToString().Trim();
-#endif
+										rssItem.Category = FromHtml(qiCategory.Value);
 								}
 								catch(Exception)
 								{ ; }
@@ -221,6 +204,19 @@ namespace de.dhoffmann.mono.adfcnewsapp.buslog.feedimport
 				System.Diagnostics.Debug.WriteLine("ex: " + ex.ToString());
 			}
 			
+			return ret;
+		}
+
+		private string FromHtml(string input)
+		{
+			if (String.IsNullOrEmpty(input))
+				return null;
+
+			string ret = Regex.Replace(input.ToString().Trim(), @"<[^>]*>", String.Empty).ToString().Replace("￼", "").Trim();
+
+			if (!String.IsNullOrEmpty(ret))
+				ret = HttpUtility.HtmlDecode(ret);
+
 			return ret;
 		}
 	

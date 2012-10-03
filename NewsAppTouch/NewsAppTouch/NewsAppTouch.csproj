@@ -89,6 +89,7 @@
     <Reference Include="Mono.Data.Sqlite" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Json" />
+    <Reference Include="System.Web.Services" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
