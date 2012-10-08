@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>CFBundleDisplayName</key>
-	<string>ADFC-News</string>
+	<string>ADFC News</string>
 	<key>CFBundleIconFiles</key>
 	<array>
 		<string>logo_57.png</string>
@@ -14,7 +14,7 @@
 		<string>logo_50.png</string>
 	</array>
 	<key>CFBundleIdentifier</key>
-	<string>de.dhoffmann.mono.adfcnewsapp.touch</string>
+	<string>de.dhoffmann.mono.adfcnewsapp</string>
 	<key>CFBundleVersion</key>
 	<string>1</string>
 	<key>MinimumOSVersion</key>

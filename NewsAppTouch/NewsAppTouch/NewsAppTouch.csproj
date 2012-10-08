@@ -59,6 +59,8 @@
     <ConsolePause>False</ConsolePause>
     <CodesignKey>iPhone Developer</CodesignKey>
     <DefineConstants>MONOTOUCH;</DefineConstants>
+    <MtouchArch>ARMv7</MtouchArch>
+    <MtouchI18n />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Ad-Hoc|iPhone' ">
     <DebugType>none</DebugType>
@@ -80,6 +82,20 @@
     <ConsolePause>False</ConsolePause>
     <CodesignKey>iPhone Distribution</CodesignKey>
     <DefineConstants>MONOTOUCH;</DefineConstants>
+    <MtouchArch>ARMv7</MtouchArch>
+    <MtouchI18n />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Publish|iPhone' ">
+    <DebugType>none</DebugType>
+    <Optimize>False</Optimize>
+    <OutputPath>bin\iPhone\Apple-AppStore</OutputPath>
+    <DefineConstants>MONOTOUCH;</DefineConstants>
+    <WarningLevel>4</WarningLevel>
+    <IpaPackageName />
+    <MtouchI18n />
+    <CodesignProvision>1A678BB6-C8C1-46D6-A7CF-F4127486DEB4</CodesignProvision>
+    <CodesignKey>iPhone Distribution</CodesignKey>
+    <MtouchArch>ARMv7</MtouchArch>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
