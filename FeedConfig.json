@@ -115,13 +115,13 @@
             "FeedType": "News",
             "URL": "http://www.adfc-ffb.de/rss.xml",
             "URLType": "RSS"
-        }
+        },
         {
             "Name": "Seligenstadt - News",
             "FeedType": "News",
             "URL": "http://www.adfc-seligenstadt.de/rss.php",
             "URLType": "RSS"
-        }
+        },
         {
             "Name": "GPS - News",
             "FeedType": "News",
