@@ -61,6 +61,14 @@ namespace de.dhoffmann.mono.adfcnewsapp.buslog
 			
 			bgWorker.DoWork += delegate(object sender, DoWorkEventArgs e) 
 			{
+#if MONODROID
+				// Wartekringel anzeigen
+				de.dhoffmann.mono.adfcnewsapp.droid.Tabs tabs = this.activity.Parent as de.dhoffmann.mono.adfcnewsapp.droid.Tabs;
+				
+				if (tabs != null)
+					tabs.SetLoadingIcon(true);
+#endif
+
 				UpdateFeeds();
 			};
 
@@ -77,6 +85,12 @@ namespace de.dhoffmann.mono.adfcnewsapp.buslog
 						aNews.LoadNews();
 						Android.Widget.Toast.MakeText(this.activity, "Die Newsfeeds sind aktualisiert.", Android.Widget.ToastLength.Short).Show();
 					}
+
+					// Wartekringel entfernen
+					de.dhoffmann.mono.adfcnewsapp.droid.Tabs tabs = this.activity.Parent as de.dhoffmann.mono.adfcnewsapp.droid.Tabs;
+					
+					if (tabs != null)
+						tabs.SetLoadingIcon(false);
 				});
 #endif
 #if MONOTOUCH

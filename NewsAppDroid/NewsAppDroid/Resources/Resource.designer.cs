@@ -76,20 +76,23 @@ namespace de.dhoffmann.mono.adfcnewsapp.droid
 			// aapt resource value: 0x7f06000c
 			public const int menu = 2131099660;
 			
-			// aapt resource value: 0x7f060017
-			public const int menuGetDataNow = 2131099671;
+			// aapt resource value: 0x7f060018
+			public const int menuGetDataNow = 2131099672;
 			
-			// aapt resource value: 0x7f060019
-			public const int menuMarkAllRead = 2131099673;
+			// aapt resource value: 0x7f06001a
+			public const int menuMarkAllRead = 2131099674;
 			
 			// aapt resource value: 0x7f06000d
 			public const int menuMarkAsUnread = 2131099661;
 			
-			// aapt resource value: 0x7f060016
-			public const int menuSettings = 2131099670;
+			// aapt resource value: 0x7f060017
+			public const int menuSettings = 2131099671;
 			
-			// aapt resource value: 0x7f060018
-			public const int menuShowReadNews = 2131099672;
+			// aapt resource value: 0x7f060019
+			public const int menuShowReadNews = 2131099673;
+			
+			// aapt resource value: 0x7f060016
+			public const int progressLoading = 2131099670;
 			
 			// aapt resource value: 0x7f060010
 			public const int scrollView1 = 2131099664;

@@ -32,6 +32,17 @@
             android:textColor="#EE7F00"
             android:textSize="30dp"
             android:textStyle="bold" />
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:gravity="right">
+            <ProgressBar
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:id="@+id/progressLoading"
+                android:visibility="invisible" />
+        </LinearLayout>
     </LinearLayout>
     <TabHost
         android:id="@android:id/tabhost"

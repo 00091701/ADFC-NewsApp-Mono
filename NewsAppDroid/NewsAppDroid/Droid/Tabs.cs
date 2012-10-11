@@ -130,6 +130,21 @@ namespace de.dhoffmann.mono.adfcnewsapp.droid
 			
 			return true;
 		}
+
+
+		/// <summary>
+		/// Steuert die Anzeige des Wartekringels
+		/// </summary>
+		/// <param name='isActive'>
+		/// If set to <c>true</c> is active.
+		/// </param>
+		public void SetLoadingIcon(bool isActive)
+		{
+			Logging.Log(this, Logging.LoggingTypeDebug, "SetLoadingIcon: " + (isActive? "visible" : "hide"));
+
+			ProgressBar progressLoading = FindViewById<ProgressBar>(Resource.Id.progressLoading);
+			progressLoading.Visibility = (isActive? ViewStates.Visible : ViewStates.Invisible);
+		}
 	}
 }
 
