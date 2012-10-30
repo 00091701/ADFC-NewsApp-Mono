@@ -3,6 +3,7 @@
     android:id="@+id/menu">
     <item
         android:id="@+id/menuSettings"
+        android:icon="@android:drawable/ic_menu_preferences"
         android:title="Einstellungen" />
     <item
         android:id="@+id/menuGetDataNow"
