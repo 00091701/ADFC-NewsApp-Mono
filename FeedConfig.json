@@ -127,8 +127,12 @@
             "FeedType": "News",
             "URL": "http://www.adfc-gps.de/rss.php",
             "URLType": "RSS"
+        },
+        {
+            "Name": "Groß-Gerau - News",
+            "FeedType": "News",
+            "URL": "http://www.adfc-kreis-gg.de/rss.php",
+            "URLType": "RSS"
         }
-
-
     ]
 }
