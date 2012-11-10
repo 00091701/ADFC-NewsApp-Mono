@@ -15,31 +15,31 @@
     <AndroidApplication>True</AndroidApplication>
     <AndroidResgenFile>Resources\Resource.designer.cs</AndroidResgenFile>
     <AssemblyName>NewsAppDroid</AssemblyName>
-    <DeployExternal>false</DeployExternal>
+    <DeployExternal>False</DeployExternal>
     <AndroidManifest>Properties\AndroidManifest.xml</AndroidManifest>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
+    <DebugSymbols>True</DebugSymbols>
     <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
+    <Optimize>False</Optimize>
     <OutputPath>bin\Debug</OutputPath>
     <DefineConstants>DEBUG;MONODROID;</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <ConsolePause>false</ConsolePause>
+    <ConsolePause>False</ConsolePause>
     <AndroidLinkMode>None</AndroidLinkMode>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>none</DebugType>
-    <Optimize>true</Optimize>
+    <Optimize>True</Optimize>
     <OutputPath>bin\Release</OutputPath>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <ConsolePause>false</ConsolePause>
+    <ConsolePause>False</ConsolePause>
     <AndroidLinkMode>SdkOnly</AndroidLinkMode>
-    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <AndroidUseSharedRuntime>false</AndroidUseSharedRuntime>
+    <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
+    <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
+    <AndroidUseSharedRuntime>False</AndroidUseSharedRuntime>
     <DefineConstants>MONODROID;</DefineConstants>
     <AssemblyOriginatorKeyFile>..\..\..\..\Android-Keystore\AndNaviki</AssemblyOriginatorKeyFile>
   </PropertyGroup>
@@ -78,6 +78,7 @@
     <Compile Include="BusLog\Logging.cs" />
     <Compile Include="AndroidService\NewsAppBroadcastReceiver.cs" />
     <Compile Include="AndroidService\NewsAppAlarmService.cs" />
+    <Compile Include="Droid\SplashActivity.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />
@@ -98,6 +99,8 @@
     <AndroidResource Include="Resources\layout\TabsMenu.axml" />
     <AndroidResource Include="Resources\layout\NewsDetailsMenu.axml" />
     <AndroidResource Include="Resources\drawable\Share.png" />
+    <AndroidResource Include="Resources\drawable\splash.png" />
+    <AndroidResource Include="Resources\drawable-land\splash.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
   <ItemGroup>
@@ -108,5 +111,6 @@
     <Folder Include="BusLog\FeedImport\" />
     <Folder Include="AndroidHelper\" />
     <Folder Include="AndroidService\" />
+    <Folder Include="Resources\drawable-land\" />
   </ItemGroup>
 </Project>

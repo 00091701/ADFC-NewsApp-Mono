@@ -21,4 +21,9 @@
 		<item name="android:paddingBottom">10dp</item>
 	</style>
 	
+	<style name="Theme.Splash" parent="android:Theme">
+	    <item name="android:windowBackground">@drawable/splash</item>
+	    <item name="android:windowNoTitle">true</item>
+    </style>
+	
 </resources>
