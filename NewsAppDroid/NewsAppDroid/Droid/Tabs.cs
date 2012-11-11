@@ -140,10 +140,12 @@ namespace de.dhoffmann.mono.adfcnewsapp.droid
 		/// </param>
 		public void SetLoadingIcon(bool isActive)
 		{
-			Logging.Log(this, Logging.LoggingTypeDebug, "SetLoadingIcon: " + (isActive? "visible" : "hide"));
-
-			ProgressBar progressLoading = FindViewById<ProgressBar>(Resource.Id.progressLoading);
-			progressLoading.Visibility = (isActive? ViewStates.Visible : ViewStates.Invisible);
+			RunOnUiThread(delegate() {
+				Logging.Log(this, Logging.LoggingTypeDebug, "SetLoadingIcon: " + (isActive? "Visible" : "Invisible"));
+				
+				ProgressBar progressLoading = FindViewById<ProgressBar>(Resource.Id.progressLoading);
+				progressLoading.Visibility = (isActive? ViewStates.Visible : ViewStates.Invisible);
+			});
 		}
 	}
 }
