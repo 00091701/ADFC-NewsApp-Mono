@@ -156,6 +156,12 @@
             "FeedType": "News",
             "URL": "http://www.adfc-bw.de/index.php?id=7564&type=100",
             "URLType": "RSS"
+        },
+        {
+            "Name": "ADFC Heidelberg/Rhein-Neckar (BW)",
+            "FeedType": "News",
+            "URL": "http://www.adfc-bw.de/heidelberg/joomla/index.php?format=feed&type=rss",
+            "URLType": "RSS"
         }
     ]
 }
