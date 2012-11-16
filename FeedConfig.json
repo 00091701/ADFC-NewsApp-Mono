@@ -162,6 +162,12 @@
             "FeedType": "News",
             "URL": "http://www.adfc-bw.de/heidelberg/joomla/index.php?format=feed&type=rss",
             "URLType": "RSS"
+        },
+        {
+            "Name": "ADFC Böblingen (BW)",
+            "FeedType": "News",
+            "URL": "http://www.adfc-bw.de/index.php?id=4161&type=100",
+            "URLType": "RSS"
         }
     ]
 }
