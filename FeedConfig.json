@@ -150,6 +150,12 @@
             "FeedType": "News",
             "URL": "http://www.adfc-bw.de/index.php?id=6459&type=100",
             "URLType": "RSS"
+        },
+        {
+            "Name": "ADFC Freiburg/Breisgau (BW)",
+            "FeedType": "News",
+            "URL": "http://www.adfc-bw.de/index.php?id=7564&type=100",
+            "URLType": "RSS"
         }
     ]
 }
