@@ -28,7 +28,6 @@
             "URLType": "RSS",
             "CategoryFilter": ""
         },
-        
         {
             "Name": "Bayern - News",
             "FeedType": "News",
@@ -132,6 +131,12 @@
             "Name": "Groß-Gerau - News",
             "FeedType": "News",
             "URL": "http://www.adfc-kreis-gg.de/rss.php",
+            "URLType": "RSS"
+        },
+        {
+            "Name": "ADFC Ludwigsburg (BW)",
+            "FeedType": "News",
+            "URL": "http://www.adfc-bw.de/index.php?id=6277&type=100",
             "URLType": "RSS"
         }
     ]
