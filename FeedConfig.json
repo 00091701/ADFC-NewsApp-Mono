@@ -144,6 +144,12 @@
             "FeedType": "News",
             "URL": "http://www.adfc-bw.de/index.php?id=4926&type=100",
             "URLType": "RSS"
+        },
+        {
+            "Name": "ADFC Baden-Baden (BW)",
+            "FeedType": "News",
+            "URL": "http://www.adfc-bw.de/index.php?id=6459&type=100",
+            "URLType": "RSS"
         }
     ]
 }
