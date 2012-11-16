@@ -138,6 +138,12 @@
             "FeedType": "News",
             "URL": "http://www.adfc-bw.de/index.php?id=6277&type=100",
             "URLType": "RSS"
+        },
+        {
+            "Name": "ADFC Baden-Württemberg",
+            "FeedType": "News",
+            "URL": "http://www.adfc-bw.de/index.php?id=4926&type=100",
+            "URLType": "RSS"
         }
     ]
 }
