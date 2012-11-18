@@ -51,8 +51,6 @@ namespace de.dhoffmann.mono.adfcnewsapp.buslog.webservice
 				if (!String.IsNullOrEmpty(response.CharacterSet))
 					encoding = Encoding.GetEncoding(response.CharacterSet);
 
-				StreamReader sr = new StreamReader(response.GetResponseStream());
-
 				using (Stream resStream = response.GetResponseStream())
 				{
 					StreamReader reader = new StreamReader(resStream, encoding);
