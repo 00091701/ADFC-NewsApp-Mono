@@ -32,7 +32,7 @@ using Android.Widget;
 
 namespace de.dhoffmann.mono.adfcnewsapp.droid
 {
-	[Activity (Label = "SplashActivity", MainLauncher = true, NoHistory = true, Theme = "@style/Theme.Splash")]			
+	[Activity (Label = "@string/app_name", MainLauncher = true, NoHistory = true, Theme = "@style/Theme.Splash")]			
 	public class SplashActivity : Activity
 	{
 		protected override void OnCreate (Bundle savedInstanceState)
