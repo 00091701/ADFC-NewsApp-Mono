@@ -21,6 +21,7 @@
 using System;
 using System.Net;
 using System.IO;
+using System.Text;
 
 
 namespace de.dhoffmann.mono.adfcnewsapp.buslog.webservice
@@ -42,9 +43,21 @@ namespace de.dhoffmann.mono.adfcnewsapp.buslog.webservice
 				request.AllowAutoRedirect = true;
 				request.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
 				request.Method = "GET";
-				
-				StreamReader sr = new StreamReader(request.GetResponse().GetResponseStream());
-				ret = sr.ReadToEnd();
+
+				HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+
+				Encoding encoding = Encoding.UTF8;
+
+				if (!String.IsNullOrEmpty(response.CharacterSet))
+					encoding = Encoding.GetEncoding(response.CharacterSet);
+
+				StreamReader sr = new StreamReader(response.GetResponseStream());
+
+				using (Stream resStream = response.GetResponseStream())
+				{
+					StreamReader reader = new StreamReader(resStream, encoding);
+					ret = reader.ReadToEnd();
+				}
 			}
 			catch(WebException ex)
 			{
