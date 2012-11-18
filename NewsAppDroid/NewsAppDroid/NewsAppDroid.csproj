@@ -78,7 +78,7 @@
     <Compile Include="BusLog\Logging.cs" />
     <Compile Include="AndroidService\NewsAppBroadcastReceiver.cs" />
     <Compile Include="AndroidService\NewsAppAlarmService.cs" />
-    <Compile Include="Droid\SplashActivity.cs" />
+    <Compile Include="Droid\Splash.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />
