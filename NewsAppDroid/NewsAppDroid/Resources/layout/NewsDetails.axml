@@ -101,10 +101,6 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/btnNextNewsEntry"
                     android:layout_marginTop="10dp" />
-                <WebView
-                    android:id="@+id/wvNewsDetail"
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent" />
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
