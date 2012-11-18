@@ -62,15 +62,31 @@ namespace de.dhoffmann.mono.adfcnewsapp.droid
 			{
 				Button btnNextNewsEntry = FindViewById<Button>(Resource.Id.btnNextNewsEntry);
 
-				List<de.dhoffmann.mono.adfcnewsapp.buslog.feedimport.Rss.RssItem> rssItems = new de.dhoffmann.mono.adfcnewsapp.buslog.database.Rss().GetActiveFeedItems(true);
+				List<de.dhoffmann.mono.adfcnewsapp.buslog.feedimport.Rss.RssItem> rssItems = new de.dhoffmann.mono.adfcnewsapp.buslog.database.Rss().GetActiveFeedItems(false);
 				btnNextNewsEntry.Visibility = ViewStates.Gone;
+
+				int? nextFeedID = null;
+				int? nextFeedItemID = null;
 
 				if (rssItems != null && rssItems.Count > 1)
 				{
-					for (int nIndex=0; nIndex<rssItems.Count-1; nIndex++)
+					bool ready = false;
+					for (int nIndex=0; nIndex<rssItems.Count; nIndex++)
 					{
-						if (rssItems[nIndex].ItemID == feedItemID)
+						if (!ready)
 						{
+							if (rssItems[nIndex].ItemID == feedItemID)
+							{
+								ready = true;
+							}
+
+							continue;
+						}
+
+						if (!rssItems[nIndex].IsRead)
+						{
+							nextFeedID = rssItems[nIndex].FeedID;
+							nextFeedItemID = rssItems[nIndex].ItemID;
 							btnNextNewsEntry.Visibility = ViewStates.Visible;
 							break;
 						}
@@ -78,7 +94,6 @@ namespace de.dhoffmann.mono.adfcnewsapp.droid
 				}
 
 				new de.dhoffmann.mono.adfcnewsapp.buslog.database.Rss().MarkItemsAsRead(feedItemID, true);
-
 				de.dhoffmann.mono.adfcnewsapp.buslog.feedimport.Rss.RssFeed rssfeed = new de.dhoffmann.mono.adfcnewsapp.buslog.database.Rss().GetRssFeed(feedID, feedItemID);
 
 				if (rssfeed.Items.First().PubDate.HasValue)
@@ -119,27 +134,18 @@ namespace de.dhoffmann.mono.adfcnewsapp.droid
 					StartActivity(Intent.CreateChooser(intent, "Share via"));
 				};
 
-				btnNextNewsEntry.Click += delegate(object sender, EventArgs e) 
+				if (nextFeedID.HasValue && nextFeedItemID.HasValue)
 				{
-					rssItems = new de.dhoffmann.mono.adfcnewsapp.buslog.database.Rss().GetActiveFeedItems(false);
-
-					if (rssItems != null && rssItems.Count > 1)
+					btnNextNewsEntry.Click += delegate(object sender, EventArgs e) 
 					{
-						for (int nIndex=1; nIndex<rssItems.Count; nIndex++)
-						{
-							if (rssItems[nIndex-1].ItemID == feedItemID)
-							{
-								Intent i = new Android.Content.Intent(this, typeof(NewsDetails));
-								i.PutExtra("FeedID", rssItems[nIndex].FeedID);
-								i.PutExtra("FeedItemID", rssItems[nIndex].ItemID);
-
-								StartActivity(i);
-								this.Finish();
-								break;
-							}
-						}
-					}
-				};
+						Intent i = new Android.Content.Intent(this, typeof(NewsDetails));
+						i.PutExtra("FeedID", nextFeedID.Value);
+						i.PutExtra("FeedItemID", nextFeedItemID.Value);
+						
+						StartActivity(i);
+						this.Finish();
+					};
+				}
 			}
 		}
 
