@@ -39,7 +39,7 @@ namespace de.dhoffmann.mono.adfcnewsapp.droid
 		{
 			base.OnCreate (savedInstanceState);
 
-			System.Threading.Thread.Sleep(1000);
+			System.Threading.Thread.Sleep(200);
 
 			StartActivity(typeof(Tabs));
 		}
