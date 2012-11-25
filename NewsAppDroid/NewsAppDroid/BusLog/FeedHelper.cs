@@ -76,22 +76,24 @@ namespace de.dhoffmann.mono.adfcnewsapp.buslog
 			{
 				Logging.Log(this, Logging.LoggingTypeDebug, "UpdateBGFeeds() - RunWorkerCompleted");
 #if MONODROID
-				
-				activity.RunOnUiThread(delegate() 
+				if (activity != null)
 				{
-					if (this.activity.GetType() == typeof(de.dhoffmann.mono.adfcnewsapp.droid.News))
+					activity.RunOnUiThread(delegate() 
 					{
-						de.dhoffmann.mono.adfcnewsapp.droid.News aNews = (de.dhoffmann.mono.adfcnewsapp.droid.News)this.activity;
-						aNews.LoadNews();
-						Android.Widget.Toast.MakeText(this.activity, "Die Newsfeeds sind aktualisiert.", Android.Widget.ToastLength.Short).Show();
-					}
+						if (this.activity.GetType() == typeof(de.dhoffmann.mono.adfcnewsapp.droid.News))
+						{
+							de.dhoffmann.mono.adfcnewsapp.droid.News aNews = (de.dhoffmann.mono.adfcnewsapp.droid.News)this.activity;
+							aNews.LoadNews();
+							Android.Widget.Toast.MakeText(this.activity, "Die Newsfeeds sind aktualisiert.", Android.Widget.ToastLength.Short).Show();
+						}
 
-					// Wartekringel entfernen
-					de.dhoffmann.mono.adfcnewsapp.droid.Tabs tabs = this.activity.Parent as de.dhoffmann.mono.adfcnewsapp.droid.Tabs;
-					
-					if (tabs != null)
-						tabs.SetLoadingIcon(false);
-				});
+						// Wartekringel entfernen
+						de.dhoffmann.mono.adfcnewsapp.droid.Tabs tabs = this.activity.Parent as de.dhoffmann.mono.adfcnewsapp.droid.Tabs;
+						
+						if (tabs != null)
+							tabs.SetLoadingIcon(false);
+					});
+				}
 #endif
 #if MONOTOUCH
 				parentController.InvokeOnMainThread(delegate 
