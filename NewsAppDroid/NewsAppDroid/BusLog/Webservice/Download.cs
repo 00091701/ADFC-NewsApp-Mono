@@ -41,6 +41,8 @@ namespace de.dhoffmann.mono.adfcnewsapp.buslog.webservice
 			{
 				HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
 				request.AllowAutoRedirect = true;
+				request.Headers.Add(HttpRequestHeader.AcceptCharset, "utf-8");
+				request.Headers.Add(HttpRequestHeader.AcceptLanguage, System.Threading.Thread.CurrentThread.CurrentUICulture.Name + "," + System.Threading.Thread.CurrentThread.CurrentUICulture.TwoLetterISOLanguageName);
 				request.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
 				request.Method = "GET";
 
@@ -48,8 +50,15 @@ namespace de.dhoffmann.mono.adfcnewsapp.buslog.webservice
 
 				Encoding encoding = Encoding.UTF8;
 
-				if (!String.IsNullOrEmpty(response.CharacterSet))
-					encoding = Encoding.GetEncoding(response.CharacterSet);
+				try
+				{
+					if (!String.IsNullOrEmpty(response.CharacterSet))
+						encoding = Encoding.GetEncoding(response.CharacterSet);
+				}
+				catch(Exception ex)
+				{
+					Logging.Log(this, Logging.LoggingTypeError, "Unbekanntes Encoding", ex);
+				}
 
 				using (Stream resStream = response.GetResponseStream())
 				{

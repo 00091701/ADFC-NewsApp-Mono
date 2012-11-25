@@ -23,6 +23,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.IO;
 using System.Json;
+using System.Text;
 
 
 namespace de.dhoffmann.mono.adfcnewsapp.buslog.webservice
@@ -72,7 +73,8 @@ namespace de.dhoffmann.mono.adfcnewsapp.buslog.webservice
 			{
 				HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
 				request.AllowAutoRedirect = true;
-				request.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
+				request.Headers.Add(HttpRequestHeader.AcceptCharset, "utf-8");
+				request.Headers.Add(HttpRequestHeader.AcceptLanguage, System.Threading.Thread.CurrentThread.CurrentUICulture.Name + "," + System.Threading.Thread.CurrentThread.CurrentUICulture.TwoLetterISOLanguageName);				request.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
 				request.Method = "GET";
 				
 				jsonValue = (JsonObject)JsonObject.Load(request.GetResponse().GetResponseStream());
