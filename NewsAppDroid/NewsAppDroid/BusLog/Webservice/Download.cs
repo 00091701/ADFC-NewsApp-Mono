@@ -40,6 +40,21 @@ namespace de.dhoffmann.mono.adfcnewsapp.buslog.webservice
 			try
 			{
 				HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+				
+#if MONODROID
+				string proxyHost = Android.Net.Proxy.DefaultHost;
+				int proxyPort = Android.Net.Proxy.DefaultPort;
+#endif				
+#if MONOTOUCH
+				//TODO
+				string proxyHost = null;
+				int proxyAddr = 0;
+#endif
+				//Wenn ein Proxy im System eingestellt ist, diesen auch nutzen
+				if(!String.IsNullOrEmpty(proxyHost))
+				   request.Proxy = new WebProxy(proxyHost, proxyPort);
+
+				
 				request.AllowAutoRedirect = true;
 				request.Headers.Add(HttpRequestHeader.AcceptCharset, "utf-8");
 				request.Headers.Add(HttpRequestHeader.AcceptLanguage, System.Threading.Thread.CurrentThread.CurrentUICulture.Name + "," + System.Threading.Thread.CurrentThread.CurrentUICulture.TwoLetterISOLanguageName);
