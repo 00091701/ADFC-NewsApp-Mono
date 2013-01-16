@@ -174,7 +174,12 @@
             "FeedType": "News",
             "URL": "http://www.adfc-bw.de/index.php?id=6319&type=100",
             "URLType": "RSS"
+        },
+        {
+            "Name": "ADFC Freising",
+            "FeedType": "News",
+            "URL": "http://matfrank.de/max/adfc/viewasrss.php",
+            "URLType": "RSS"
         }
-
     ]
 }
