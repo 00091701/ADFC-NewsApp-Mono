@@ -180,6 +180,12 @@
             "FeedType": "News",
             "URL": "http://matfrank.de/max/adfc/viewasrss.php",
             "URLType": "RSS"
+        },
+        {
+            "Name": "ADFC-Münster/Münsterland",
+            "FeedType": "News",
+            "URL": "http://www.adfc-nrw.de/kreisverbaende/kv-muenster/presse-publikationen/rss-feed-abbonieren.html",
+            "URLType": "RSS"
         }
     ]
 }
