@@ -36,30 +36,11 @@
             "CategoryFilter": ""
         },
         {
-            "Name": "Braunschweig - News",
-            "FeedType": "News",
-            "URL": "http://www.adfc-braunschweig.de/rss.xml",
-            "URLType": "RSS",
-            "CategoryFilter": ""
-        },
-        {
             "Name": "Bremen - News",
             "FeedType": "News",
             "URL": "http://www.adfc-bremen.de/index.php?id=53&type=100",
             "URLType": "RSS",
             "CategoryFilter": ""
-        },
-        {
-            "Name": "Braunschweig - Radtouren",
-            "FeedType": "Dates",
-            "URL": "https://www.google.com/calendar/ical/aog2q8lqog1emfe03u2dm8ehn0%40group.calendar.google.com/public/basic.ics",
-            "URLType": "ICS"
-        },
-        {
-            "Name": "Braunschweig - Veranstaltungen",
-            "FeedType": "Dates",
-            "URL": "https://www.google.com/calendar/ical/ikcd7hqi8pbnjvkbiacfjte2h0%40group.calendar.google.com/public/basic.ics",
-            "URLType": "ICS"
         },
         {
             "Name": "Coburg - News",
@@ -185,7 +166,8 @@
             "Name": "ADFC-Münster/Münsterland",
             "FeedType": "News",
             "URL": "http://www.adfc-nrw.de/kreisverbaende/kv-muenster/presse-publikationen/rss-feed-abbonieren.html",
-            "URLType": "RSS"
+            "URLType": "RSS",
+            "UseEncoding": "UTF-8"
         }
     ]
 }
