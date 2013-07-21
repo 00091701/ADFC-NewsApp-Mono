@@ -53,6 +53,7 @@ namespace de.dhoffmann.mono.adfcnewsapp.buslog.webservice
 			public string Url { get; set; }
 			public UrlTypes UrlType { get; set; }
 			public string CategoryFilter { get; set; }
+			public string UseEncoding { get; set; }
 		}
 		
 		
@@ -95,7 +96,7 @@ namespace de.dhoffmann.mono.adfcnewsapp.buslog.webservice
 			}
 			catch(WebException ex)
 			{
-				System.Diagnostics.Debug.WriteLine(string.Format("Fehler beim Abruf des Feeds: {0} - ex: ", url, ex.ToString()));
+				Logging.Log(this, Logging.LoggingTypeError, string.Format("Fehler beim Abruf des Feeds: {0} - ex: ", url), ex);
 			}
 			
 			if (jsonValue != null && jsonValue.Count > 0)
@@ -136,7 +137,10 @@ namespace de.dhoffmann.mono.adfcnewsapp.buslog.webservice
 							feedConfig.UrlType = UrlTypes.UNSET;
 							break;
 					}
-					
+				
+					if (feed.ContainsKey("UseEncoding") && !string.IsNullOrEmpty((string)feed["UseEncoding"]))
+						feedConfig.UseEncoding = (string)feed["UseEncoding"];
+
 					if (!string.IsNullOrEmpty(feedConfig.Name) &&
 					    !string.IsNullOrEmpty(feedConfig.Url) &&
 					    feedConfig.FeedType != FeedTypes.UNSET &&

@@ -129,7 +129,9 @@ namespace de.dhoffmann.mono.adfcnewsapp.droid
 
 			Config config = new Config(this);
 			config.SetAppConfig(appConfig);
-			config.SetWSConfig(settingsFeedListAdapter.GetFeedConfig);
+
+			if (settingsFeedListAdapter != null)
+				config.SetWSConfig(settingsFeedListAdapter.GetFeedConfig);
 		}
 		
 		protected override void OnStop ()

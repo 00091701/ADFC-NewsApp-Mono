@@ -32,8 +32,10 @@ namespace de.dhoffmann.mono.adfcnewsapp.buslog.database
 {
 	public class Rss : DataBase
 	{
+		public bool NewFeeds { get; private set; }
 		public Rss ()
 		{
+			NewFeeds = false;
 		}
 		
 		
@@ -211,6 +213,8 @@ namespace de.dhoffmann.mono.adfcnewsapp.buslog.database
 								sqlCmd.Parameters.AddWithValue("@IsRead", 0);
 
 								sqlCmds.Add(sqlCmd);
+
+								NewFeeds = true;
 							}
 						}
 						
@@ -231,7 +235,8 @@ namespace de.dhoffmann.mono.adfcnewsapp.buslog.database
 				}
 				catch(SqliteException ex)
 				{
-					System.Diagnostics.Debug.WriteLine("SqlEx SetRssFeed - ex: " + ex.ToString());
+					Logging.Log(this, Logging.LoggingTypeError, "SqlEx SetRssFeed", ex);
+					NewFeeds = false;
 				}
 			}					
 			
@@ -345,7 +350,7 @@ namespace de.dhoffmann.mono.adfcnewsapp.buslog.database
 			} 
 			catch (SqliteException ex) 
 			{
-				System.Diagnostics.Debug.WriteLine(this.GetType().Name + ".MarkItemAsRead() - ex: " + ex.ToString());
+				Logging.Log(this, Logging.LoggingTypeError, ".MarkItemAsRead()", ex);
 			}
 		}
 	}

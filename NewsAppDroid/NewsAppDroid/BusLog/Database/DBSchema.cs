@@ -93,6 +93,12 @@ namespace de.dhoffmann.mono.adfcnewsapp.buslog.database
 				commands.AppendLine("CREATE TABLE rssfeeditem (ItemID INTEGER PRIMARY KEY AUTOINCREMENT, FeedID INTEGER NOT NULL, DateCreate DATETIME NOT NULL, Title VARCHAR(200), Link VARCHAR(250), Description VARCHAR(1000), Category VARCHAR(100), PubDate DATETIME, IsRead BOOLEAN NOT NULL);");
 				commands.AppendLine("INSERT INTO version (DateCreate) VALUES (date('now'));");
 			}
+
+			if (currentVersion <= 1) 
+			{
+				commands.AppendLine ("ALTER TABLE feedconfig ADD UseEncoding VARCHAR(30);");
+				commands.AppendLine("INSERT INTO version (DateCreate) VALUES (date('now'));");
+			}
 			
 			// Befehle an die Datenbank schicken
 			if (commands.Length > 0)

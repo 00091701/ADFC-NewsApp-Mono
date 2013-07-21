@@ -130,20 +130,24 @@ namespace de.dhoffmann.mono.adfcnewsapp.buslog
 
 				Logging.Log(this, Logging.LoggingTypeInfo, "Feedimport start.");
 				
+				bool newFeeds = false;
+
 				foreach(WSFeedConfig.FeedConfig feed in feedsConfig)
 				{
 					// Nur aktive feeds laden
 					if (!feed.IsActive)
 						continue;
 					
-					string webSource = new Download().DownloadWebSource(feed.Url);
+					string webSource = new Download().DownloadWebSource(feed.Url, feed.UseEncoding);
 					
 					if (!string.IsNullOrEmpty(webSource))
 					{
 						switch(feed.FeedType)
 						{
 							case WSFeedConfig.FeedTypes.News:
-								new feedimport.Rss().ImportRss(feed, webSource);
+								feedimport.Rss importRss = new feedimport.Rss();
+								importRss.ImportRss(feed, webSource);
+								newFeeds |= importRss.NewFeeds;
 								break;
 						}
 					}

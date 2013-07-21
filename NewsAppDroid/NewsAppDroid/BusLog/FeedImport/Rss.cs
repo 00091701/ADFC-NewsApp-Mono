@@ -36,7 +36,8 @@ namespace de.dhoffmann.mono.adfcnewsapp.buslog.feedimport
 {
 	public class Rss
 	{
-		
+		public bool NewFeeds { get; private set; }
+
 		public class RssFeed
 		{
 			public RssHeader Header { get; set; }
@@ -72,13 +73,17 @@ namespace de.dhoffmann.mono.adfcnewsapp.buslog.feedimport
 		public bool ImportRss(WSFeedConfig.FeedConfig feed, string webSource)
 		{
 			bool ret = false;
-			
-			System.Diagnostics.Debug.WriteLine(string.Format("ImportRss: \"{0}\")", feed.Name));
+
+			Logging.Log(this, Logging.LoggingTypeDebug, string.Format("ImportRss: \"{0}\")", feed.Name));
 			
 			RssFeed rssFeed = ReadRssFeed(feed.FeedID, webSource);
 			
 			if (rssFeed != null && rssFeed.Header != null)
-				ret = new database.Rss().SetRssFeed(rssFeed);
+			{
+				database.Rss dbRss = new database.Rss();
+				ret = dbRss.SetRssFeed(rssFeed);
+				NewFeeds = dbRss.NewFeeds;
+			}
 			else 
 				ret = true;
 			

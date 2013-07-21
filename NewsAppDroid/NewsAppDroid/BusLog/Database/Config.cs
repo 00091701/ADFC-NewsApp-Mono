@@ -59,41 +59,10 @@ namespace de.dhoffmann.mono.adfcnewsapp.buslog.database
 
 		public AppConfig GetAppConfig()
 		{
+			Logging.Log(this, Logging.LoggingTypeDebug, "GetAppConfig()");
+
 			AppConfig ret = new AppConfig();
 			string sqlCommand = "SELECT AppIsConfigured, DateIndicate, DataAutomaticUpdate FROM config Limit 1;";
-
-#if MONODROID
-			if ((int)Android.OS.Build.VERSION.SdkInt < 77)
-			{
-				/*
-				 * http://pastebin.com/tNPmzXND
-				 * http://www.c-sharpcorner.com/UploadFile/88b6e5/sqlitedatabase-connectivity/
-				 * 
-				try
-				{
-					DBHelper dbHelper = new DBHelper((Android.Content.Context)context);
-					Android.Database.Sqlite.SQLiteDatabase sqlDB = dbHelper.ReadableDatabase;
-
-
-					Cursor reader = sqlDB.RawQuery(sqlCommand, null);
-					while(result.moveToNext())
-					{
-						ret.AppIsConfigured = reader.GetBoolean(0);
-						ret.DateIndicate = reader.GetBoolean(1);
-						ret.DataAutomaticUpdate = reader.GetBoolean(2);
-					}
-
-					dbHelper.Close();
-				}
-				catch(Exception ex)
-				{
-					System.Diagnostics.Debug.WriteLine(this.GetType() + ".GetAppConfig() - ex: " + ex.ToString());
-				}
-
-				return ret;
-				*/
-			}
-#endif
 
 			try
 			{
@@ -125,7 +94,7 @@ namespace de.dhoffmann.mono.adfcnewsapp.buslog.database
 			}
 			catch(SqliteException ex)
 			{
-				System.Diagnostics.Debug.WriteLine(this.GetType() + ".GetAppConfig() - ex: " + ex.ToString());
+				Logging.Log(this, Logging.LoggingTypeError, ".GetAppConfig()", ex);
 			}
 
 			return ret;
@@ -157,7 +126,7 @@ namespace de.dhoffmann.mono.adfcnewsapp.buslog.database
 			}
 			catch(SqliteException ex)
 			{
-				System.Diagnostics.Debug.WriteLine(this.GetType() + ".SetAppConfig() - ex: " + ex.ToString());
+				Logging.Log(this, Logging.LoggingTypeError, ".SetAppConfig()", ex);
 			}
 		}
 		
@@ -172,7 +141,7 @@ namespace de.dhoffmann.mono.adfcnewsapp.buslog.database
 				{
 					using(DbCommand c = conn.CreateCommand())
 					{
-						using (SqliteCommand sqlCmd = new SqliteCommand("SELECT FeedID, IsActive, Name, FeedType, URL, URLType, CategoryFilter FROM feedconfig ORDER BY Name, FeedType, CategoryFilter;", conn))
+						using (SqliteCommand sqlCmd = new SqliteCommand("SELECT FeedID, IsActive, Name, FeedType, URL, URLType, CategoryFilter, UseEncoding FROM feedconfig ORDER BY Name, FeedType, CategoryFilter;", conn))
 						{
 							conn.Open();
 
@@ -190,7 +159,8 @@ namespace de.dhoffmann.mono.adfcnewsapp.buslog.database
 											FeedType = (WSFeedConfig.FeedTypes)reader.GetInt32(3),
 											Url = reader.GetString(4),
 											UrlType = (WSFeedConfig.UrlTypes)reader.GetInt32(5),
-											CategoryFilter = (!reader.IsDBNull(6)? reader.GetString(6) : null)
+											CategoryFilter = (!reader.IsDBNull(6)? reader.GetString(6) : null),
+											UseEncoding = (!reader.IsDBNull(7)? reader.GetString(7) : null)
 										});
 									}
 								}
@@ -203,7 +173,7 @@ namespace de.dhoffmann.mono.adfcnewsapp.buslog.database
 			}
 			catch(SqliteException ex)
 			{
-				System.Diagnostics.Debug.WriteLine(this.GetType() + ".GetWSConfig() - ex: " + ex.ToString());
+				Logging.Log(this, Logging.LoggingTypeError, ".GetWSConfig()", ex);
 			}
 			
 			return ret;
@@ -228,13 +198,13 @@ namespace de.dhoffmann.mono.adfcnewsapp.buslog.database
 					{
 						if (!dbFeedsConfig.Exists(p => p.Url == feedConfig.Url && p.CategoryFilter == feedConfig.CategoryFilter))
 						{
-							SqliteCommand sqlCmd = new SqliteCommand("INSERT INTO feedconfig (IsActive, Name, FeedType, URL, URLType, CategoryFilter) VALUES (0, @Name, @FeedType, @Url, @UrlType, @CategoryFilter);", conn);
+							SqliteCommand sqlCmd = new SqliteCommand("INSERT INTO feedconfig (IsActive, Name, FeedType, URL, URLType, CategoryFilter, UseEncoding) VALUES (0, @Name, @FeedType, @Url, @UrlType, @CategoryFilter, @UseEncoding);", conn);
 							sqlCmd.Parameters.AddWithValue("@Name", feedConfig.Name);
 							sqlCmd.Parameters.AddWithValue("@FeedType", (int)feedConfig.FeedType);
 							sqlCmd.Parameters.AddWithValue("@Url", feedConfig.Url);
 							sqlCmd.Parameters.AddWithValue("@UrlType", (int)feedConfig.UrlType);
 							sqlCmd.Parameters.AddWithValue("@CategoryFilter", feedConfig.CategoryFilter);
-
+							sqlCmd.Parameters.AddWithValue("@UseEncoding", feedConfig.UseEncoding);
 							sqlCmds.Add(sqlCmd);
 						}
 						else
@@ -273,7 +243,7 @@ namespace de.dhoffmann.mono.adfcnewsapp.buslog.database
 			}
 			catch(SqliteException ex)
 			{
-				System.Diagnostics.Debug.WriteLine(this.GetType() + ".SetWSConfig() - ex: " + ex.ToString());
+				Logging.Log(this, Logging.LoggingTypeError, ".SetWSConfig()", ex);
 			}	
 
 		}

@@ -33,7 +33,7 @@ namespace de.dhoffmann.mono.adfcnewsapp.buslog.webservice
 		}
 		
 		
-		public string DownloadWebSource (string url)
+		public string DownloadWebSource (string url, string useEncoding = null)
 		{
 			string ret = null;
 			
@@ -74,6 +74,9 @@ namespace de.dhoffmann.mono.adfcnewsapp.buslog.webservice
 				{
 					Logging.Log(this, Logging.LoggingTypeError, "Unbekanntes Encoding", ex);
 				}
+
+				if (!String.IsNullOrEmpty(useEncoding))
+					encoding = Encoding.GetEncoding(useEncoding);
 
 				using (Stream resStream = response.GetResponseStream())
 				{
