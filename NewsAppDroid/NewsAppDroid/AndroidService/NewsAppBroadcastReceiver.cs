@@ -23,7 +23,7 @@ namespace de.dhoffmann.mono.adfcnewsapp.AndroidService
 
 				AlarmManager alarmManager = (AlarmManager) context.GetSystemService(Context.AlarmService);
 				PendingIntent pendingIntent = PendingIntent.GetBroadcast(context, 0, new Intent(context, typeof(NewsAppAlarmService)), 0);
-				alarmManager.SetInexactRepeating(AlarmType.ElapsedRealtimeWakeup, SystemClock.ElapsedRealtime() + 60, AlarmManager.IntervalHalfDay, pendingIntent);
+				alarmManager.SetRepeating(AlarmType.Rtc, 0, AlarmManager.IntervalFifteenMinutes/10, pendingIntent);
 			}
 		}
 	}
