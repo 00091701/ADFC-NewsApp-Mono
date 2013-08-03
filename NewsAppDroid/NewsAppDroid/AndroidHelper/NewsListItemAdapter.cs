@@ -72,7 +72,7 @@ namespace de.dhoffmann.mono.adfcnewsapp.androidhelper
 			TextView tvName = view.FindViewById<TextView>(Resource.Id.tvName);
 
 			if (!entry.IsRead)
-				tvName.SetTypeface(Typeface.DefaultBold, TypefaceStyle.Bold);
+				tvName.SetTextColor (new Color (238, 127, 0));
 
 			tvName.Text = entry.Title;
 

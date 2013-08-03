@@ -34,13 +34,15 @@ using de.dhoffmann.mono.adfcnewsapp.androidhelper;
 using de.dhoffmann.mono.adfcnewsapp.buslog.webservice;
 using System.ComponentModel;
 using de.dhoffmann.mono.adfcnewsapp.buslog;
+using System.Threading.Tasks;
 
 namespace de.dhoffmann.mono.adfcnewsapp.droid
 {
-	[Activity (Label = "Settings", Theme = "@style/MainTheme")]			
+	[Activity (Label = "Settings", Theme = "@style/MainTheme")]
 	public class Settings : Activity
 	{
 		private SettingsFeedListAdapter settingsFeedListAdapter;
+		ProgressBar progressLoading;
 
 		protected override void OnCreate (Bundle bundle)
 		{
@@ -49,27 +51,38 @@ namespace de.dhoffmann.mono.adfcnewsapp.droid
 			Logging.Log(this, Logging.LoggingTypeDebug, "OnCreate");
 			
 			SetContentView(Resource.Layout.Settings);
+			progressLoading = FindViewById<ProgressBar> (Resource.Id.progressLoading);
+			progressLoading.Visibility = ViewStates.Gone;
+
+			ImageButton btnBack = FindViewById<ImageButton> (Resource.Id.btnBack);
+			btnBack.Click += (object sender, EventArgs e) => {
+				OnBackPressed();
+			};
+
+			ImageButton btnLogo = FindViewById<ImageButton> (Resource.Id.btnLogo);
+			btnLogo.Click += (object sender, EventArgs e) => {
+				OnBackPressed();
+			};
 		}
 
 		protected override void OnResume ()
 		{
 			base.OnResume ();
 
-			bool firstRun = Intent.GetBooleanExtra("FirstRun", false);
+			Logging.Log(this, Logging.LoggingTypeDebug, "OnResume");
 
-			if (!firstRun)
+			if (new Config (this).GetAppConfig ().AppIsConfigured)
 				BindMyData();
 			else 
 			{
-				BackgroundWorker bgWorker = new BackgroundWorker();
+				progressLoading.Visibility = ViewStates.Visible;
 
-				bgWorker.DoWork += delegate(object sender, DoWorkEventArgs e) 
-				{
+				Task.Factory.StartNew (() => {
 					RunOnUiThread(delegate() 
-					{
+					              {
 						AlertDialog dlgInfo = new AlertDialog.Builder(this).Create();
-	     				dlgInfo.SetTitle("Hinweis");
-	     				dlgInfo.SetMessage("In diesem Moment wird die Basiskonfiguration von einem Webserver geladen.\n\n" +
+						dlgInfo.SetTitle("Hinweis");
+						dlgInfo.SetMessage("In diesem Moment wird die Basiskonfiguration von einem Webserver geladen.\n\n" +
 						                   "Warten Sie daher bitte einen kleinen Moment.\nAnschließend können Sie " +
 						                   "Termine und Neuigkeiten von verschiedenen Ortgruppen abonnieren.\n\n" +
 						                   "Die Einstellungen werden automatisch beim verlassen der Konfiguration gespeichert." + 
@@ -78,21 +91,17 @@ namespace de.dhoffmann.mono.adfcnewsapp.droid
 						                   "nochmal auf die 'Zurück-Taste' die gewünschten Nachrichten werden dann aktualisiert und " +
 						                   "stehen kurz danach zur Verfügung."
 						                   );
-	     				dlgInfo.Show();
+						dlgInfo.Show();
 					});
 
 					new FeedHelper().UpdateFeeds();
-				};
-
-				bgWorker.RunWorkerCompleted += delegate(object sender, RunWorkerCompletedEventArgs e) 
-				{
+				}).ContinueWith (t => {
 					RunOnUiThread(delegate() 
-					{
+					              {
 						BindMyData();
+						progressLoading.Visibility = ViewStates.Gone;
 					});
-				};
-
-				bgWorker.RunWorkerAsync();
+				}, TaskScheduler.FromCurrentSynchronizationContext ());
 			}
 		}
 
@@ -119,6 +128,8 @@ namespace de.dhoffmann.mono.adfcnewsapp.droid
 		{
 			base.OnPause ();
 
+			Logging.Log(this, Logging.LoggingTypeDebug, "OnPause");
+
 			CheckBox cbDateIndicate = FindViewById<CheckBox>(Resource.Id.cbDateIndicate);
 			CheckBox cbDataUpdate = FindViewById<CheckBox>(Resource.Id.cbDataUpdate);
 			
@@ -132,11 +143,6 @@ namespace de.dhoffmann.mono.adfcnewsapp.droid
 
 			if (settingsFeedListAdapter != null)
 				config.SetWSConfig(settingsFeedListAdapter.GetFeedConfig);
-		}
-		
-		protected override void OnStop ()
-		{
-			base.OnStop ();		
 		}
 	}
 }

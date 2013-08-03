@@ -29,6 +29,8 @@ using Android.OS;
 using Android.Runtime;
 using Android.Views;
 using Android.Widget;
+using System.Threading.Tasks;
+using de.dhoffmann.mono.adfcnewsapp.buslog;
 
 namespace de.dhoffmann.mono.adfcnewsapp.droid
 {
@@ -39,9 +41,13 @@ namespace de.dhoffmann.mono.adfcnewsapp.droid
 		{
 			base.OnCreate (savedInstanceState);
 
-			System.Threading.Thread.Sleep(200);
+			Logging.Log (this, Logging.LoggingTypeDebug, "OnCreate");
 
-			StartActivity(typeof(Tabs));
+			AppInit appInit = new AppInit();
+			appInit.AppStartAsync ().ContinueWith (t => {
+				// und weiter gehts
+				StartActivity(typeof(News));
+			}, TaskScheduler.FromCurrentSynchronizationContext ());
 		}
 	}
 }

@@ -63,10 +63,7 @@ namespace de.dhoffmann.mono.adfcnewsapp.buslog
 			{
 #if MONODROID
 				// Wartekringel anzeigen
-				de.dhoffmann.mono.adfcnewsapp.droid.Tabs tabs = this.activity.Parent as de.dhoffmann.mono.adfcnewsapp.droid.Tabs;
-				
-				if (tabs != null)
-					tabs.SetLoadingIcon(true);
+				((de.dhoffmann.mono.adfcnewsapp.droid.News)this.activity).SetLoadingIcon(true);
 #endif
 
 				UpdateFeeds();
@@ -88,10 +85,8 @@ namespace de.dhoffmann.mono.adfcnewsapp.buslog
 						}
 
 						// Wartekringel entfernen
-						de.dhoffmann.mono.adfcnewsapp.droid.Tabs tabs = this.activity.Parent as de.dhoffmann.mono.adfcnewsapp.droid.Tabs;
-						
-						if (tabs != null)
-							tabs.SetLoadingIcon(false);
+						((de.dhoffmann.mono.adfcnewsapp.droid.News)this.activity).SetLoadingIcon(false);
+
 					});
 				}
 #endif

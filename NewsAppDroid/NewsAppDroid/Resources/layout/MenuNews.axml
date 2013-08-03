@@ -6,9 +6,6 @@
         android:icon="@android:drawable/ic_menu_preferences"
         android:title="Einstellungen" />
     <item
-        android:id="@+id/menuGetDataNow"
-        android:title="Aktualisieren" />
-    <item
         android:id="@+id/menuShowReadNews"
         android:title="Alle News" />
     <item

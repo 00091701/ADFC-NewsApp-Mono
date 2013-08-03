@@ -1,11 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:lb="http://schemas.android.com/apk/res/legacybar.sample"
     android:orientation="vertical"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:minWidth="25px"
     android:minHeight="25px"
-    style="@style/TabContent">
+    style="@style/MailLayout">
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="48dp"
+        android:minWidth="25px"
+        android:minHeight="25px"
+        android:baselineAligned="false"
+        android:gravity="center_vertical">
+        <ImageButton
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:id="@+id/imageButton1"
+            android:src="@drawable/Icon"
+            android:layout_margin="4dp" />
+        <TextView
+            android:text="ADFC-News"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView1" />
+        <LinearLayout
+            android:orientation="horizontal"
+            android:minWidth="25px"
+            android:minHeight="25px"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/linearLayout1"
+            android:gravity="right">
+            <ImageButton
+                android:src="@drawable/ic_action_refresh"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:id="@+id/btnRefresh"
+                android:background="#004B7C" />
+            <ProgressBar
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:id="@+id/progressLoading"
+                android:indeterminate="true" />
+            <ImageButton
+                android:src="@drawable/ic_action_overflow"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:id="@+id/ibMenu"
+                android:layout_gravity="right"
+                android:background="#004B7C" />
+        </LinearLayout>
+    </LinearLayout>
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="2dip"
+        android:id="@+id/view1"
+        android:background="#ffEE7F00" />
     <ListView
         android:minWidth="25px"
         android:minHeight="25px"

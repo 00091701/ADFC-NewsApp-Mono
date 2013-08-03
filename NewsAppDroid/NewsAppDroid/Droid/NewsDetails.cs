@@ -49,6 +49,17 @@ namespace de.dhoffmann.mono.adfcnewsapp.droid
 			Logging.Log(this, Logging.LoggingTypeDebug, "OnCreate");
 
 			SetContentView (Resource.Layout.NewsDetails);
+
+			ImageButton btnBack = FindViewById<ImageButton> (Resource.Id.btnBack);
+			btnBack.Click += (object sender, EventArgs e) => {
+				OnBackPressed();
+			};
+
+			ImageButton btnLogo = FindViewById<ImageButton> (Resource.Id.btnLogo);
+			btnLogo.Click += (object sender, EventArgs e) => {
+				OnBackPressed();
+			};
+
 		}
 
 		protected override void OnResume ()
@@ -122,7 +133,7 @@ namespace de.dhoffmann.mono.adfcnewsapp.droid
 					StartActivity(intent);
 				};
 
-				Button btnShare = FindViewById<Button>(Resource.Id.btnShare);
+				ImageButton btnShare = FindViewById<ImageButton>(Resource.Id.btnShare);
 				btnShare.Click += delegate(object sender, EventArgs e) 
 				{
 					Intent intent = new Intent(Android.Content.Intent.ActionSend);
@@ -152,7 +163,7 @@ namespace de.dhoffmann.mono.adfcnewsapp.droid
 		public override bool OnCreateOptionsMenu (IMenu menu)
 		{
 			MenuInflater menuInflater = new Android.Views.MenuInflater(this);
-			menuInflater.Inflate(Resource.Layout.NewsDetailsMenu, menu);
+			menuInflater.Inflate(Resource.Layout.MenuNewsDetails, menu);
 			
 			return true;
 		}

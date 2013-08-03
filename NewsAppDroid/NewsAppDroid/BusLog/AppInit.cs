@@ -1,6 +1,6 @@
 /*
  * This file is part of ADFC-NewsApp
- * Copyright (C) 2012 David Hoffmann
+ * Copyright (C) 2013 David Hoffmann
  *
  * ADFC-NewsApp is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -19,30 +19,20 @@
 
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Threading.Tasks;
+using de.dhoffmann.mono.adfcnewsapp.buslog.database;
 
-using Android.App;
-using Android.Content;
-using Android.OS;
-using Android.Runtime;
-using Android.Views;
-using Android.Widget;
-using de.dhoffmann.mono.adfcnewsapp.buslog;
-
-namespace de.dhoffmann.mono.adfcnewsapp.droid
+namespace de.dhoffmann.mono.adfcnewsapp.buslog
 {
-	[Activity (Label = "Dates")]			
-	public class Dates : Activity
+	public class AppInit
 	{
-		protected override void OnCreate (Bundle bundle)
+		public Task AppStartAsync()
 		{
-			base.OnCreate (bundle);
+			return Task.Factory.StartNew (() => {
 
-			Logging.Log(this, Logging.LoggingTypeDebug, "OnCreate");
-
-			SetContentView(Resource.Layout.Dates);
+				// Datenbank anlegen / updaten
+				new DBSchema ().UpdateDBSchema ();
+			});
 		}
 	}
 }
