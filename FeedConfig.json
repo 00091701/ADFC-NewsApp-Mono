@@ -162,6 +162,15 @@
             "URL": "http://www.adfc-nrw.de/kreisverbaende/kv-muenster/presse-publikationen/rss-feed-abbonieren.html",
             "URLType": "RSS",
             "UseEncoding": "UTF-8"
+        },
+        {
+            "Name": "ADFC NRW",
+            "FeedType": "News",
+            "URL": "http://www.adfc-nrw.de/aktuelles/rss.html",
+            "URLType": "RSS",
+            "UseEncoding": "UTF-8"
         }
+
+
     ]
 }
