@@ -181,6 +181,7 @@
 	    "Name": "ADFC Unna",
 	    "FeedType": "News",
 	    "URL": "http://www.adfc-nrw.de/kreisverbaende/kv-unna/serviceseiten/rss-feed.html",
+	    "UrlType": "RSS",
 	    "UseEncoding": "UTF-8"
 	}
     ]
