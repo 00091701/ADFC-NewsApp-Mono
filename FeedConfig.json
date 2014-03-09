@@ -176,8 +176,12 @@
             "URL": "http://www.adfc-nrw.de/kreisverbaende/kv-bochum/aktuelles/rss.html",
             "URLType": "RSS",
             "UseEncoding": "UTF-8"
-        }
-
-
+        },
+	{
+	    "Name": "ADFC Unna",
+	    "FeedType": "News",
+	    "URL": "http://www.adfc-nrw.de/kreisverbaende/kv-unna/serviceseiten/rss-feed.html",
+	    "UseEncoding": "UTF-8"
+	}
     ]
 }
