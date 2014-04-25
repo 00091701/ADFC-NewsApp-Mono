@@ -183,6 +183,14 @@
 	    "URL": "http://www.adfc-nrw.de/kreisverbaende/kv-unna/serviceseiten/rss-feed.html",
 	    "URLType": "RSS",
 	    "UseEncoding": "UTF-8"
-	}
+	},
+        {
+            "Name": "ADFC Gelsenkirchen",
+            "FeedType": "News",
+            "URL": "http://www.adfc-nrw.de/kreisverbaende/kv-gelsenkirchen/aktuelles/rss.html",
+            "URLType": "RSS",
+            "UseEncoding": "UTF-8"
+        }
+
     ]
 }
