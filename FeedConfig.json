@@ -74,7 +74,7 @@
         },
         {
             "Name": "Esslingen - News",
-            "FeedType": "News",            
+            "FeedType": "News",
             "URL": "http://www.adfc-bw.de/index.php?id=5218&type=100",
             "URLType": "RSS"
         },
@@ -195,6 +195,13 @@
             "Name": "ADFC Leipzig",
             "FeedType": "News",
             "URL": "http://www.adfc-leipzig.de/neuigkeiten/rss",
+            "URLType": "RSS",
+            "UseEncoding": "UTF-8"
+        },
+        {
+            "Name": "ADFC Berlin",
+            "FeedType": "News",
+            "URL": "http://adfc-berlin.de/?format=feed&type=rss",
             "URLType": "RSS",
             "UseEncoding": "UTF-8"
         }
