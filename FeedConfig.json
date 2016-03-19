@@ -204,6 +204,13 @@
             "URL": "http://adfc-berlin.de/?format=feed&type=rss",
             "URLType": "RSS",
             "UseEncoding": "UTF-8"
+        },
+        {
+            "Name": "ADFC Hamburg",
+            "FeedType": "News",
+            "URL": "http://hamburg.adfc.de/news/feed.rss",
+            "URLType": "RSS",
+            "UseEncoding": "UTF-8"
         }
     ]
 }
